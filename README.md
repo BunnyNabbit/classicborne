@@ -1,5 +1,8 @@
 # classicborne
 
+[![NPM version badge](https://img.shields.io/npm/v/classicborne.svg)](http://npmjs.com/package/classicborne)
+[![Open GitHub issues badge](https://img.shields.io/github/issues/bunnynabbit/classicborne)](https://github.com/BunnyNabbit/classicborne/issues)
+
 A general purpose\* Minecraft Classic server with CPE support.
 
 ```js
