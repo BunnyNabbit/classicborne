@@ -9,8 +9,8 @@ import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
 /** @typedef {import("../player/BasePlayer.mjs").BasePlayer} BasePlayer */
 /** @typedef {import("../../types/arrayLikes.mjs").Vector3} Vector3 */
 /** @typedef {import("../../types/arrayLikes.mjs").Vector2} Vector2 */
-/** @typedef {import("classicborne-server-protocol/class/Client.mjs").Client} Client */
-/** @typedef {import("./levelCommands.mjs").LevelCommand} LevelCommand */
+// /** @typedef {import("classicborne-server-protocol/class/Client.mjs").Client} Client */
+// /** @typedef {import("./levelCommands.mjs").LevelCommand} LevelCommand */
 
 /**@todo Yet to be documented.
  * @extends {TypedEmitter<{"playerAdded": (player: Player) => void "playerRemoved": (player: Player) => void "loaded": () => void "unloaded": () => void "levelLoaded": () => void}>}

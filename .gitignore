@@ -129,5 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Classicborne save data
+# classicborne save data
 /blockRecords
+# classicborne documentation
+/docs
