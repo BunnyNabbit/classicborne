@@ -32,8 +32,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 	 * @param {?BasePlayer} player
 	 * @param {number[]} [actionBytes=[]]
 	 */
-	interpretCommand(command = "cuboid 1", player = null, actionBytes = []) {
-		// i.e: cuboid 1
+	interpretCommand(command = "cuboid", player = null, actionBytes = []) {
 		// consider: if the block set has names, user could refer to blocks by name and not just id.
 		const commandClass = this.level.constructor.getCommandClassFromName(command)
 		if (commandClass) {
