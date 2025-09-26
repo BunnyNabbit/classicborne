@@ -6,10 +6,11 @@ import { TypedEmitter } from "tiny-typed-emitter"
  * @extends {TypedEmitter<{"playerAdded": (player: Player) => void "playerRemoved": (player: Player) => void}>}
  */
 export class BaseUniverse extends TypedEmitter {
-	/** */
+	/** @todo Yet to be documented. */
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
+		/** @todo Yet to be documented. */
 		this.server = new Server(serverConfiguration.port)
 		this.server.setupWebSocketServer()
 		this.server.universe = this
@@ -23,6 +24,7 @@ export class BaseUniverse extends TypedEmitter {
 				this.heartbeat = new HeartbeatClass(`https://www.classicube.net/server/heartbeat/`, this)
 			})
 		}
+		/** @todo Yet to be documented. */
 		this.levels = new Map()
 		this.server.on("clientConnected", async (client, authInfo) => {
 			new this.constructor.playerClass(client, this, authInfo)
@@ -60,7 +62,9 @@ export class BaseUniverse extends TypedEmitter {
 		})
 		this.emit("playerRemoved", player)
 	}
+	/** @todo Yet to be documented. */
 	static playerClass = BasePlayer
+	/** @todo Yet to be documented. */
 	static heartbeatClass = import("./BaseHeartbeat.mjs").then((module) => module.default)
 }
 

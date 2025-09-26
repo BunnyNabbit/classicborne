@@ -23,10 +23,15 @@ export class BaseLevel extends TypedEmitter {
 	constructor(bounds, blocks) {
 		super()
 		this.players = []
+		/** @todo Yet to be documented. */
 		this.bounds = bounds
+		/** @todo Yet to be documented. */
 		this.blocks = blocks
+		/** @todo Yet to be documented. */
 		this.allowList = []
+		/** @todo Yet to be documented. */
 		this.drones = new Set()
+		/** @todo Yet to be documented. */
 		this.clientDrones = new Map()
 		this.commandInterpreter = new this.constructor.commandInterpreterClass(this)
 	}
@@ -108,7 +113,7 @@ export class BaseLevel extends TypedEmitter {
 			}
 		)
 	}
-
+	/** @todo Yet to be documented. */
 	reload() {
 		this.players.forEach((player) => {
 			const reloadedPosition = Array.from(player.position)
@@ -290,20 +295,25 @@ export class BaseLevel extends TypedEmitter {
 	}
 	/** @type {Vector3} */
 	static bounds = [64, 64, 64]
+	/** @todo Yet to be documented. */
 	static environment = {
 		sidesId: 7,
 		edgeId: 250,
 		edgeHeight: 0,
 		cloudsHeight: 256,
 	}
+	/** @todo Yet to be documented. */
 	static blockset = []
+	/** @todo Yet to be documented. */
 	static template = new EmptyTemplate()
-	/**
-	 * @see `Level.bounds`
+	/**@todo Yet to be documented.
+	 * @see `BaseLevel.bounds`
 	 * @deprecated
 	 */
 	static standardBounds = this.bounds
+	/** @todo Yet to be documented. */
 	static commands = []
+	/** @todo Yet to be documented. */
 	static commandInterpreterClass = BaseLevelCommandInterpreter
 }
 

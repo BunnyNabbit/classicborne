@@ -3,6 +3,7 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /** @typedef {import("../player/BasePlayer.mjs").BasePlayer} BasePlayer */
 /** @typedef {import("../../types/arrayLikes.mjs").Vector3} Vector3 */
 
+/** @todo Yet to be documented. */
 export class TypeQuestion {
 	/**@todo Yet to be documented.
 	 * @param {string} type
@@ -162,6 +163,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		}
 		this.inferCurrentCommand(null, player)
 	}
+	/** @todo Yet to be documented. */
 	static parsingErrors = {
 		invalidBlockId: 0,
 		invalidPosition: 1,
@@ -191,6 +193,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 			this.level.blocking = false
 		}
 	}
+	/** @todo Yet to be documented. */
 	dispose() {
 		this.removeAllListeners()
 	}

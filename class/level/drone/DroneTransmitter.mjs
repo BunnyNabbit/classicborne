@@ -9,6 +9,7 @@ export class DroneTransmitter extends EventEmitter {
 	constructor(client) {
 		super()
 		this.client = client
+		/** @todo Yet to be documented. */
 		this.drones = new Set()
 		this.netIds = new Map()
 		this.listeners = new Map()

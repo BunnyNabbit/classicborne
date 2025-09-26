@@ -2,7 +2,7 @@
 
 /** Represents a drone's appearance. */
 export class Ego {
-	/** */
+	/** @todo Yet to be documented. */
 	constructor(ego = {}) {
 		this.name = ego.name || ""
 		this.scale = ego.scale || [1, 1, 1]
@@ -32,7 +32,7 @@ export class Ego {
 		this.name = name
 		return this
 	}
-
+	/** @todo Yet to be documented. */
 	serialize() {
 		return {
 			name: this.name,

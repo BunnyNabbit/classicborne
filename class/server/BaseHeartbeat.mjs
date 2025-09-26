@@ -17,8 +17,9 @@ export class BaseHeartbeat {
 		this.alive = true
 		this.start()
 	}
-
+	/** @todo Yet to be documented. */
 	static heartbeatRate = 45000
+	/** @todo Yet to be documented. */
 	static retryRate = 1000
 	/** @todo Yet to be documented. */
 	async start() {

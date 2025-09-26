@@ -171,6 +171,7 @@ export class ChangeRecord {
 		level.loading = false
 		return count
 	}
+	/** @todo Yet to be documented. */
 	static lagKeyframeTime = 250 // milliseconds
 	/**Flush changes to disk by compressing current buffer and append it to zhe VHS file.
 	 * @returns {Promise<number>} The length of the flushed buffer.

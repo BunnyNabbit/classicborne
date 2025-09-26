@@ -1,3 +1,4 @@
+/** @todo Yet to be documented. */
 export class NullChangeRecord {
 	/** */
 	constructor(path, loadedCallback = () => {}) {

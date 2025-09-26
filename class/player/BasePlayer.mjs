@@ -2,8 +2,9 @@ import { DroneTransmitter } from "../level/drone/DroneTransmitter.mjs"
 import { EventEmitter } from "events"
 import { Watchdog } from "./Watchdog.mjs"
 
+/** @todo Yet to be documented. */
 export class BasePlayer extends EventEmitter {
-	/** */
+	/** @todo Yet to be documented. */
 	constructor(client, universe, authInfo) {
 		super()
 		this.client = client
@@ -14,7 +15,7 @@ export class BasePlayer extends EventEmitter {
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
 	}
-
+	/** @todo Yet to be documented. */
 	async initialize(client, universe, authInfo) {
 		this.universe = universe
 		this.authInfo = authInfo
@@ -46,18 +47,17 @@ export class BasePlayer extends EventEmitter {
 		}
 		return true
 	}
-
 	/** I am intended to be overridden. When overridden, return true if the player is authenticated. If a string is returned, it is used as a reason for rejection.
 	 * @abstract
 	 */
 	async checkAuthInfo() {
 		return true
 	}
-
+	/** @todo Yet to be documented. */
 	async afterAuth() {
 		this.client.serverIdentification("classicborne-server-protocol", "", 100)
 	}
-
+	/** @todo Yet to be documented. */
 	listenSetBlock() {
 		this.client.on("setBlock", (operation) => {
 			if (this.watchdog.rateOperation()) return
@@ -70,7 +70,7 @@ export class BasePlayer extends EventEmitter {
 			this.space.setBlock(operationPosition, block, [this.client])
 		})
 	}
-
+	/** @todo Yet to be documented. */
 	listenPosition() {
 		// TODO: consider emitting events on Player
 		this.client.on("position", (position, orientation, heldBlock) => {
@@ -83,7 +83,7 @@ export class BasePlayer extends EventEmitter {
 			}
 		})
 	}
-
+	/** @todo Yet to be documented. */
 	message(message, types = [0], continueAdornment = "> ") {
 		const originalMessage = message
 		if (typeof types === "number") types = [types]
@@ -129,12 +129,12 @@ export class BasePlayer extends EventEmitter {
 			}
 		})
 	}
-
+	/** @todo Yet to be documented. */
 	isClassiCubeMobile() {
 		if (this.client.appName.startsWith("ClassiCube") && BasePlayer.classiCubeMobileSuffixes.some((suffix) => this.client.appName.endsWith(suffix))) return true
 	}
+	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
-
 	/**Clears zhe displayed screen prints.
 	 * @param {string} [type="top"] Zhe print type to clear out.
 	 */
@@ -143,6 +143,7 @@ export class BasePlayer extends EventEmitter {
 			this.message(" ", printType)
 		})
 	}
+	/** @todo Yet to be documented. */
 	static messageTypes = {
 		bottomLowestRow: 11,
 		bottomMiddleRow: 12,
@@ -152,17 +153,20 @@ export class BasePlayer extends EventEmitter {
 		topHighestRow: 1,
 		center: 100,
 	}
+	/** @todo Yet to be documented. */
 	static printAreaTypes = {
 		bottom: [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow],
 		top: [BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow],
 		center: [BasePlayer.messageTypes.center],
 	}
+	/** @todo Yet to be documented. */
 	static rightAlignedMessageTypes = [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow, BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow]
-
+	/** @todo Yet to be documented. */
 	static sendHotbar(player) {
 		this.defaultHotbar.forEach((blockId, index) => {
 			player.client.setHotbar(blockId, index)
 		})
 	}
+	/** @todo Yet to be documented. */
 	static defaultHotbar = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
