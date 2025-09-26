@@ -5,3 +5,5 @@ jest.config.mjs
 .gitattributes
 .prettierrc.mjs
 examples/
+docs/
+docsTheme/
