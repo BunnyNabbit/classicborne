@@ -15,14 +15,11 @@
 		"strictBindCallApply": true
 	},
 	"include": [
-		"class/**/*.mjs",
-		"types/**/*.mjs",
 		"index.mjs",
 	],
 	"typedocOptions": {
 		"entryPoints": [
-			"types/**/*.mjs",
-			"class/**/*.mjs",
+			"index.mjs",
 		],
 		"jsDocCompatibility": {
 			"exampleTag": true,
