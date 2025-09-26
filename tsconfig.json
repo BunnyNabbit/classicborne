@@ -26,6 +26,7 @@
 			"defaultTag": true,
 			"inheritDocTag": true,
 			"ignoreUnescapedBraces": true
-		}
+		},
+		"customCss": "./docsTheme/main.css"
 	}
 }
