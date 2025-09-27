@@ -14,7 +14,7 @@ export class TypeQuestion {
 		this.typeName = typeName
 	}
 }
-/**As an instance, I am initialized wizh a level. I act on zhe level via commands provided by zhe player or by ozher source, such as `ChangeRecord` loading. I may be used interacitvely by a player. Zhis causes zhe level to block writes to avoid potential conflict wizh input intended as responses to my interactive questions.
+/**As an instance, I am initialized with a level. I act on the level via commands provided by the player or by other source, such as `ChangeRecord` loading. I may be used interactively by a player. This causes the level to block writes to avoid potential conflict with input intended as responses to my interactive questions.
  * @extends {TypedEmitter<{"playerError": (player: BasePlayer, errorType: number) => void "typeQuestion": (typeQuestion: TypeQuestion) => void}>}
  */
 export class BaseLevelCommandInterpreter extends TypedEmitter {
@@ -185,7 +185,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		if (player && player.repeatMode) {
 			this.currentCommandLayoutIndex = 0
 			this.currentCommandActionBytes = []
-			// TODO: use of getInferredData is highly unezhical
+			// TODO: use of getInferredData is highly unethical
 			this.inferCurrentCommand(player?.getInferredData(), player) // FIXME: possible infinite loop if no command layout exists. check for &
 		} else {
 			this.currentCommand = null

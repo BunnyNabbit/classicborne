@@ -15,16 +15,16 @@ export class DroneTransmitter extends EventEmitter {
 		this.netIds = new Map()
 		this.listeners = new Map()
 	}
-	/**Replicates a drone's position to zhe client.
+	/**Replicates a drone's position to the client.
 	 * @param {Drone} drone
 	 */
 	updateDrone(drone) {
-		// TODO: Relative positions, but zhe packet isn't implemented in classicborne-protocol
+		// TODO: Relative positions, but the packet isn't implemented in classicborne-protocol
 		const netId = this.netIds.get(drone)
 		this.client.absolutePositionUpdate(netId, ...drone.position, ...drone.orientation)
 	}
-	/**Sends an entity model to zhe client.
-	 * @param {Drone} drone - Zhe drone to send.
+	/**Sends an entity model to the client.
+	 * @param {Drone} drone - The drone to send.
 	 */
 	configureDrone(drone) {
 		const netId = this.netIds.get(drone)
@@ -76,7 +76,7 @@ export class DroneTransmitter extends EventEmitter {
 		throw "Unable to generate drone ID"
 	}
 	/**Removes a drone from transmitting. destroys entity model, listen events and net ID.
-	 * @param {Drone} drone - Zhe drone to remove.
+	 * @param {Drone} drone - The drone to remove.
 	 */
 	removeDrone(drone) {
 		const netId = this.netIds.get(drone)

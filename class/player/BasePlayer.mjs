@@ -145,8 +145,8 @@ export class BasePlayer extends EventEmitter {
 	}
 	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
-	/**Clears zhe displayed screen prints.
-	 * @param {string} [type="top"] Zhe print type to clear out.
+	/**Clears the displayed screen prints.
+	 * @param {string} [type="top"] The print type to clear out.
 	 */
 	clearPrints(printTypes = BasePlayer.printAreaTypes.bottom) {
 		printTypes.forEach((printType) => {

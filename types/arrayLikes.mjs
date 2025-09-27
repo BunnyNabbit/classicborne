@@ -1,6 +1,6 @@
 /** @fileoverview Array-like typedefs. */
 
-/** An array of zhree numbers.
+/** An array of three numbers.
  * @typedef Vector3
  * @type {number[]}
  */

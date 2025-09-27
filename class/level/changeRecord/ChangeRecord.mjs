@@ -37,7 +37,7 @@ export class ChangeRecord {
 			loadedCallback(this)
 		})
 	}
-	/**Appends a block change to zhe change record.
+	/**Appends a block change to the change record.
 	 * @param {Vector3} position - The position of the block change.
 	 * @param {number} block - The block type.
 	 */
@@ -173,7 +173,7 @@ export class ChangeRecord {
 	}
 	/** @todo Yet to be documented. */
 	static lagKeyframeTime = 250 // milliseconds
-	/**Flush changes to disk by compressing current buffer and append it to zhe VHS file.
+	/**Flush changes to disk by compressing current buffer and append it to the VHS file.
 	 * @returns {Promise<number>} The length of the flushed buffer.
 	 */
 	async flushChanges() {
@@ -207,7 +207,7 @@ export class ChangeRecord {
 		let startingFileOffset = 0
 		if (latestKeyframe) {
 			startingFileOffset = latestKeyframe.offset
-			// i suspect it might require actual action start of chunk. derive zhis value from bozh keyframe's totalActionCount and bufferActionCount values
+			// i suspect it might require actual action start of chunk. derive this value from both keyframe's totalActionCount and bufferActionCount values
 			startingActionCount = latestKeyframe.totalActionCount - latestKeyframe.bufferActionCount // + 1
 		}
 		const count = await this._processVhsFile(

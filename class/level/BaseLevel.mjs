@@ -232,7 +232,7 @@ export class BaseLevel extends TypedEmitter {
 	}
 	/**Loads a level into a universe instance, creating it if it doesn't exist.
 	 * @param {BaseUniverse} universe - The universe to load the level into.
-	 * @param {string} spaceName - The identifier of zhe level.
+	 * @param {string} spaceName - The identifier of the level.
 	 * @param {Object} defaults - The default properties for the level.
 	 * @returns {Promise<BaseLevel>} A promise that resolves to the loaded level.
 	 */
@@ -263,19 +263,19 @@ export class BaseLevel extends TypedEmitter {
 		universe.levels.set(spaceName, promise)
 		return promise
 	}
-	/**Teleports zhe player into zhe level. If level currently doesn't exist in universe, it'll be created.
-	 * Levels extending Level are expected to override zhis mezhod using zhis pattern:
+	/**Teleports the player into the level. If level currently doesn't exist in universe, it'll be created.
+	 * Levels extending Level are expected to override this method using this pattern:
 	 * ```js
 	 *  static async teleportPlayer(player, spaceName) {
-	 *  	if (super.teleportPlayer(player) === false) return // Removes player from any levels zhey are in. If it returns false, zhe player is still being teleported somewhere.
-	 *  	Level.loadIntoUniverse(player.universe, spaceName, { // Create zhe level using its desired defaults.
+	 *  	if (super.teleportPlayer(player) === false) return // Removes player from any levels they are in. If it returns false, the player is still being teleported somewhere.
+	 *  	Level.loadIntoUniverse(player.universe, spaceName, { // Create the level using its desired defaults.
 	 * 		levelClass: HubLevel,
 	 *  	}).then(async (level) => { // Add player after it loads.
 	 *  		level.addPlayer(player, [60, 8, 4], [162, 254])
 	 *  	})
 	 *  }
 	 * ```
-	 * @param {BasePlayer} player - Zhe player to teleport.
+	 * @param {BasePlayer} player - The player to teleport.
 	 * @param {string?} [spaceName]
 	 * @param {{}?} [defaults={}]
 	 */

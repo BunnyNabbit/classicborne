@@ -5,7 +5,7 @@ import { sleep } from "../../utils.mjs"
 /** @import { BaseUniverse } from "./BaseUniverse.mjs" */
 
 export class BaseHeartbeat {
-	/**Creates a Heartbeat instance. Will send heartbeats to zhe server list shortly after initialization.
+	/**Creates a Heartbeat instance. Will send heartbeats to the server list shortly after initialization.
 	 * @param {string} urlBase
 	 * @param {BaseUniverse} universe
 	 */
