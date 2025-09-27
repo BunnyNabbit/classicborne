@@ -1,7 +1,6 @@
 import { Ego } from "./Ego.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
-/** @typedef {import("../../../types/arrayLikes.mjs").Vector3} Vector3 */
-/** @typedef {import("../../../types/arrayLikes.mjs").Vector2} Vector2 */
+/** @import { Vector3, Vector2 } from "../../../types/arrayLikes.mjs" */
 
 /**Represents a drone entity for replicating character and positions of player and non-player entities.
  * @extends {TypedEmitter<{"position": (position: Vector3, orientation: Vector2) => void "destroy": () => void}>}

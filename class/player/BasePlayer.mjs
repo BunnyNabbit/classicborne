@@ -1,10 +1,16 @@
 import { DroneTransmitter } from "../level/drone/DroneTransmitter.mjs"
 import { EventEmitter } from "events"
 import { Watchdog } from "./Watchdog.mjs"
+/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
+/** @import { BaseUniverse } from "../server/BaseUniverse.mjs" */
 
 /** @todo Yet to be documented. */
 export class BasePlayer extends EventEmitter {
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {Client} client
+	 * @param {BaseUniverse} universe
+	 * @param {any} authInfo
+	 */
 	constructor(client, universe, authInfo) {
 		super()
 		this.client = client
@@ -15,7 +21,11 @@ export class BasePlayer extends EventEmitter {
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
 	}
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {Client} client
+	 * @param {BaseUniverse} universe
+	 * @param {any} authInfo
+	 */
 	async initialize(client, universe, authInfo) {
 		this.universe = universe
 		this.authInfo = authInfo

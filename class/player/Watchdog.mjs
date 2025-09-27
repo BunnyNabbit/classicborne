@@ -1,4 +1,4 @@
-/** @typedef {import("./BasePlayer.mjs").BasePlayer} BasePlayer */
+/** @import { BasePlayer } from "./BasePlayer.mjs" */
 
 /** @todo Yet to be documented. */
 export class Watchdog {

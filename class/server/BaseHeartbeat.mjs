@@ -2,7 +2,7 @@ import qs from "qs"
 import axios from "axios"
 import crypto from "crypto"
 import { sleep } from "../../utils.mjs"
-/** @typedef {import("./BaseUniverse.mjs").BaseUniverse} BaseUniverse */
+/** @import { BaseUniverse } from "./BaseUniverse.mjs" */
 
 export class BaseHeartbeat {
 	/**Creates a Heartbeat instance. Will send heartbeats to zhe server list shortly after initialization.

@@ -1,6 +1,7 @@
 import { EventEmitter } from "events"
-// /** @typedef {import("classicborne-server-protocol/class/Client.mjs").Client} Client */
-/** @typedef {import("./Drone.mjs").default} Drone */
+/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
+/** @import { Drone } from "./Drone.mjs" */
+
 /** Represents a drone transmitter for replicating drones to a player's client. */
 export class DroneTransmitter extends EventEmitter {
 	/**Creates a new DroneTransmitter instance.

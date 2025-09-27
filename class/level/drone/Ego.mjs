@@ -1,4 +1,4 @@
-/** @typedef {import("../../../types/arrayLikes.mjs").Vector3} Vector3 */
+/** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
 
 /** Represents a drone's appearance. */
 export class Ego {

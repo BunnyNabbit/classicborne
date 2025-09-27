@@ -6,11 +6,10 @@ import { EmptyTemplate } from "./BaseTemplate.mjs"
 import { NullChangeRecord } from "./changeRecord/NullChangeRecord.mjs"
 import { ChangeRecord } from "./changeRecord/ChangeRecord.mjs"
 import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
-/** @typedef {import("../player/BasePlayer.mjs").BasePlayer} BasePlayer */
-/** @typedef {import("../../types/arrayLikes.mjs").Vector3} Vector3 */
-/** @typedef {import("../../types/arrayLikes.mjs").Vector2} Vector2 */
-// /** @typedef {import("classicborne-server-protocol/class/Client.mjs").Client} Client */
-// /** @typedef {import("./levelCommands.mjs").LevelCommand} LevelCommand */
+/** @import { BasePlayer } from "../player/BasePlayer.mjs" */
+/** @import { Vector3, Vector2 } from "../../types/arrayLikes.mjs" */
+/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
+// /** @import { LevelCommand } from "./levelCommands.mjs" */
 
 /**@todo Yet to be documented.
  * @extends {TypedEmitter<{"playerAdded": (player: Player) => void "playerRemoved": (player: Player) => void "loaded": () => void "unloaded": () => void "levelLoaded": () => void}>}

@@ -8,7 +8,7 @@ import trash from "trash"
 import { join } from "path"
 import sqlite3 from "sqlite3"
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
-/** @typedef {import("../../../types/arrayLikes.mjs").Vector3} Vector3 */
+/** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
 
 /** Represents a change record for a level. */
 export class ChangeRecord {

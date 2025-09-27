@@ -1,7 +1,7 @@
 import { TypedEmitter } from "tiny-typed-emitter"
-/** @typedef {import("./BaseLevel.mjs").BaseLevel} BaseLevel */
-/** @typedef {import("../player/BasePlayer.mjs").BasePlayer} BasePlayer */
-/** @typedef {import("../../types/arrayLikes.mjs").Vector3} Vector3 */
+/** @import { BaseLevel } from "./BaseLevel.mjs" */
+/** @import { BasePlayer} from "../player/BasePlayer.mjs" */
+/** @import { Vector3 } from "../../types/arrayLikes.mjs" */
 
 /** @todo Yet to be documented. */
 export class TypeQuestion {
