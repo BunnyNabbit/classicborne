@@ -31,7 +31,7 @@ export class BaseUniverse extends TypedEmitter {
 		})
 	}
 	/**@todo Yet to be documented.
-	 * @param {Player} player
+	 * @param {BasePlayer} player
 	 */
 	addPlayer(player) {
 		for (let i = 0; i < 127; i++) {
@@ -52,7 +52,7 @@ export class BaseUniverse extends TypedEmitter {
 		throw new Error("Unable to generate unique player ID.")
 	}
 	/**@todo Yet to be documented.
-	 * @param {Player} player
+	 * @param {BasePlayer} player
 	 */
 	removePlayer(player) {
 		const clientIndex = this.server.players.indexOf(player)
