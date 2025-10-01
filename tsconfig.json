@@ -27,6 +27,7 @@
 			"inheritDocTag": true,
 			"ignoreUnescapedBraces": true
 		},
+		"hostedBaseUrl": "https://classicborne.bunnynabbit.com",
 		"customCss": "./docsTheme/main.css"
 	}
 }
