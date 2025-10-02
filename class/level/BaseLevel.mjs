@@ -3,8 +3,6 @@ import { Ego } from "./drone/Ego.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { componentToHex } from "../../utils.mjs"
 import { EmptyTemplate } from "./BaseTemplate.mjs"
-import { NullChangeRecord } from "./changeRecord/NullChangeRecord.mjs"
-import { ChangeRecord } from "./changeRecord/ChangeRecord.mjs"
 import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
 /** @import { BasePlayer } from "../player/BasePlayer.mjs" */
 /** @import { Vector3, Vector2 } from "../../types/arrayLikes.mjs" */
@@ -253,7 +251,7 @@ export class BaseLevel extends TypedEmitter {
 		const bounds = defaults.bounds ?? this.bounds
 		const template = defaults.template ?? this.template
 		const templateBlocks = Buffer.from(await template.generate(bounds))
-		const promise = new Promise((resolve) => {
+		const promise = new Promise(async (resolve) => {
 			const levelClass = defaults.levelClass ?? this
 			const level = new levelClass(bounds, templateBlocks, ...(defaults.arguments ?? []))
 			level.template = template
@@ -263,8 +261,12 @@ export class BaseLevel extends TypedEmitter {
 			level.texturePackUrl = defaults.texturePackUrl ?? universe.serverConfiguration.texturePackUrl
 			level.allowList = defaults.allowList ?? []
 			level.universe = universe
-			let changeRecordClass = ChangeRecord
-			if (defaults.useNullChangeRecord) changeRecordClass = NullChangeRecord
+			let changeRecordClass
+			if (defaults.useNullChangeRecord) {
+				changeRecordClass = await import("./changeRecord/NullChangeRecord.mjs").then((module) => module.NullChangeRecord)
+			} else {
+				changeRecordClass = await import("./changeRecord/ChangeRecord.mjs").then((module) => module.ChangeRecord)
+			}
 			level.changeRecord = new changeRecordClass(`./blockRecords/${spaceName}/`, async () => {
 				await level.changeRecord.restoreBlockChangesToLevel(level)
 				level.emit("loaded")
