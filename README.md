@@ -25,11 +25,12 @@ setInterval(() => {
 Extend it by subclassing base classes.
 
 ```js
-import { BaseLevel } from "classicborne/class/server/BaseUniverse.mjs"
+import { BaseLevel } from "classicborne/class/level/BaseLevel.mjs"
 import { BasePlayer } from "classicborne/class/player/BasePlayer.mjs"
 import { BaseUniverse } from "classicborne/class/server/BaseUniverse.mjs"
 
 class MyLevel extends BaseLevel {
+	/** */
 	constructor(...args) {
 		super(...args)
 		this.positionEventListeners = new Map()
@@ -45,10 +46,10 @@ class MyLevel extends BaseLevel {
 			this.positionEventListeners.set(player, onPosition)
 		})
 	}
-	/** */
+
 	static async teleportPlayer(player) {
 		if (super.teleportPlayer(player) === false) return
-		Level.loadIntoUniverse(player.universe, "my-level").then(async (level) => {
+		MyLevel.loadIntoUniverse(player.universe, "my-level").then(async (level) => {
 			level.addPlayer(player, [60, 8, 4], [162, 254])
 		})
 	}
@@ -57,7 +58,7 @@ class MyLevel extends BaseLevel {
 class MyPlayer extends BasePlayer {
 	/** */
 	async initialize(...args) {
-		const authenticated = await super(...args)
+		const authenticated = await super.initialize(...args)
 		if (!authenticated) return
 		this.universe.addPlayer(this)
 		MyLevel.teleportPlayer(this)
@@ -70,7 +71,7 @@ class MyUniverse extends BaseUniverse {
 
 new MyUniverse({
 	port: 25565,
-	postToMainServer: true,
+	postToMainServer: false,
 })
 ```
 
