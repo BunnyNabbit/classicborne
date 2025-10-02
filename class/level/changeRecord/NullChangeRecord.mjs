@@ -34,6 +34,7 @@ export class NullChangeRecord {
 	}
 
 	async dispose() {}
+	static lagKeyframeTime = 250 // milliseconds
 }
 
 export default NullChangeRecord

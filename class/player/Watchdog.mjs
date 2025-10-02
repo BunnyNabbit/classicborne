@@ -1,3 +1,4 @@
+// @ts-check
 /** @import { BasePlayer } from "./BasePlayer.mjs" */
 
 /** @todo Yet to be documented. */

@@ -3,7 +3,7 @@ import { BasePlayer } from "../player/BasePlayer.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
 
 /**@todo Yet to be documented.
- * @extends {TypedEmitter<{"playerAdded": (player: Player) => void "playerRemoved": (player: Player) => void}>}
+ * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void}>}
  */
 export class BaseUniverse extends TypedEmitter {
 	/** @todo Yet to be documented. */

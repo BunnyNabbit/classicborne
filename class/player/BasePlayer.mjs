@@ -1,8 +1,11 @@
+// @ts-check
 import { DroneTransmitter } from "../level/drone/DroneTransmitter.mjs"
 import { EventEmitter } from "events"
 import { Watchdog } from "./Watchdog.mjs"
 /** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
 /** @import { BaseUniverse } from "../server/BaseUniverse.mjs" */
+/** @import { BaseLevel } from "../level/BaseLevel.mjs" */
+/** @import { Vector3, Vector2 } from "../../types/arrayLikes.mjs" */
 
 /** @todo Yet to be documented. */
 export class BasePlayer extends EventEmitter {
@@ -18,8 +21,13 @@ export class BasePlayer extends EventEmitter {
 		this.client.player = this
 		this.authInfo = authInfo
 		this.username = authInfo.username
+		/** @type {BaseLevel|null} */
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
+		/** @type {number} */
+		this.netId
+		/** @type {boolean} */
+		this.teleporting
 	}
 	/**@todo Yet to be documented.
 	 * @param {Client} client
@@ -35,7 +43,9 @@ export class BasePlayer extends EventEmitter {
 			return false
 		}
 		// do rest of propertry initialization
+		/** @type {Vector3} */
 		this.position = [0, 0, 0]
+		/** @type {Vector2} */
 		this.orientation = [0, 0]
 		this.watchdog = new Watchdog(this)
 		this.droneTransmitter = new DroneTransmitter(this.client)
@@ -58,9 +68,12 @@ export class BasePlayer extends EventEmitter {
 		return true
 	}
 	/** I am intended to be overridden. When overridden, return true if the player is authenticated. If a string is returned, it is used as a reason for rejection.
+	 * @param {Client} client
+	 * @param {BaseUniverse} universe
+	 * @param {any} authInfo
 	 * @abstract
 	 */
-	async checkAuthInfo() {
+	async checkAuthInfo(client, universe, authInfo) {
 		return true
 	}
 	/** @todo Yet to be documented. */
@@ -93,12 +106,16 @@ export class BasePlayer extends EventEmitter {
 			}
 		})
 	}
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {string} message
+	 * @param {number|number[]} types
+	 * @param {string} [continueAdornment="> "]
+	 */
 	message(message, types = [0], continueAdornment = "> ") {
 		const originalMessage = message
 		if (typeof types === "number") types = [types]
 		const maxLength = 64 - continueAdornment.length
-		const messages = []
+		/** @type {string[]} */ const messages = []
 		let currentColorCode = ""
 		if (message.length <= maxLength) {
 			// Handle short messages directly
@@ -146,7 +163,7 @@ export class BasePlayer extends EventEmitter {
 	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
 	/**Clears the displayed screen prints.
-	 * @param {string} [type="top"] The print type to clear out.
+	 * @param {number[]} printTypes - The print type to clear out.
 	 */
 	clearPrints(printTypes = BasePlayer.printAreaTypes.bottom) {
 		printTypes.forEach((printType) => {
@@ -171,7 +188,9 @@ export class BasePlayer extends EventEmitter {
 	}
 	/** @todo Yet to be documented. */
 	static rightAlignedMessageTypes = [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow, BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow]
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {BasePlayer} player
+	 */
 	static sendHotbar(player) {
 		this.defaultHotbar.forEach((blockId, index) => {
 			player.client.setHotbar(blockId, index)

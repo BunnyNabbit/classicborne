@@ -23,6 +23,7 @@ export class ChangeRecord {
 		this.draining = false
 		this.dirty = false
 		this.vhsFh = null
+		/** @type {Vector3} */
 		this.bounds = [64, 64, 64]
 		this.actionCount = 0
 		this.currentActionCount = 0
@@ -47,7 +48,7 @@ export class ChangeRecord {
 	/**Append an action to the change record.
 	 * @param {boolean} isCommand - Whether the action is a command.
 	 * @param {number[]} actionBytes - The action bytes to append.
-	 * @param {string} commandString - The command string (if applicable).
+	 * @param {string} [commandString] - The command string (if applicable).
 	 */
 	appendAction(isCommand = false, actionBytes, commandString) {
 		this.actionCount += 1
@@ -332,7 +333,7 @@ class KeyframeRecord {
 	}
 	/**Adds a keyframe to the database.
 	 * @param {number} offset - The offset in the VHS file.
-	 * @param {number} actionCount - The action count at this keyframe.
+	 * @param {number} totalActionCount - The action count at this keyframe.
 	 * @param {string} template - The template associated with this keyframe.
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.

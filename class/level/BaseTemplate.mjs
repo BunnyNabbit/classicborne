@@ -1,6 +1,13 @@
+// @ts-check
+import { Buffer } from 'node:buffer'
+/** @import {Vector3 } from "../../types/arrayLikes.mjs" */
+
 /** @todo Yet to be documented. */
 export class BaseTemplate {
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {string} iconName
+	 * @param {Vector3} defaultBounds
+	 */
 	constructor(iconName, defaultBounds = [64, 64, 64]) {
 		if (!iconName) throw new Error("iconName not provided.")
 		this.iconName = iconName

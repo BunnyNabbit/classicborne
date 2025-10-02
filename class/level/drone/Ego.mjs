@@ -1,3 +1,4 @@
+// @ts-check
 /** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
 
 /** Represents a drone's appearance. */

@@ -12,7 +12,7 @@ import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
 // /** @import { LevelCommand } from "./levelCommands.mjs" */
 
 /**@todo Yet to be documented.
- * @extends {TypedEmitter<{"playerAdded": (player: Player) => void "playerRemoved": (player: Player) => void "loaded": () => void "unloaded": () => void "levelLoaded": () => void}>}
+ * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void; "loaded": () => void; "unloaded": () => void; "levelLoaded": () => void}>}
  */
 export class BaseLevel extends TypedEmitter {
 	/**@todo Yet to be documented.
@@ -21,18 +21,29 @@ export class BaseLevel extends TypedEmitter {
 	 */
 	constructor(bounds, blocks) {
 		super()
+		/**@todo Yet to be documented.
+		 * @type {BasePlayer[]}
+		 */
 		this.players = []
 		/** @todo Yet to be documented. */
 		this.bounds = bounds
 		/** @todo Yet to be documented. */
 		this.blocks = blocks
-		/** @todo Yet to be documented. */
+		/** @todo Yet to be documented.
+		 * @type {string[]}
+		 */
 		this.allowList = []
 		/** @todo Yet to be documented. */
 		this.drones = new Set()
 		/** @todo Yet to be documented. */
 		this.clientDrones = new Map()
 		this.commandInterpreter = new this.constructor.commandInterpreterClass(this)
+		/** @type {boolean} */
+		this.loading
+		/** @type {boolean} */
+		this.blocking
+		/** @type {ChangeRecord|NullChangeRecord} */
+		this.changeRecord
 	}
 	/**@todo Yet to be documented.
 	 * @param {BasePlayer} player

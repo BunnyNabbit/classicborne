@@ -58,8 +58,8 @@ export class DroneTransmitter extends EventEmitter {
 	addDrone(drone) {
 		for (let i = 0; i < 127; i++) {
 			if (!this.getDroneByNetId(i)) {
-				const positionEvent = (newPosition, newOrientation) => {
-					this.updateDrone(drone, newPosition, newOrientation)
+				const positionEvent = () => {
+					this.updateDrone(drone)
 				}
 				const destroyEvent = () => {
 					this.removeDrone(drone)

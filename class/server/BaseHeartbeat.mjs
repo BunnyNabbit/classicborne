@@ -1,3 +1,4 @@
+// @ts-check
 import qs from "qs"
 import axios from "axios"
 import crypto from "crypto"
@@ -35,14 +36,16 @@ export class BaseHeartbeat {
 					web: "true",
 					salt: this.salt,
 				})
-				await sleep(this.constructor.heartbeatRate)
+				await sleep(/** @type {typeof BaseHeartbeat} */ (this.constructor).heartbeatRate)
 			} catch (error) {
 				console.error("Heartbeat error. Retrying.", error)
-				await sleep(this.constructor.retryRate)
+				await sleep(/** @type {typeof BaseHeartbeat} */ (this.constructor).retryRate)
 			}
 		}
 	}
-	/** @todo Yet to be documented. */
+	/**@todo Yet to be documented.
+	 * @param {Record<string, string>} form
+	 */
 	async postHeartbeat(form) {
 		await axios.post(this.urlBase, qs.stringify(form)).then((response) => {
 			if (this.pinged == false) console.log(response.data)

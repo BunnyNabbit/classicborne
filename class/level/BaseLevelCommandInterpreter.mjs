@@ -15,7 +15,7 @@ export class TypeQuestion {
 	}
 }
 /**As an instance, I am initialized with a level. I act on the level via commands provided by the player or by other source, such as `ChangeRecord` loading. I may be used interactively by a player. This causes the level to block writes to avoid potential conflict with input intended as responses to my interactive questions.
- * @extends {TypedEmitter<{"playerError": (player: BasePlayer, errorType: number) => void "typeQuestion": (typeQuestion: TypeQuestion) => void}>}
+ * @extends {TypedEmitter<{"parsingError": (player: BasePlayer, errorType: number) => void; "typeQuestion": (typeQuestion: TypeQuestion) => void; "commandExecuted": (commandName: string, actionBytes: number[]) => void}>}
  */
 export class BaseLevelCommandInterpreter extends TypedEmitter {
 	/**@todo Yet to be documented.
@@ -53,7 +53,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		return true
 	}
 	/**@todo Yet to be documented.
-	 * @param {?Object} providedData
+	 * @param {object} [providedData]
 	 * @param {number} providedData.block
 	 * @param {Vector3} providedData.position
 	 * @param {?BasePlayer} player
