@@ -9,6 +9,7 @@ import { join } from "path"
 import sqlite3 from "sqlite3"
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 /** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
+/** @import { BaseLevel } from "../../level/BaseLevel.mjs" */
 
 /** Represents a change record for a level. */
 export class ChangeRecord {
@@ -22,6 +23,7 @@ export class ChangeRecord {
 		this.path = path
 		this.draining = false
 		this.dirty = false
+		/** @type {fs.promises.FileHandle} */
 		this.vhsFh = null
 		/** @type {Vector3} */
 		this.bounds = [64, 64, 64]
@@ -71,7 +73,7 @@ export class ChangeRecord {
 		}
 	}
 	/**Process the VHS file with a given processor function.
-	 * @param {object} vhsFh - The file handle of the VHS file.
+	 * @param {fs.promises.FileHandle} vhsFh - The file handle of the VHS file.
 	 * @param {function} processor - The processor function to process each action.
 	 * @param {number} [startFileOffset=0] - The offset to start processing from.
 	 * @param {number} [startActionCount=0] - The action count to start from.
@@ -82,6 +84,7 @@ export class ChangeRecord {
 		let currentFileReadOffset = startFileOffset
 		this.actionCount = startActionCount
 		while (true) {
+			/** @type {Buffer|number} */
 			let bufferLength = Buffer.alloc(4)
 			await vhsFh.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
 			bufferLength = bufferLength.readUint32LE(0)
@@ -89,6 +92,7 @@ export class ChangeRecord {
 
 			const deflateBuffer = Buffer.alloc(bufferLength)
 			await vhsFh.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
+			/** @type {Buffer|SmartBuffer} */
 			let changes = await inflate(deflateBuffer)
 			let bufferActionCount = 0
 			changes = SmartBuffer.fromBuffer(changes)
@@ -115,7 +119,7 @@ export class ChangeRecord {
 		return this.actionCount
 	}
 	/**Restore block changes to a level.
-	 * @param {Level} level - The level to restore changes to.
+	 * @param {BaseLevel} level - The level to restore changes to.
 	 * @param {number} [maxActions] - The maximum number of actions to restore.
 	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes.
 	 * @returns {Promise<number>} The total number of actions restored.
