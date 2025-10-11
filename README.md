@@ -75,6 +75,20 @@ new MyUniverse({
 })
 ```
 
+## Features
+
+- Support for [Classic Protocol Extension](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Classic_Protocol_Extension) (CPE).
+- Multiple level management.
+- Per-client entity ID assignment.
+- Novel level data persistence.
+  - It's just undoable history in a compact format.
+  - Block changes and command issues are only recorded.
+  - Optional caching of "keyframes" when restoring from changes alone takes long.
+  - Each change can be undone.
+- Basic "Watchdog" client monitor.
+
 ## Projects using classicborne
 
 - [Voxel Telephone](https://github.com/BunnyNabbit/voxel-telephone)
+
+See the [GitHub topic](https://github.com/topics/classicborne) for more.
