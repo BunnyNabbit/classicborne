@@ -1,0 +1,8 @@
+{
+	"plugins": {
+		"release-it-pnpm": {}
+	},
+	"github": {
+		"draft": true
+	}
+}
