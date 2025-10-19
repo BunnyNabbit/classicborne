@@ -1,6 +1,8 @@
 import { Server } from "classicborne-server-protocol"
 import { BasePlayer } from "../player/BasePlayer.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
+/** @import { BaseHeartbeat } from "./BaseHeartbeat.mjs" */
+/** @import { BaseLevel } from "../level/BaseLevel.mjs" */
 
 /**@todo Yet to be documented.
  * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void}>}
@@ -10,7 +12,9 @@ export class BaseUniverse extends TypedEmitter {
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
-		/** @todo Yet to be documented. */
+		/**A `classicborne-server-protocol` Server instance.
+		 * @type {Server}
+		 */
 		this.server = new Server(serverConfiguration.port)
 		this.server.setupWebSocketServer()
 		this.server.universe = this
@@ -24,13 +28,20 @@ export class BaseUniverse extends TypedEmitter {
 				this.heartbeat = new HeartbeatClass(`https://www.classicube.net/server/heartbeat/`, this)
 			})
 		}
-		/** @todo Yet to be documented. */
+		/**The currently loaded levels.
+		 * @type {Map<string, BaseLevel>}
+		 */
 		this.levels = new Map()
 		this.server.on("clientConnected", async (client, authInfo) => {
 			new this.constructor.playerClass(client, this, authInfo)
 		})
+		/**The heartbeat used for announcing the server to a server list.
+		 * @type {BaseHeartbeat}
+		 */
+		this.heartbeat
 	}
-	/**@todo Yet to be documented.
+	/**Registers the player into the universe, assigning it a network ID and emitting a `playerAdded` event.
+	 * @throws {Error} Thrown if a network ID cannot be assigned.
 	 * @param {BasePlayer} player
 	 */
 	addPlayer(player) {
@@ -51,7 +62,7 @@ export class BaseUniverse extends TypedEmitter {
 		}
 		throw new Error("Unable to generate unique player ID.")
 	}
-	/**@todo Yet to be documented.
+	/**Unregisters the player from the universe, emitting a `playerRemoved` event. This is called on player disconnect or by `basePlayer.client.disconnect`.
 	 * @param {BasePlayer} player
 	 */
 	removePlayer(player) {
