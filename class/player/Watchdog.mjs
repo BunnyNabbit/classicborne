@@ -1,7 +1,9 @@
 // @ts-check
 /** @import { BasePlayer } from "./BasePlayer.mjs" */
 
-/** @todo Yet to be documented. */
+/**
+ * I keep track of client activity. My {@link Watchdog.rateOperation} method is used to increment my {@link Watchdog.currentRate}. If {@link Watchdog.currentRate} goes beyond my {@link Watchdog.limit}, I will disconnect my {@link Watchdog.player}. I set {@link Watchdog#currentRate} to zero on a one second interval.
+ */
 export class Watchdog {
 	/**@todo Yet to be documented.
 	 * @param {BasePlayer} player
@@ -14,6 +16,7 @@ export class Watchdog {
 		this.currentRate = 0
 		/** @todo Yet to be documented. */
 		this.limit = 382
+		/** @type {BasePlayer} */
 		this.player = player
 	}
 	/** @todo Yet to be documented. */
