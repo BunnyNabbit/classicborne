@@ -7,3 +7,5 @@ jest.config.mjs
 examples/
 docs/
 docsTheme/
+CONTRIBUTING.md
+.release-it.json
