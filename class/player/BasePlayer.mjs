@@ -56,7 +56,7 @@ export class BasePlayer extends EventEmitter {
 			this.watchdog.destroy()
 			universe.removePlayer(this)
 		})
-		this.client.customBlockSupport(1)
+		if (this.client.extensions.has("CustomBlocks")) this.client.extensions.get("CustomBlocks").sendSupportLevel(1)
 		// setup events
 		this.listenSetBlock()
 		this.listenPosition()
@@ -193,7 +193,7 @@ export class BasePlayer extends EventEmitter {
 	 */
 	static sendHotbar(player) {
 		this.defaultHotbar.forEach((blockId, index) => {
-			player.client.setHotbar(blockId, index)
+			player.client.extensions.get("SetHotbar").setHotbar(blockId, index)
 		})
 	}
 	/** @todo Yet to be documented. */

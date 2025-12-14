@@ -110,14 +110,14 @@ export class BaseLevel extends TypedEmitter {
 			},
 			() => {
 				if (this.blockset) BaseLevel.sendBlockset(player.client, this.blockset)
-				if (this.environment) player.client.setEnvironmentProperties(this.environment)
-				if (this.texturePackUrl) player.client.texturePackUrl(this.texturePackUrl)
-				player.client.setBlockPermission(7, 1, 1)
-				player.client.setBlockPermission(8, 1, 1)
-				player.client.setBlockPermission(9, 1, 1)
-				player.client.setBlockPermission(10, 1, 1)
-				player.client.setBlockPermission(11, 1, 1)
-				player.client.configureSpawnExt(-1, player.authInfo.username, position[0], position[1], position[2], orientation[0], orientation[1], player.authInfo.username)
+				if (this.environment) player.client.extensions.get("LevelEnvironment").setEnvironmentProperties(this.environment)
+				if (this.texturePackUrl) player.client.extensions.get("LevelEnvironment").texturePackUrl(this.texturePackUrl)
+				player.client.extensions.get("BlockPermissions").setBlockPermission(7, 1, 1)
+				player.client.extensions.get("BlockPermissions").setBlockPermission(8, 1, 1)
+				player.client.extensions.get("BlockPermissions").setBlockPermission(9, 1, 1)
+				player.client.extensions.get("BlockPermissions").setBlockPermission(10, 1, 1)
+				player.client.extensions.get("BlockPermissions").setBlockPermission(11, 1, 1)
+				player.client.extensions.get("ExtendedPlayerList").configureSpawn(-1, player.authInfo.username, position[0], position[1], position[2], orientation[0], orientation[1], player.authInfo.username)
 			}
 		)
 	}
@@ -235,8 +235,8 @@ export class BaseLevel extends TypedEmitter {
 				bottomTexture: texture,
 				transmitLight: 1,
 			}
-			client.defineBlock(block)
-			client.defineBlockExt(block)
+			client.extensions.get("BlockDefinitions").defineBlock(block)
+			client.extensions.get("BlockDefinitionsExtended").defineBlock(block)
 		}
 	}
 	/**Loads a level into a universe instance, creating it if it doesn't exist.

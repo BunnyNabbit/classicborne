@@ -29,6 +29,7 @@ export class BaseHeartbeat {
 				await this.postHeartbeat({
 					name: this.universe.serverConfiguration.serverName ?? "A classicborne server.",
 					port: this.universe.serverConfiguration.port.toString(),
+					// @ts-ignore
 					users: this.universe.server.players.length.toString(),
 					max: "64",
 					software: "BunnyNabbit/classicborne",

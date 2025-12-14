@@ -28,11 +28,11 @@ export class DroneTransmitter extends EventEmitter {
 	 */
 	configureDrone(drone) {
 		const netId = this.netIds.get(drone)
-		this.client.configureSpawnExt(netId, drone.ego.name, ...drone.position, ...drone.orientation, drone.ego.skin)
+		this.client.extensions.get("ExtendedPlayerList").configureSpawn(netId, drone.ego.name, ...drone.position, ...drone.orientation, drone.ego.skin)
 		// Set model scale
-		this.client.setEntityProperty(netId, 3, drone.ego.scale[0] * 1000) // X
-		this.client.setEntityProperty(netId, 4, drone.ego.scale[1] * 1000) // Y
-		this.client.setEntityProperty(netId, 5, drone.ego.scale[2] * 1000) // Z
+		this.client.extensions.get("EntityProperty").setEntityProperty(netId, 3, drone.ego.scale[0] * 1000) // X
+		this.client.extensions.get("EntityProperty").setEntityProperty(netId, 4, drone.ego.scale[1] * 1000) // Y
+		this.client.extensions.get("EntityProperty").setEntityProperty(netId, 5, drone.ego.scale[2] * 1000) // Z
 	}
 	/** Sends all drones as entities to the client. */
 	resendDrones() {
