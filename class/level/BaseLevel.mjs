@@ -10,7 +10,8 @@ import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
 // /** @import { LevelCommand } from "./levelCommands.mjs" */
 
 /**@todo Yet to be documented.
- * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void; "loaded": () => void; "unloaded": () => void; "levelLoaded": () => void}>}
+ * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void; "loaded": () => void; "unloaded": () => void; "levelLoaded": () => void} & E>}
+ * @template {Record<string, any>} E
  */
 export class BaseLevel extends TypedEmitter {
 	/**@todo Yet to be documented.
