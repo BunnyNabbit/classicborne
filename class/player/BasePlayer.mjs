@@ -162,7 +162,7 @@ export class BasePlayer extends EventEmitter {
 	}
 	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
-	/**Returns the display name for the player, truncated to 62 characters to allow room for color code prefixes in protocol calls.
+	/** Returns the display name for the player, truncated to 62 characters to allow room for color code prefixes in protocol calls.
 	 * Subclasses can override this method to customize display name behavior.
 	 * @returns {string} The display name for the player
 	 */
