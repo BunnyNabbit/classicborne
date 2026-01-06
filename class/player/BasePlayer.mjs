@@ -20,7 +20,8 @@ export class BasePlayer extends EventEmitter {
 		this.universe = universe
 		this.client.player = this
 		this.authInfo = authInfo
-		this.username = authInfo.username
+		// Truncate username to 62 characters to allow room for color code prefix (&7) in addPlayerName
+		this.username = authInfo.username.substring(0, 62)
 		/** @type {BaseLevel|null} */
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
