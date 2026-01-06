@@ -20,8 +20,7 @@ export class BasePlayer extends EventEmitter {
 		this.universe = universe
 		this.client.player = this
 		this.authInfo = authInfo
-		// Truncate username to 62 characters to allow room for color code prefix (&7) in addPlayerName
-		this.username = authInfo.username?.substring(0, 62) || "Player"
+		this.username = authInfo.username
 		/** @type {BaseLevel|null} */
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
@@ -163,6 +162,13 @@ export class BasePlayer extends EventEmitter {
 	}
 	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
+	/**Returns the display name for the player, truncated to 62 characters to allow room for color code prefixes in protocol calls.
+	 * Subclasses can override this method to customize display name behavior.
+	 * @returns {string} The display name for the player
+	 */
+	getDisplayName() {
+		return this.username?.substring(0, 62) || "Player"
+	}
 	/**Clears the displayed screen prints.
 	 * @param {number[]} printTypes - The print type to clear out.
 	 */
