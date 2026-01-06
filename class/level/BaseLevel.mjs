@@ -89,7 +89,7 @@ export class BaseLevel extends TypedEmitter {
 		player.space = this
 		this.loadPlayer(player, position, orientation)
 		this.sendDrones(player)
-		const drone = new Drone(new Ego({ name: "&7" + player.authInfo.username }))
+		const drone = new Drone(new Ego({ name: "&7" + player.username }))
 		this.clientDrones.set(player.client, drone)
 		this.addDrone(drone)
 		this.players.push(player)
@@ -118,7 +118,7 @@ export class BaseLevel extends TypedEmitter {
 				player.client.extensions.get("BlockPermissions").setBlockPermission(9, 1, 1)
 				player.client.extensions.get("BlockPermissions").setBlockPermission(10, 1, 1)
 				player.client.extensions.get("BlockPermissions").setBlockPermission(11, 1, 1)
-				player.client.extensions.get("ExtendedPlayerList").configureSpawn(-1, player.authInfo.username, position[0], position[1], position[2], orientation[0], orientation[1], player.authInfo.username)
+				player.client.extensions.get("ExtendedPlayerList").configureSpawn(-1, player.username, position[0], position[1], position[2], orientation[0], orientation[1], player.username)
 			}
 		)
 	}
