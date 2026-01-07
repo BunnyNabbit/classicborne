@@ -87,6 +87,14 @@ export class BasePlayer extends EventEmitter {
 	async afterAuth() {
 		this.client.serverIdentification("classicborne-server-protocol", "", 100)
 	}
+	/**Gets the display name, ensuring it does not exceed the character limit for drones or player list entries.
+	 *
+	 * @param {string} [suffix="&7"] Default is `"&7"`
+	 */
+	getDisplayName(suffix = "&7") {
+		const limit = 64
+		return `${suffix}${this.username}`.substring(0, limit)
+	}
 	/** @todo Yet to be documented. */
 	listenSetBlock() {
 		this.client.on("setBlock", (operation) => {

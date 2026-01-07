@@ -54,12 +54,12 @@ export class BaseUniverse extends TypedEmitter {
 			if (!this.server.players.some((player) => player.netId == i)) {
 				player.netId = i
 				this.server.players.forEach((otherPlayer) => {
-					player.client.extensions.get("ExtendedPlayerList").addPlayerName(otherPlayer.netId, otherPlayer.username, `&7${otherPlayer.username}`, "Server", 1)
+					player.client.extensions.get("ExtendedPlayerList").addPlayerName(otherPlayer.netId, otherPlayer.username, otherPlayer.getDisplayName(), "Server", 1)
 				})
 				this.server.players.push(player)
-				player.client.extensions.get("ExtendedPlayerList").addPlayerName(255, player.username, `&7${player.username}`, "Server", 1)
+				player.client.extensions.get("ExtendedPlayerList").addPlayerName(255, player.username, player.getDisplayName(), "Server", 1)
 				this.server.players.forEach((anyPlayer) => {
-					if (anyPlayer != player) anyPlayer.client.extensions.get("ExtendedPlayerList").addPlayerName(i, player.username, `&7${player.username}`, "Server", 1)
+					if (anyPlayer != player) anyPlayer.client.extensions.get("ExtendedPlayerList").addPlayerName(i, player.username, player.getDisplayName(), "Server", 1)
 				})
 				this.emit("playerAdded", player)
 				return
