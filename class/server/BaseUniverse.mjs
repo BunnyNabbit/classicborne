@@ -1,11 +1,12 @@
 import { Server } from "classicborne-server-protocol"
 import { BasePlayer } from "../player/BasePlayer.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
-/** @import { BaseHeartbeat } from "./BaseHeartbeat.mjs" */
-/** @import { BaseLevel } from "../level/BaseLevel.mjs" */
+/** @import {BaseHeartbeat} from "./BaseHeartbeat.mjs" */
+/** @import {BaseLevel} from "../level/BaseLevel.mjs" */
 
 /**@todo Yet to be documented.
- * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void}>}
+ *
+ * @extends {TypedEmitter<{ playerAdded: (player: BasePlayer) => void; playerRemoved: (player: BasePlayer) => void }>}
  */
 export class BaseUniverse extends TypedEmitter {
 	/** @todo Yet to be documented. */
@@ -13,6 +14,7 @@ export class BaseUniverse extends TypedEmitter {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
 		/**A `classicborne-server-protocol` Server instance.
+		 *
 		 * @type {Server}
 		 */
 		this.server = new Server(serverConfiguration.port)
@@ -29,6 +31,7 @@ export class BaseUniverse extends TypedEmitter {
 			})
 		}
 		/**The currently loaded levels.
+		 *
 		 * @type {Map<string, BaseLevel>}
 		 */
 		this.levels = new Map()
@@ -36,13 +39,15 @@ export class BaseUniverse extends TypedEmitter {
 			new this.constructor.playerClass(client, this, authInfo)
 		})
 		/**The heartbeat used for announcing the server to a server list.
+		 *
 		 * @type {BaseHeartbeat}
 		 */
 		this.heartbeat
 	}
 	/**Registers the player into the universe, assigning it a network ID and emitting a `playerAdded` event.
-	 * @throws {Error} Thrown if a network ID cannot be assigned.
+	 *
 	 * @param {BasePlayer} player
+	 * @throws {Error} Thrown if a network ID cannot be assigned.
 	 */
 	addPlayer(player) {
 		for (let i = 0; i < 127; i++) {
@@ -63,6 +68,7 @@ export class BaseUniverse extends TypedEmitter {
 		throw new Error("Unable to generate unique player ID.")
 	}
 	/**Unregisters the player from the universe, emitting a `playerRemoved` event. This is called on player disconnect or by `basePlayer.client.disconnect`.
+	 *
 	 * @param {BasePlayer} player
 	 */
 	removePlayer(player) {

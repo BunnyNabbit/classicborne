@@ -4,23 +4,30 @@ import { TypedEmitter } from "tiny-typed-emitter"
 import { componentToHex } from "../../utils.mjs"
 import { EmptyTemplate } from "./BaseTemplate.mjs"
 import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
-/** @import { BasePlayer } from "../player/BasePlayer.mjs" */
-/** @import { Vector3, Vector2 } from "../../types/arrayLikes.mjs" */
-/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
+/** @import {BasePlayer} from "../player/BasePlayer.mjs" */
+/**@import {
+ *   Vector2,
+ *   Vector3
+ * } from "../../types/arrayLikes.mjs"
+ */
+/** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
 // /** @import { LevelCommand } from "./levelCommands.mjs" */
 
 /**@todo Yet to be documented.
- * @extends {TypedEmitter<{"playerAdded": (player: BasePlayer) => void; "playerRemoved": (player: BasePlayer) => void; "loaded": () => void; "unloaded": () => void; "levelLoaded": () => void} & E>}
+ *
  * @template {Record<string, any>} E
+ * @extends {TypedEmitter<{ playerAdded: (player: BasePlayer) => void; playerRemoved: (player: BasePlayer) => void; loaded: () => void; unloaded: () => void; levelLoaded: () => void } & E>}
  */
 export class BaseLevel extends TypedEmitter {
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Vector3} bounds
 	 * @param {Buffer} blocks
 	 */
 	constructor(bounds, blocks) {
 		super()
 		/**@todo Yet to be documented.
+		 *
 		 * @type {BasePlayer[]}
 		 */
 		this.players = []
@@ -28,7 +35,8 @@ export class BaseLevel extends TypedEmitter {
 		this.bounds = bounds
 		/** @todo Yet to be documented. */
 		this.blocks = blocks
-		/** @todo Yet to be documented.
+		/**@todo Yet to be documented.
+		 *
 		 * @type {string[]}
 		 */
 		this.allowList = []
@@ -41,10 +49,11 @@ export class BaseLevel extends TypedEmitter {
 		this.loading
 		/** @type {boolean} */
 		this.blocking
-		/** @type {ChangeRecord|NullChangeRecord} */
+		/** @type {ChangeRecord | NullChangeRecord} */
 		this.changeRecord
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {BasePlayer} player
 	 */
 	sendDrones(player) {
@@ -53,6 +62,7 @@ export class BaseLevel extends TypedEmitter {
 		})
 	}
 	/**Removes a player from the level.
+	 *
 	 * @param {BasePlayer} player - The player to be removed.
 	 */
 	removePlayer(player) {
@@ -66,6 +76,7 @@ export class BaseLevel extends TypedEmitter {
 		this.emit("playerRemoved", player)
 	}
 	/**Removes a drone from the level.
+	 *
 	 * @param {Drone} drone - The drone to be removed.
 	 */
 	removeDrone(drone) {
@@ -73,6 +84,7 @@ export class BaseLevel extends TypedEmitter {
 		this.drones.delete(drone)
 	}
 	/**Adds a drone to the level.
+	 *
 	 * @param {Drone} drone - The drone to be added.
 	 */
 	addDrone(drone) {
@@ -82,6 +94,7 @@ export class BaseLevel extends TypedEmitter {
 		this.drones.add(drone)
 	}
 	/**Adds a player to the level.
+	 *
 	 * @param {BasePlayer} player - The player to be added.
 	 */
 	addPlayer(player, position = [0, 0, 0], orientation = [0, 0]) {
@@ -96,9 +109,10 @@ export class BaseLevel extends TypedEmitter {
 		player.teleporting = false
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {BasePlayer} player
-	 * @param {Vector3} [position=[0,0,0]]
-	 * @param {Vector2} [orientation=[0,0]]
+	 * @param {Vector3} [position=[0,0,0]] Default is `[0,0,0]`
+	 * @param {Vector2} [orientation=[0,0]] Default is `[0,0]`
 	 */
 	loadPlayer(player, position = [0, 0, 0], orientation = [0, 0]) {
 		player.client.loadLevel(
@@ -133,10 +147,11 @@ export class BaseLevel extends TypedEmitter {
 		})
 	}
 	/**@todo Yet to be documented.
-	 * @param {number} block
+	 *
 	 * @param {Vector3} position
-	 * @param {BasePlayer[]} [excludePlayers=[]]
-	 * @param {boolean} [saveToRecord=true]
+	 * @param {number} block
+	 * @param {BasePlayer[]} [excludePlayers=[]] Default is `[]`
+	 * @param {boolean} [saveToRecord=true] Default is `true`
 	 */
 	setBlock(position, block, excludePlayers = [], saveToRecord = true) {
 		this.blocks.writeUInt8(block, position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
@@ -149,6 +164,7 @@ export class BaseLevel extends TypedEmitter {
 		}
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Vector3} position
 	 * @param {number} block
 	 */
@@ -156,6 +172,7 @@ export class BaseLevel extends TypedEmitter {
 		this.blocks.writeUInt8(block, position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Vector3} position
 	 * @returns {number}
 	 */
@@ -163,6 +180,7 @@ export class BaseLevel extends TypedEmitter {
 		return this.blocks.readUInt8(position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Vector3} position
 	 * @returns {boolean}
 	 */
@@ -173,6 +191,7 @@ export class BaseLevel extends TypedEmitter {
 		return true
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} username
 	 * @returns {boolean}
 	 */
@@ -182,6 +201,7 @@ export class BaseLevel extends TypedEmitter {
 		return false
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} command
 	 * @returns {LevelCommand} The command class, or `null` if not found.
 	 */
@@ -193,7 +213,8 @@ export class BaseLevel extends TypedEmitter {
 		return commandClass
 	}
 	/**Destroys the level, releasing any resources used for it.
-	 * @param {boolean} [saveChanges=true]
+	 *
+	 * @param {boolean} [saveChanges=true] Default is `true`
 	 */
 	async dispose(saveChanges = true) {
 		if (!this.changeRecord.draining && this.changeRecord.dirty && saveChanges) {
@@ -205,8 +226,9 @@ export class BaseLevel extends TypedEmitter {
 		this.commandInterpreter.dispose()
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Client} client
-	 * @param	{number[][]} blockset
+	 * @param {number[][]} blockset
 	 */
 	static sendBlockset(client, blockset) {
 		for (let i = 0; i < blockset.length; i++) {
@@ -241,6 +263,7 @@ export class BaseLevel extends TypedEmitter {
 		}
 	}
 	/**Loads a level into a universe instance, creating it if it doesn't exist.
+	 *
 	 * @param {BaseUniverse} universe - The universe to load the level into.
 	 * @param {string} spaceName - The identifier of the level.
 	 * @param {Object} defaults - The default properties for the level.
@@ -278,7 +301,9 @@ export class BaseLevel extends TypedEmitter {
 		return promise
 	}
 	/**Teleports the player into the level. If level currently doesn't exist in universe, it'll be created.
+	 *
 	 * Levels extending Level are expected to override this method using this pattern:
+	 *
 	 * ```js
 	 *  static async teleportPlayer(player, spaceName) {
 	 *  	if (super.teleportPlayer(player) === false) return // Removes player from any levels they are in. If it returns false, the player is still being teleported somewhere.
@@ -289,9 +314,10 @@ export class BaseLevel extends TypedEmitter {
 	 *  	})
 	 *  }
 	 * ```
+	 *
 	 * @param {BasePlayer} player - The player to teleport.
-	 * @param {string?} [spaceName]
-	 * @param {{}?} [defaults={}]
+	 * @param {string | null} [spaceName]
+	 * @param {{}?} [defaults={}] Default is `{}`
 	 */
 	static async teleportPlayer(player, spaceName, defaults = {}) {
 		if (player) {
@@ -320,8 +346,9 @@ export class BaseLevel extends TypedEmitter {
 	/** @todo Yet to be documented. */
 	static template = new EmptyTemplate()
 	/**@todo Yet to be documented.
-	 * @see `BaseLevel.bounds`
+	 *
 	 * @deprecated
+	 * @see {BaseLevel.bounds}
 	 */
 	static standardBounds = this.bounds
 	/** @todo Yet to be documented. */

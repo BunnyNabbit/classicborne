@@ -1,6 +1,6 @@
 /** @todo Yet to be documented. */
 export class NullChangeRecord {
-	/** */
+	/**/
 	constructor(path, loadedCallback = () => {}) {
 		this.currentBuffer = null
 		this.path = path

@@ -1,11 +1,12 @@
 import { TypedEmitter } from "tiny-typed-emitter"
-/** @import { BaseLevel } from "./BaseLevel.mjs" */
-/** @import { BasePlayer} from "../player/BasePlayer.mjs" */
-/** @import { Vector3 } from "../../types/arrayLikes.mjs" */
+/** @import {BaseLevel} from "./BaseLevel.mjs" */
+/** @import {BasePlayer} from "../player/BasePlayer.mjs" */
+/** @import {Vector3} from "../../types/arrayLikes.mjs" */
 
 /** @todo Yet to be documented. */
 export class TypeQuestion {
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} type
 	 * @param {string} typeName
 	 */
@@ -15,10 +16,12 @@ export class TypeQuestion {
 	}
 }
 /**As an instance, I am initialized with a level. I act on the level via commands provided by the player or by other source, such as `ChangeRecord` loading. I may be used interactively by a player. This causes the level to block writes to avoid potential conflict with input intended as responses to my interactive questions.
- * @extends {TypedEmitter<{"parsingError": (player: BasePlayer, errorType: number) => void; "typeQuestion": (typeQuestion: TypeQuestion) => void; "commandExecuted": (commandName: string, actionBytes: number[]) => void}>}
+ *
+ * @extends {TypedEmitter<{ parsingError: (player: BasePlayer, errorType: number) => void; typeQuestion: (typeQuestion: TypeQuestion) => void; commandExecuted: (commandName: string, actionBytes: number[]) => void }>}
  */
 export class BaseLevelCommandInterpreter extends TypedEmitter {
 	/**@todo Yet to be documented.
+	 *
 	 * @param {BaseLevel} level
 	 */
 	constructor(level) {
@@ -28,9 +31,10 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		this.level.loading = false
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} command
-	 * @param {?BasePlayer} player
-	 * @param {number[]} [actionBytes=[]]
+	 * @param {BasePlayer | null} player
+	 * @param {number[]} [actionBytes=[]] Default is `[]`
 	 */
 	interpretCommand(command = "cuboid 1", player = null, actionBytes = []) {
 		// i.e: cuboid 1
@@ -54,10 +58,11 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		return true
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {object} [providedData]
 	 * @param {number} providedData.block
 	 * @param {Vector3} providedData.position
-	 * @param {?BasePlayer} player
+	 * @param {BasePlayer | null} player
 	 */
 	inferCurrentCommand(providedData = null, player = null) {
 		const currentType = this.currentCommand.layout[this.currentCommandLayoutIndex]
@@ -97,6 +102,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		throw new Error(`Command needs ${currentType} but no handler for type was used.`)
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string[]} splitCommand
 	 * @param {BasePlayer} player
 	 */
@@ -170,7 +176,8 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		positionOutBounds: 2,
 	}
 	/**@todo Yet to be documented.
-	 * @param {?BasePlayer} player
+	 *
+	 * @param {BasePlayer | null} player
 	 */
 	commitAction(player = null) {
 		const command = this.currentCommand
@@ -198,6 +205,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		this.removeAllListeners()
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {number} number
 	 * @returns {boolean}
 	 */

@@ -1,10 +1,11 @@
 // @ts-check
-import { Buffer } from 'node:buffer'
-/** @import {Vector3 } from "../../types/arrayLikes.mjs" */
+import { Buffer } from "node:buffer"
+/** @import {Vector3} from "../../types/arrayLikes.mjs" */
 
 /** @todo Yet to be documented. */
 export class BaseTemplate {
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} iconName
 	 * @param {Vector3} defaultBounds
 	 */
@@ -20,7 +21,7 @@ export class BaseTemplate {
 }
 /** @todo Yet to be documented. */
 export class EmptyTemplate extends BaseTemplate {
-	/** */
+	/**/
 	constructor() {
 		super("empty")
 	}

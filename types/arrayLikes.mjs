@@ -1,11 +1,13 @@
-/** @fileoverview Array-like typedefs. */
+/** @file Array-like typedefs. */
 
-/** An array of three numbers.
+/**An array of three numbers.
+ *
  * @typedef Vector3
  * @type {number[]}
  */
 
-/** An array of two numbers.
+/**An array of two numbers.
+ *
  * @typedef Vector2
  * @type {number[]}
  */

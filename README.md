@@ -30,7 +30,7 @@ import { BasePlayer } from "classicborne/class/player/BasePlayer.mjs"
 import { BaseUniverse } from "classicborne/class/server/BaseUniverse.mjs"
 
 class MyLevel extends BaseLevel {
-	/** */
+	/**/
 	constructor(...args) {
 		super(...args)
 		this.positionEventListeners = new Map()
@@ -56,7 +56,7 @@ class MyLevel extends BaseLevel {
 }
 
 class MyPlayer extends BasePlayer {
-	/** */
+	/**/
 	async initialize(...args) {
 		const authenticated = await super.initialize(...args)
 		if (!authenticated) return

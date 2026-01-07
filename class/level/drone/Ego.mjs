@@ -1,5 +1,5 @@
 // @ts-check
-/** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
+/** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 
 /** Represents a drone's appearance. */
 export class Ego {
@@ -10,6 +10,7 @@ export class Ego {
 		this.skin = ego.skin || this.name
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} skin
 	 * @returns
 	 */
@@ -18,6 +19,7 @@ export class Ego {
 		return this
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Vector3} scale
 	 * @returns
 	 */
@@ -26,6 +28,7 @@ export class Ego {
 		return this
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} name
 	 * @returns
 	 */

@@ -3,10 +3,11 @@ import qs from "qs"
 import axios from "axios"
 import crypto from "crypto"
 import { sleep } from "../../utils.mjs"
-/** @import { BaseUniverse } from "./BaseUniverse.mjs" */
+/** @import {BaseUniverse} from "./BaseUniverse.mjs" */
 
 export class BaseHeartbeat {
 	/**Creates a Heartbeat instance. Will send heartbeats to the server list shortly after initialization.
+	 *
 	 * @param {string} urlBase
 	 * @param {BaseUniverse} universe
 	 */
@@ -45,6 +46,7 @@ export class BaseHeartbeat {
 		}
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Record<string, string>} form
 	 */
 	async postHeartbeat(form) {

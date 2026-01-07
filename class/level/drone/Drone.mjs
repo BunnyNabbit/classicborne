@@ -1,13 +1,19 @@
 // @ts-check
 import { Ego } from "./Ego.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
-/** @import { Vector3, Vector2 } from "../../../types/arrayLikes.mjs" */
+/**@import {
+ *   Vector2,
+ *   Vector3
+ * } from "../../../types/arrayLikes.mjs"
+ */
 
 /**Represents a drone entity for replicating character and positions of player and non-player entities.
- * @extends {TypedEmitter<{"position": (position: Vector3, orientation: Vector2) => void; "destroy": () => void}>}
+ *
+ * @extends {TypedEmitter<{ position: (position: Vector3, orientation: Vector2) => void; destroy: () => void }>}
  */
 export class Drone extends TypedEmitter {
 	/**Creates a new drone instance.
+	 *
 	 * @param {Ego} ego - The drone's appearance.
 	 */
 	constructor(ego = new Ego()) {
@@ -19,6 +25,7 @@ export class Drone extends TypedEmitter {
 		this.destroyed = false
 	}
 	/**Sets position and orientation of the drone.
+	 *
 	 * @param {Object} position - The position of the drone.
 	 * @param {Object} orientation - The orientation of the drone.
 	 */

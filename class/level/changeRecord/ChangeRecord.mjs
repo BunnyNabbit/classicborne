@@ -8,12 +8,13 @@ import trash from "trash"
 import { join } from "path"
 import sqlite3 from "sqlite3"
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
-/** @import { Vector3 } from "../../../types/arrayLikes.mjs" */
-/** @import { BaseLevel } from "../../level/BaseLevel.mjs" */
+/** @import {Vector3} from "../../../types/arrayLikes.mjs" */
+/** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
 
-/** Represents a change record for a level. */
+/** I am a change record for a {@link BaseLevel}. */
 export class ChangeRecord {
 	/**Creates a new ChangeRecord instance.
+	 *
 	 * @param {string} path - The path to the change record file.
 	 * @param {function} loadedCallback - The callback function to call when file handles are opened.
 	 * @param {object} options - Options for the change record.
@@ -41,6 +42,7 @@ export class ChangeRecord {
 		})
 	}
 	/**Appends a block change to the change record.
+	 *
 	 * @param {Vector3} position - The position of the block change.
 	 * @param {number} block - The block type.
 	 */
@@ -48,6 +50,7 @@ export class ChangeRecord {
 		this.appendAction(false, position.concat(block))
 	}
 	/**Append an action to the change record.
+	 *
 	 * @param {boolean} isCommand - Whether the action is a command.
 	 * @param {number[]} actionBytes - The action bytes to append.
 	 * @param {string} [commandString] - The command string (if applicable).
@@ -73,18 +76,19 @@ export class ChangeRecord {
 		}
 	}
 	/**Process the VHS file with a given processor function.
+	 *
+	 * @private
 	 * @param {fs.promises.FileHandle} vhsFh - The file handle of the VHS file.
 	 * @param {function} processor - The processor function to process each action.
-	 * @param {number} [startFileOffset=0] - The offset to start processing from.
-	 * @param {number} [startActionCount=0] - The action count to start from.
+	 * @param {number} [startFileOffset=0] - The offset to start processing from. Default is `0`
+	 * @param {number} [startActionCount=0] - The action count to start from. Default is `0`
 	 * @returns {Promise<number>} The total number of actions processed.
-	 * @private
 	 */
 	async _processVhsFile(vhsFh, processor, startFileOffset = 0, startActionCount = 0) {
 		let currentFileReadOffset = startFileOffset
 		this.actionCount = startActionCount
 		while (true) {
-			/** @type {Buffer|number} */
+			/** @type {Buffer | number} */
 			let bufferLength = Buffer.alloc(4)
 			await vhsFh.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
 			bufferLength = bufferLength.readUint32LE(0)
@@ -92,7 +96,7 @@ export class ChangeRecord {
 
 			const deflateBuffer = Buffer.alloc(bufferLength)
 			await vhsFh.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
-			/** @type {Buffer|SmartBuffer} */
+			/** @type {Buffer | SmartBuffer} */
 			let changes = await inflate(deflateBuffer)
 			let bufferActionCount = 0
 			changes = SmartBuffer.fromBuffer(changes)
@@ -119,6 +123,7 @@ export class ChangeRecord {
 		return this.actionCount
 	}
 	/**Restore block changes to a level.
+	 *
 	 * @param {BaseLevel} level - The level to restore changes to.
 	 * @param {number} [maxActions] - The maximum number of actions to restore.
 	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes.
@@ -179,6 +184,7 @@ export class ChangeRecord {
 	/** @todo Yet to be documented. */
 	static lagKeyframeTime = 250 // milliseconds
 	/**Flush changes to disk by compressing current buffer and append it to the VHS file.
+	 *
 	 * @returns {Promise<number>} The length of the flushed buffer.
 	 */
 	async flushChanges() {
@@ -196,6 +202,7 @@ export class ChangeRecord {
 		return vhsBlockBuffer.length
 	}
 	/**Trims the VHS file to the specified action count, discarding any actions beyond that count.
+	 *
 	 * @param {number} toActionCount - The action count to trim to.
 	 */
 	async commit(toActionCount, level) {
@@ -262,12 +269,11 @@ export class ChangeRecord {
 	}
 }
 
-/**Stopwatch class to measure elapsed time.
- * This class can be used to measure the time taken for operations.
- */
+/** I measure elapsed time. I am primarily used to measure the time taken for operations. */
 class Stopwatch {
 	/**Creates a new Stopwatch instance.
-	 * @param {boolean} [start=false] - Whether to start the stopwatch immediately.
+	 *
+	 * @param {boolean} [start=false] - Whether to start the stopwatch immediately. Default is `false`
 	 */
 	constructor(start = false) {
 		this.startTime = 0
@@ -275,12 +281,13 @@ class Stopwatch {
 		this.running = false
 		if (start) this.start()
 	}
-	/**Starts the stopwatch. */
+	/** Starts the stopwatch. */
 	start() {
 		this.startTime = Date.now()
 		this.running = true
 	}
 	/**Stops the stopwatch.
+	 *
 	 * @returns {number} The elapsed time in milliseconds.
 	 */
 	stop() {
@@ -290,6 +297,7 @@ class Stopwatch {
 		return this.endTime - this.startTime
 	}
 	/**Gets the elapsed time in milliseconds.
+	 *
 	 * @returns {number} The elapsed time in milliseconds.
 	 */
 	get elapsed() {
@@ -301,11 +309,10 @@ class Stopwatch {
 	}
 }
 
-/**Represents a keyframe record for a level.
- * This class manages level keyframes in a SQLite database, allowing for efficient retrieval and management of keyframe data.
- */
+/** I am a keyframe record for a {@link BaseLevel}. I manage level keyframes in my SQLite database, allowing for efficient retrieval and management of keyframe data. */
 class KeyframeRecord {
 	/**Creates a new KeyframeRecord instance.
+	 *
 	 * @param {string} path - The path to the SQLite database file.
 	 */
 	constructor(path) {
@@ -336,12 +343,13 @@ class KeyframeRecord {
 		})
 	}
 	/**Adds a keyframe to the database.
+	 *
 	 * @param {number} offset - The offset in the VHS file.
 	 * @param {number} totalActionCount - The action count at this keyframe.
 	 * @param {string} template - The template associated with this keyframe.
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
-	 * @param {string} [levelData="{}"] - Optional level data in JSON format.
+	 * @param {string} [levelData="{}"] - Optional level data in JSON format. Default is `"{}"`
 	 * @returns {Promise<number>} The ID of the newly created keyframe.
 	 */
 	async addKeyframe(offset, totalActionCount, bufferActionCount, template, voxelData, bounds, levelData = "{}") {
@@ -358,10 +366,11 @@ class KeyframeRecord {
 		})
 	}
 	/**Gets the latest keyframe before a given action count for a specific template.
+	 *
 	 * @param {number} beforeActionCount - The action count to search before.
 	 * @param {string} template - The template to filter by.
 	 * @param {Vector3} bounds - The bounds of the level.
-	 * @returns {Promise<object|null>} The latest keyframe record or null if not found.
+	 * @returns {Promise<object | null>} The latest keyframe record or null if not found.
 	 */
 	async getLatestKeyframe(beforeActionCount, template, bounds) {
 		await this.ready
@@ -376,6 +385,7 @@ class KeyframeRecord {
 		})
 	}
 	/**Purge keyframes after a specific action count.
+	 *
 	 * @param {number} afterActionCount - The action count to purge keyframes after.
 	 * @returns {Promise<number>} The number of rows deleted.
 	 */
@@ -392,6 +402,7 @@ class KeyframeRecord {
 		})
 	}
 	/**Vacuum the database to optimize it.
+	 *
 	 * @returns {Promise<void>}
 	 */
 	async vacuum() {
@@ -407,6 +418,7 @@ class KeyframeRecord {
 		})
 	}
 	/**Close the database connection.
+	 *
 	 * @returns {Promise<void>}
 	 */
 	async close() {
@@ -422,6 +434,7 @@ class KeyframeRecord {
 		})
 	}
 	/**Get a string key for level bounds.
+	 *
 	 * @param {Vector3} bounds - The bounds to generate a key for.
 	 * @returns {string} The string key for the bounds.
 	 */

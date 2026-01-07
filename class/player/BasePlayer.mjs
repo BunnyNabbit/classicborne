@@ -2,14 +2,19 @@
 import { DroneTransmitter } from "../level/drone/DroneTransmitter.mjs"
 import { EventEmitter } from "events"
 import { Watchdog } from "./Watchdog.mjs"
-/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
-/** @import { BaseUniverse } from "../server/BaseUniverse.mjs" */
-/** @import { BaseLevel } from "../level/BaseLevel.mjs" */
-/** @import { Vector3, Vector2 } from "../../types/arrayLikes.mjs" */
+/** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
+/** @import {BaseUniverse} from "../server/BaseUniverse.mjs" */
+/** @import {BaseLevel} from "../level/BaseLevel.mjs" */
+/**@import {
+ *   Vector2,
+ *   Vector3
+ * } from "../../types/arrayLikes.mjs"
+ */
 
 /** @todo Yet to be documented. */
 export class BasePlayer extends EventEmitter {
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Client} client
 	 * @param {BaseUniverse} universe
 	 * @param {any} authInfo
@@ -21,7 +26,7 @@ export class BasePlayer extends EventEmitter {
 		this.client.player = this
 		this.authInfo = authInfo
 		this.username = authInfo.username
-		/** @type {BaseLevel|null} */
+		/** @type {BaseLevel | null} */
 		this.space = null
 		this.ready = this.initialize(client, universe, authInfo)
 		/** @type {number} */
@@ -30,6 +35,7 @@ export class BasePlayer extends EventEmitter {
 		this.teleporting
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {Client} client
 	 * @param {BaseUniverse} universe
 	 * @param {any} authInfo
@@ -67,11 +73,12 @@ export class BasePlayer extends EventEmitter {
 		}
 		return true
 	}
-	/** I am intended to be overridden. When overridden, return true if the player is authenticated. If a string is returned, it is used as a reason for rejection.
+	/**I am intended to be overridden. When overridden, return true if the player is authenticated. If a string is returned, it is used as a reason for rejection.
+	 *
+	 * @abstract
 	 * @param {Client} client
 	 * @param {BaseUniverse} universe
 	 * @param {any} authInfo
-	 * @abstract
 	 */
 	async checkAuthInfo(client, universe, authInfo) {
 		return true
@@ -107,9 +114,10 @@ export class BasePlayer extends EventEmitter {
 		})
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {string} message
-	 * @param {number|number[]} types
-	 * @param {string} [continueAdornment="> "]
+	 * @param {number | number[]} types
+	 * @param {string} [continueAdornment="> "] Default is `"> "`
 	 */
 	message(message, types = [0], continueAdornment = "> ") {
 		const originalMessage = message
@@ -163,6 +171,7 @@ export class BasePlayer extends EventEmitter {
 	/** @todo Yet to be documented. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
 	/**Clears the displayed screen prints.
+	 *
 	 * @param {number[]} printTypes - The print type to clear out.
 	 */
 	clearPrints(printTypes = BasePlayer.printAreaTypes.bottom) {
@@ -189,6 +198,7 @@ export class BasePlayer extends EventEmitter {
 	/** @todo Yet to be documented. */
 	static rightAlignedMessageTypes = [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow, BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow]
 	/**@todo Yet to be documented.
+	 *
 	 * @param {BasePlayer} player
 	 */
 	static sendHotbar(player) {

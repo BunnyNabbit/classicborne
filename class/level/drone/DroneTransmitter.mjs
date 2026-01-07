@@ -1,10 +1,11 @@
 import { EventEmitter } from "events"
-/** @import { Client } from "classicborne-server-protocol/class/Client.mjs" */
-/** @import { Drone } from "./Drone.mjs" */
+/** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
+/** @import {Drone} from "./Drone.mjs" */
 
 /** Represents a drone transmitter for replicating drones to a player's client. */
 export class DroneTransmitter extends EventEmitter {
 	/**Creates a new DroneTransmitter instance.
+	 *
 	 * @param {Client} client - The client instance to use for sending data.
 	 */
 	constructor(client) {
@@ -16,6 +17,7 @@ export class DroneTransmitter extends EventEmitter {
 		this.listeners = new Map()
 	}
 	/**Replicates a drone's position to the client.
+	 *
 	 * @param {Drone} drone
 	 */
 	updateDrone(drone) {
@@ -24,6 +26,7 @@ export class DroneTransmitter extends EventEmitter {
 		this.client.absolutePositionUpdate(netId, ...drone.position, ...drone.orientation)
 	}
 	/**Sends an entity model to the client.
+	 *
 	 * @param {Drone} drone - The drone to send.
 	 */
 	configureDrone(drone) {
@@ -41,8 +44,9 @@ export class DroneTransmitter extends EventEmitter {
 		})
 	}
 	/**Returns the drone with the specified net ID.
+	 *
 	 * @param {number} netId - The net ID of the drone to find.
-	 * @returns {Drone|null} The drone with the specified net ID, or null if not found.
+	 * @returns {Drone | null} The drone with the specified net ID, or null if not found.
 	 */
 	getDroneByNetId(netId) {
 		let resultDrone = null
@@ -52,6 +56,7 @@ export class DroneTransmitter extends EventEmitter {
 		return resultDrone
 	}
 	/**Adds a drone for transmitting and assign a client-specific net ID. Listens to the drone's position and destroy events.
+	 *
 	 * @param {Drone} drone - The drone to add.
 	 * @returns {number} The net ID assigned to the drone.
 	 */
@@ -76,6 +81,7 @@ export class DroneTransmitter extends EventEmitter {
 		throw "Unable to generate drone ID"
 	}
 	/**Removes a drone from transmitting. destroys entity model, listen events and net ID.
+	 *
 	 * @param {Drone} drone - The drone to remove.
 	 */
 	removeDrone(drone) {
