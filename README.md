@@ -2,6 +2,7 @@
 
 [![NPM version badge](https://img.shields.io/npm/v/classicborne.svg)](http://npmjs.com/package/classicborne)
 [![Open GitHub issues badge](https://img.shields.io/github/issues/bunnynabbit/classicborne)](https://github.com/BunnyNabbit/classicborne/issues)
+[![Coverage status badge](https://coveralls.io/repos/github/BunnyNabbit/classicborne/badge.svg?branch=main)](https://coveralls.io/github/BunnyNabbit/classicborne?branch=main)
 
 A general purpose\* Minecraft Classic server with CPE support.
 
