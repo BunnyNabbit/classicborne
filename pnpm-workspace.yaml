@@ -5,3 +5,4 @@ onlyBuiltDependencies:
 
 minimumReleaseAgeExclude:
   - classicborne-server-protocol
+  - prettier-plugin-drone-jsdoc
