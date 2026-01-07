@@ -102,7 +102,7 @@ export class BaseLevel extends TypedEmitter {
 		player.space = this
 		this.loadPlayer(player, position, orientation)
 		this.sendDrones(player)
-		const drone = new Drone(new Ego({ name: "&7" + player.authInfo.username }))
+		const drone = new Drone(new Ego({ name: player.getDisplayName() }))
 		this.clientDrones.set(player.client, drone)
 		this.addDrone(drone)
 		this.players.push(player)
