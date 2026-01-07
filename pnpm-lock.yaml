@@ -14,9 +14,6 @@ importers:
       classicborne-server-protocol:
         specifier: ~0.6.0
         version: 0.6.0
-      prettier-plugin-drone-jsdoc:
-        specifier: ^1.8.0
-        version: 1.8.0(prettier@3.7.4)
       qs:
         specifier: ^6.14.0
         version: 6.14.1
@@ -45,6 +42,9 @@ importers:
       prettier-plugin-drone-class:
         specifier: ^0.1.0
         version: 0.1.0
+      prettier-plugin-drone-jsdoc:
+        specifier: ^1.8.0
+        version: 1.8.0(prettier@3.7.4)
       release-it:
         specifier: ^19.1.0
         version: 19.1.0(@types/node@22.19.2)
