@@ -1,13 +1,20 @@
 // @ts-check
 import { Ego } from "./Ego.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
+/** @import {DroneTransmitter} from "./DroneTransmitter.mjs" */
+/** @import {BasePlayer} from "../../player/BasePlayer.mjs" */
+/** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
 /**@import {
  *   Vector2,
  *   Vector3
  * } from "../../../types/arrayLikes.mjs"
  */
 
-/**Represents a drone entity for replicating character and positions of player and non-player entities.
+/**Represents a drone entity for replicating character and positions of players and non-player entities.
+ * 
+ * I am added to {@link BasePlayer | players'} {@link DroneTransmitter} instances so my position and appearance can be synchronized to other players.
+ * 
+ * By default, {@link BaseLevel} adds me on {@link BaseLevel.addPlayer} to represent the player's character in the level. I get destroyed when the player leaves the level via {@link BaseLevel.removePlayer}.
  *
  * @extends {TypedEmitter<{ position: (position: Vector3, orientation: Vector2) => void; destroy: () => void }>}
  */

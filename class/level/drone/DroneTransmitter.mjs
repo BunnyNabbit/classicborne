@@ -1,16 +1,19 @@
 import { EventEmitter } from "events"
 /** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
 /** @import {Drone} from "./Drone.mjs" */
+/** @import {BasePlayer} from "../../player/BasePlayer.mjs" */
 
-/** Represents a drone transmitter for replicating drones to a player's client. */
+/** I replicate {@link Drone | drones} and their positions to a {@link BasePlayer | player's} client. */
 export class DroneTransmitter extends EventEmitter {
-	/**Creates a new DroneTransmitter instance.
+	/**Creates a new DroneTransmitter instance for a client.
 	 *
 	 * @param {Client} client - The client instance to use for sending data.
 	 */
 	constructor(client) {
 		super()
 		this.client = client
+		// Validate required protocol extensions
+		DroneTransmitter.validateClientExtensions(client)
 		/** @todo Yet to be documented. */
 		this.drones = new Set()
 		this.netIds = new Map()
@@ -21,7 +24,7 @@ export class DroneTransmitter extends EventEmitter {
 	 * @param {Drone} drone
 	 */
 	updateDrone(drone) {
-		// TODO: Relative positions, but the packet isn't implemented in classicborne-protocol
+		// TODO: Relative positions, but the packet isn't implemented in classicborne-server-protocol
 		const netId = this.netIds.get(drone)
 		this.client.absolutePositionUpdate(netId, ...drone.position, ...drone.orientation)
 	}
@@ -55,7 +58,7 @@ export class DroneTransmitter extends EventEmitter {
 		})
 		return resultDrone
 	}
-	/**Adds a drone for transmitting and assign a client-specific net ID. Listens to the drone's position and destroy events.
+	/**Adds a {@link Drone} for transmitting and assign a client-specific net ID. Listens to the drone's position and destroy events.
 	 *
 	 * @param {Drone} drone - The drone to add.
 	 * @returns {number} The net ID assigned to the drone.
@@ -80,7 +83,7 @@ export class DroneTransmitter extends EventEmitter {
 		}
 		throw "Unable to generate drone ID"
 	}
-	/**Removes a drone from transmitting. destroys entity model, listen events and net ID.
+	/**Removes a {@link Drone} from transmitting. destroys entity model, listen events and frees up its net ID.
 	 *
 	 * @param {Drone} drone - The drone to remove.
 	 */
@@ -99,6 +102,19 @@ export class DroneTransmitter extends EventEmitter {
 		this.drones.forEach((drone) => {
 			this.removeDrone(drone)
 		})
+	}
+	/**Validates that the client has the required protocol extensions for {@link DroneTransmitter}.
+	 *
+	 * @param {Client} client - The client instance to validate.
+	 * @throws {Error} If a required extension is missing.
+	 */
+	static validateClientExtensions(client) {
+		const requiredExtensions = ["ExtendedPlayerList", "EntityProperty"]
+		for (const extension of requiredExtensions) {
+			if (!client.extensions || !client.extensions.has(extension)) {
+				throw new Error(`DroneTransmitter requires client to have protocol extension: ${extension}`)
+			}
+		}
 	}
 }
 
