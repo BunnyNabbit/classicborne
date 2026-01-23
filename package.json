@@ -5,7 +5,8 @@
   "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: Run tests in /tests\" && exit 1",
-    "build-docs": "typedoc"
+    "build-docs": "typedoc",
+    "type-check": "tsc"
   },
   "keywords": [
     "minecraft",
