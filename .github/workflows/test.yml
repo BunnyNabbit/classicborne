@@ -35,6 +35,9 @@ jobs:
         run: pnpm install
         working-directory: ./tests
 
+      - name: Type check
+        run: "pnpm run type-check"
+
       - name: Run tests
         run: pnpm test
         working-directory: ./tests
