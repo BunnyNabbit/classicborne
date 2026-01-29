@@ -3,6 +3,7 @@ import { BasePlayer } from "../player/BasePlayer.mjs"
 import { TypedEmitter } from "tiny-typed-emitter"
 /** @import {BaseHeartbeat} from "./BaseHeartbeat.mjs" */
 /** @import {BaseLevel} from "../level/BaseLevel.mjs" */
+/** @import {BasePlayer} from "../player/BasePlayer.mjs" */
 
 /**@todo Yet to be documented.
  *
@@ -30,7 +31,9 @@ export class BaseUniverse extends TypedEmitter {
 				this.heartbeat = new HeartbeatClass(`https://www.classicube.net/server/heartbeat/`, this)
 			})
 		}
-		/**The currently loaded levels.
+		/**The currently loaded levels. Indexed by {@link BaseLevel.name}.
+		 *
+		 * Use {@link BaseLevel.loadIntoUniverse} or {@link BaseLevel.teleportPlayer} to load levels into this map.
 		 *
 		 * @type {Map<string, BaseLevel>}
 		 */
@@ -38,13 +41,13 @@ export class BaseUniverse extends TypedEmitter {
 		this.server.on("clientConnected", async (client, authInfo) => {
 			new this.constructor.playerClass(client, this, authInfo)
 		})
-		/**The heartbeat used for announcing the server to a server list.
+		/**The heartbeat used for announcing the server to a server list. By default, I load {@link BaseHeartbeat} asynchronously if {@link BaseUniverse.constructor | serverConfiguration.postToMainServer} is true.
 		 *
 		 * @type {BaseHeartbeat}
 		 */
 		this.heartbeat
 	}
-	/**Registers the player into the universe, assigning it a network ID and emitting a `playerAdded` event.
+	/**Registers the {@link BasePlayer | player} into the {@link BaseUniverse | universe}, assigning it a network ID and emitting a `playerAdded` event.
 	 *
 	 * @param {BasePlayer} player
 	 * @throws {Error} Thrown if a network ID cannot be assigned.
@@ -67,7 +70,7 @@ export class BaseUniverse extends TypedEmitter {
 		}
 		throw new Error("Unable to generate unique player ID.")
 	}
-	/**Unregisters the player from the universe, emitting a `playerRemoved` event. This is called on player disconnect or by `basePlayer.client.disconnect`.
+	/**Unregisters the {@link BasePlayer | player} from the {@link BaseUniverse | universe}, emitting a `playerRemoved` event. This is called on player disconnect or by {@link BasePlayer.client.disconnect}.
 	 *
 	 * @param {BasePlayer} player
 	 */

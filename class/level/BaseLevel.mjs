@@ -12,6 +12,10 @@ import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
  */
 /** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
 // /** @import { LevelCommand } from "./levelCommands.mjs" */
+/** @import {BaseTemplate} from "./BaseTemplate.mjs" */
+/** @import {BaseUniverse} from "../server/BaseUniverse.mjs" */
+/** @import {ChangeRecord} from "./changeRecord/ChangeRecord.mjs" */
+/** @import {NullChangeRecord} from "./changeRecord/NullChangeRecord.mjs" */
 
 /**@todo Yet to be documented.
  *
@@ -19,32 +23,44 @@ import { BaseLevelCommandInterpreter } from "./BaseLevelCommandInterpreter.mjs"
  * @extends {TypedEmitter<{ playerAdded: (player: BasePlayer) => void; playerRemoved: (player: BasePlayer) => void; loaded: () => void; unloaded: () => void; levelLoaded: () => void } & E>}
  */
 export class BaseLevel extends TypedEmitter {
-	/**@todo Yet to be documented.
+	/**Initializes a new instance of the BaseLevel class.
 	 *
 	 * @param {Vector3} bounds
 	 * @param {Buffer} blocks
 	 */
 	constructor(bounds, blocks) {
 		super()
-		/**@todo Yet to be documented.
+		/**The players currently in the level.
 		 *
 		 * @type {BasePlayer[]}
 		 */
 		this.players = []
-		/** @todo Yet to be documented. */
+		/**The bounds of the level.
+		 *
+		 * @type {Vector3}
+		 */
 		this.bounds = bounds
-		/** @todo Yet to be documented. */
+		/**The buffer representing the level's blocks.
+		 *
+		 * @type {Buffer}
+		 */
 		this.blocks = blocks
-		/**@todo Yet to be documented.
+		/**Usernames of who is allowed to build in the level. {@link BaseLevel.userHasPermission} checks against this list. If empty, everyone is allowed.
 		 *
 		 * @type {string[]}
 		 */
 		this.allowList = []
-		/** @todo Yet to be documented. */
+		/**The set of drones currently in the level.
+		 *
+		 * @type {Set<Drone>}
+		 */
 		this.drones = new Set()
-		/** @todo Yet to be documented. */
+		/**Drones which are linked to clients in the level.
+		 *
+		 * @type {Map<Client, Drone>}
+		 */
 		this.clientDrones = new Map()
-		this.commandInterpreter = new this.constructor.commandInterpreterClass(this)
+		this.commandInterpreter = new /** @type {typeof BaseLevel} */ (this.constructor).commandInterpreterClass(this)
 		/** @type {boolean} */
 		this.loading
 		/** @type {boolean} */
@@ -52,16 +68,16 @@ export class BaseLevel extends TypedEmitter {
 		/** @type {ChangeRecord | NullChangeRecord} */
 		this.changeRecord
 	}
-	/**@todo Yet to be documented.
+	/**Sends all {@link Drone | drones} in the level to the specified {@link BasePlayer | player}.
 	 *
-	 * @param {BasePlayer} player
+	 * @param {BasePlayer} player - The player to send the drones to.
 	 */
 	sendDrones(player) {
 		this.drones.forEach((drone) => {
 			player.droneTransmitter.addDrone(drone)
 		})
 	}
-	/**Removes a player from the level.
+	/**Removes a {@link BasePlayer | player} from the level.
 	 *
 	 * @param {BasePlayer} player - The player to be removed.
 	 */
@@ -75,7 +91,7 @@ export class BaseLevel extends TypedEmitter {
 		player.droneTransmitter.clearDrones()
 		this.emit("playerRemoved", player)
 	}
-	/**Removes a drone from the level.
+	/**Removes a {@link Drone | drone} from the level.
 	 *
 	 * @param {Drone} drone - The drone to be removed.
 	 */
@@ -83,7 +99,7 @@ export class BaseLevel extends TypedEmitter {
 		drone.destroy()
 		this.drones.delete(drone)
 	}
-	/**Adds a drone to the level.
+	/**Adds a {@link Drone | drone} to the level.
 	 *
 	 * @param {Drone} drone - The drone to be added.
 	 */
@@ -93,7 +109,7 @@ export class BaseLevel extends TypedEmitter {
 		})
 		this.drones.add(drone)
 	}
-	/**Adds a player to the level.
+	/**Adds a {@link BasePlayer | player} to the level.
 	 *
 	 * @param {BasePlayer} player - The player to be added.
 	 */
@@ -108,7 +124,7 @@ export class BaseLevel extends TypedEmitter {
 		this.players.push(player)
 		player.teleporting = false
 	}
-	/**@todo Yet to be documented.
+	/**Sends the level data to the specified {@link BasePlayer | player}. This is typically called on {@link BaseLevel.addPlayer}.
 	 *
 	 * @param {BasePlayer} player
 	 * @param {Vector3} [position=[0,0,0]] Default is `[0,0,0]`
@@ -136,7 +152,7 @@ export class BaseLevel extends TypedEmitter {
 			}
 		)
 	}
-	/** @todo Yet to be documented. */
+	/** Reloads all players in the level, typically used to refresh the level's state. */
 	reload() {
 		this.players.forEach((player) => {
 			const reloadedPosition = Array.from(player.position)
@@ -146,10 +162,10 @@ export class BaseLevel extends TypedEmitter {
 			player.droneTransmitter.resendDrones()
 		})
 	}
-	/**@todo Yet to be documented.
+	/**Sets a block at the specified position in the level.
 	 *
-	 * @param {Vector3} position
-	 * @param {number} block
+	 * @param {Vector3} position - The position to set the block at.
+	 * @param {number} block - The block type to set.
 	 * @param {BasePlayer[]} [excludePlayers=[]] Default is `[]`
 	 * @param {boolean} [saveToRecord=true] Default is `true`
 	 */
@@ -163,26 +179,26 @@ export class BaseLevel extends TypedEmitter {
 			if (!this.changeRecord.draining && this.changeRecord.currentActionCount > 1024) this.changeRecord.flushChanges()
 		}
 	}
-	/**@todo Yet to be documented.
+	/**Sets a block at the specified position in the level without notifying players.
 	 *
-	 * @param {Vector3} position
-	 * @param {number} block
+	 * @param {Vector3} position - The position to set the block at.
+	 * @param {number} block - The block type to set.
 	 */
 	rawSetBlock(position, block) {
 		this.blocks.writeUInt8(block, position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
 	}
-	/**@todo Yet to be documented.
+	/**Gets the block type at the specified position in the level.
 	 *
-	 * @param {Vector3} position
-	 * @returns {number}
+	 * @param {Vector3} position - The position to get the block from.
+	 * @returns {number} The block type at the specified position.
 	 */
 	getBlock(position) {
 		return this.blocks.readUInt8(position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
 	}
-	/**@todo Yet to be documented.
+	/**Checks if a position is within the level bounds.
 	 *
-	 * @param {Vector3} position
-	 * @returns {boolean}
+	 * @param {Vector3} position - The position to check.
+	 * @returns {boolean} Whether the position is within the level bounds.
 	 */
 	withinLevelBounds(position) {
 		if (position.some((num) => isNaN(num))) return false
@@ -190,10 +206,10 @@ export class BaseLevel extends TypedEmitter {
 		if (position[0] >= this.bounds[0] || position[1] >= this.bounds[1] || position[2] >= this.bounds[2]) return false
 		return true
 	}
-	/**@todo Yet to be documented.
+	/**Checks if a user has permission to edit the level.
 	 *
-	 * @param {string} username
-	 * @returns {boolean}
+	 * @param {string} username - The username to check.
+	 * @returns {boolean} Whether the user has permission.
 	 */
 	userHasPermission(username) {
 		if (this.allowList.length == 0) return true
@@ -214,7 +230,7 @@ export class BaseLevel extends TypedEmitter {
 	}
 	/**Destroys the level, releasing any resources used for it.
 	 *
-	 * @param {boolean} [saveChanges=true] Default is `true`
+	 * @param {boolean} [saveChanges=true] If true, I will flush any pending block changes to my {@link ChangeRecord} before disposing it. Default is `true`
 	 */
 	async dispose(saveChanges = true) {
 		if (!this.changeRecord.draining && this.changeRecord.dirty && saveChanges) {
@@ -225,10 +241,10 @@ export class BaseLevel extends TypedEmitter {
 		this.removeAllListeners()
 		this.commandInterpreter.dispose()
 	}
-	/**@todo Yet to be documented.
+	/**Sends a block set to a client.
 	 *
-	 * @param {Client} client
-	 * @param {number[][]} blockset
+	 * @param {Client} client - The client to send the block set to.
+	 * @param {number[][]} blockset - The block set to send.
 	 */
 	static sendBlockset(client, blockset) {
 		for (let i = 0; i < blockset.length; i++) {
@@ -262,10 +278,10 @@ export class BaseLevel extends TypedEmitter {
 			client.extensions.get("BlockDefinitionsExtended").defineBlock(block)
 		}
 	}
-	/**Loads a level into a universe instance, creating it if it doesn't exist.
+	/**Loads a level into a {@link BaseUniverse} instance, creating it if it doesn't exist.
 	 *
 	 * @param {BaseUniverse} universe - The universe to load the level into.
-	 * @param {string} spaceName - The identifier of the level.
+	 * @param {string} spaceName - The identifier of the level. This will be used for {@link BaseUniverse.levels}.
 	 * @param {Object} defaults - The default properties for the level.
 	 * @returns {Promise<BaseLevel>} A promise that resolves to the loaded level.
 	 */
@@ -316,7 +332,7 @@ export class BaseLevel extends TypedEmitter {
 	 * ```
 	 *
 	 * @param {BasePlayer} player - The player to teleport.
-	 * @param {string | null} [spaceName]
+	 * @param {string | null} [spaceName] - The identifier of the level to teleport to. Default is `null`
 	 * @param {{}?} [defaults={}] Default is `{}`
 	 */
 	static async teleportPlayer(player, spaceName, defaults = {}) {
@@ -334,26 +350,31 @@ export class BaseLevel extends TypedEmitter {
 	}
 	/** @type {Vector3} */
 	static bounds = [64, 64, 64]
-	/** @todo Yet to be documented. */
+	/**Defines the environmental properties of the level, such as sky and cloud settings.
+	 *
+	 * @todo Expose types from classicborne-server-protocol for better documentation.
+	 */
 	static environment = {
 		sidesId: 7,
 		edgeId: 250,
 		edgeHeight: 0,
 		cloudsHeight: 256,
 	}
-	/** @todo Yet to be documented. */
+	/**Defines the block set used in the level.
+	 *
+	 * @type {number[][]}
+	 */
 	static blockset = []
-	/** @todo Yet to be documented. */
+	/** The template used to generate the level's blocks. */
 	static template = new EmptyTemplate()
-	/**@todo Yet to be documented.
+	/**Deprecated. Use {@link BaseLevel.bounds} instead.
 	 *
 	 * @deprecated
-	 * @see {BaseLevel.bounds}
 	 */
 	static standardBounds = this.bounds
 	/** @todo Yet to be documented. */
 	static commands = []
-	/** @todo Yet to be documented. */
+	/** The default {@link BaseLevelCommandInterpreter} class for the level. */
 	static commandInterpreterClass = BaseLevelCommandInterpreter
 }
 

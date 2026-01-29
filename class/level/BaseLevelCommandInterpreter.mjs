@@ -2,6 +2,7 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /** @import {BaseLevel} from "./BaseLevel.mjs" */
 /** @import {BasePlayer} from "../player/BasePlayer.mjs" */
 /** @import {Vector3} from "../../types/arrayLikes.mjs" */
+/** @import {ChangeRecord} from "./changeRecord/ChangeRecord.mjs" */
 
 /** @todo Yet to be documented. */
 export class TypeQuestion {
@@ -15,7 +16,7 @@ export class TypeQuestion {
 		this.typeName = typeName
 	}
 }
-/**As an instance, I am initialized with a level. I act on the level via commands provided by the player or by other source, such as `ChangeRecord` loading. I may be used interactively by a player. This causes the level to block writes to avoid potential conflict with input intended as responses to my interactive questions.
+/**As an instance, I am initialized with a {@link BaseLevel}. I act on the level via commands provided by the {@link BasePlayer} or by other sources, such as {@link ChangeRecord} loading. I may be used interactively by a player. This causes the level to block writes to avoid potential conflict with input intended as responses to my interactive questions.
  *
  * @extends {TypedEmitter<{ parsingError: (player: BasePlayer, errorType: number) => void; typeQuestion: (typeQuestion: TypeQuestion) => void; commandExecuted: (commandName: string, actionBytes: number[]) => void }>}
  */

@@ -5,6 +5,7 @@ import crypto from "crypto"
 import { sleep } from "../../utils.mjs"
 /** @import {BaseUniverse} from "./BaseUniverse.mjs" */
 
+/** I send periodic heartbeats to a server list to announce the presence and status of the {@link BaseUniverse | universe}. */
 export class BaseHeartbeat {
 	/**Creates a Heartbeat instance. Will send heartbeats to the server list shortly after initialization.
 	 *
@@ -19,9 +20,12 @@ export class BaseHeartbeat {
 		this.alive = true
 		this.start()
 	}
-	/** @todo Yet to be documented. */
+	/** The rate at which to post a heartbeat, in milliseconds. */
 	static heartbeatRate = 45000
-	/** @todo Yet to be documented. */
+	/**The rate at which to retry posting a heartbeat in case of failure, in milliseconds.
+	 * 
+	 * This is at a lower rate in order to keep my spot at the server list if the server for the server list is having issues. But actually, it tends to be the [CDN](https://en.wikipedia.org/w/index.php?title=Cloudflare&oldid=1329440927#Outages_and_issues) of the [server](https://en.wikipedia.org/wiki/Amazon_Web_Services) for the [server list](https://www.classicube.net/server/list/) that has [issues](https://downdetector.com/status/cloudflare/).
+	 */
 	static retryRate = 1000
 	/** @todo Yet to be documented. */
 	async start() {
