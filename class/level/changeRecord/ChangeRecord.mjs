@@ -18,6 +18,7 @@ export class ChangeRecord {
 	 * @param {string} path - The path to the change record file.
 	 * @param {function} loadedCallback - The callback function to call when file handles are opened.
 	 * @param {object} options - Options for the change record.
+	 * @param {boolean} [options.useKeyframeRecord=true] - Whether to use a keyframe record for snapshots.
 	 */
 	constructor(path, loadedCallback = () => {}, { useKeyframeRecord = true } = {}) {
 		this.currentBuffer = new SmartBuffer()
@@ -126,7 +127,7 @@ export class ChangeRecord {
 	 *
 	 * @param {BaseLevel} level - The level to restore changes to.
 	 * @param {number} [maxActions] - The maximum number of actions to restore.
-	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes.
+	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes if defined.
 	 * @returns {Promise<number>} The total number of actions restored.
 	 */
 	async restoreBlockChangesToLevel(level, maxActions, staller) {
