@@ -28,7 +28,7 @@ export class Drone extends TypedEmitter {
 		this.position = [0, 0, 0]
 		this.orientation = [0, 0]
 		this.ego = ego
-		/** @todo Yet to be documented. */
+		/** Whether I am destroyed. {@link Drone#destroy} sets this value. */
 		this.destroyed = false
 	}
 	/**Sets position and orientation of the drone.
