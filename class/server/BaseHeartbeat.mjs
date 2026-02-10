@@ -1,7 +1,7 @@
 // @ts-check
 import qs from "qs"
 import axios from "axios"
-import crypto from "crypto"
+import crypto from "node:crypto"
 import { sleep } from "../../utils.mjs"
 /** @import {BaseUniverse} from "./BaseUniverse.mjs" */
 

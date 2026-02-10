@@ -1,4 +1,4 @@
-import { EventEmitter } from "events"
+import { EventEmitter } from "node:events"
 /** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
 /** @import {Drone} from "./Drone.mjs" */
 /** @import {BasePlayer} from "../../player/BasePlayer.mjs" */

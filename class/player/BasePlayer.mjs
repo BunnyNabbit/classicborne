@@ -1,6 +1,6 @@
 // @ts-check
 import { DroneTransmitter } from "../level/drone/DroneTransmitter.mjs"
-import { EventEmitter } from "events"
+import { EventEmitter } from "node:events"
 import { Watchdog } from "./Watchdog.mjs"
 /** @import {Client} from "classicborne-server-protocol/class/Client.mjs" */
 /** @import {BaseUniverse} from "../server/BaseUniverse.mjs" */
