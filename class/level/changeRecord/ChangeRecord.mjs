@@ -1,11 +1,11 @@
 import { promisify } from "node:util"
-import fs from "fs"
+import fs from "node:fs"
 import { SmartBuffer } from "smart-buffer"
-import zlib from "zlib"
+import zlib from "node:zlib"
 const deflate = promisify(zlib.deflate)
 const inflate = promisify(zlib.inflate)
 import trash from "trash"
-import { join } from "path"
+import { join } from "node:path"
 import sqlite3 from "sqlite3"
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
