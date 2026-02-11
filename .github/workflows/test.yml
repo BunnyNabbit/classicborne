@@ -42,5 +42,10 @@ jobs:
         run: pnpm test
         working-directory: ./tests
 
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Coveralls
         uses: coverallsapp/github-action@v2
