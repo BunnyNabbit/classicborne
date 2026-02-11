@@ -10,3 +10,4 @@ docsTheme/
 CONTRIBUTING.md
 .release-it.json
 tests/
+sonar-project.properties
