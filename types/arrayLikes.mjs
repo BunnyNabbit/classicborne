@@ -3,11 +3,11 @@
 /**An array of three numbers.
  *
  * @typedef Vector3
- * @type {number[]}
+ * @type {[number, number, number]}
  */
 
 /**An array of two numbers.
  *
  * @typedef Vector2
- * @type {number[]}
+ * @type {[number, number]}
  */
