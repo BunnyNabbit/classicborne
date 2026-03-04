@@ -1,4 +1,4 @@
-# classicborne
+# *classicborne*
 
 [![NPM version badge](https://img.shields.io/npm/v/classicborne.svg)](http://npmjs.com/package/classicborne)
 [![Open GitHub issues badge](https://img.shields.io/github/issues/bunnynabbit/classicborne)](https://github.com/BunnyNabbit/classicborne/issues)
@@ -88,7 +88,7 @@ new MyUniverse({
   - Each change can be undone.
 - Basic "Watchdog" client monitor.
 
-## Projects using classicborne
+## Projects using *classicborne*
 
 - [Voxel Telephone](https://github.com/BunnyNabbit/voxel-telephone)
 

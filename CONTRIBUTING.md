@@ -2,4 +2,4 @@
 
 ## Coding style
 
-`classicborne` uses Drone style.
+*classicborne* uses Drone style.
