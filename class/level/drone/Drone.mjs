@@ -25,7 +25,9 @@ export class Drone extends TypedEmitter {
 	 */
 	constructor(ego = new Ego()) {
 		super()
+		/** @type {Vector3} */
 		this.position = [0, 0, 0]
+		/** @type {Vector2} */
 		this.orientation = [0, 0]
 		this.ego = ego
 		/** Whether I am destroyed. {@link Drone#destroy} sets this value. */

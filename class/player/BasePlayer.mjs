@@ -100,6 +100,7 @@ export class BasePlayer extends EventEmitter {
 		this.client.on("setBlock", (operation) => {
 			if (this.watchdog.rateOperation()) return
 			if (!this.space) return
+			/** @type {Vector3} */
 			const operationPosition = [operation.x, operation.y, operation.z]
 			if (operationPosition.some((value, index) => value > this.space.bounds[index] - 1)) return
 			let block = operation.type
