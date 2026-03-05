@@ -23,11 +23,11 @@ export class BaseHeartbeat {
 	/** The rate at which to post a heartbeat, in milliseconds. */
 	static heartbeatRate = 45000
 	/**The rate at which to retry posting a heartbeat in case of failure, in milliseconds.
-	 * 
+	 *
 	 * This is at a lower rate in order to keep my spot at the server list if the server for the server list is having issues. But actually, it tends to be the [CDN](https://en.wikipedia.org/w/index.php?title=Cloudflare&oldid=1329440927#Outages_and_issues) of the [server](https://en.wikipedia.org/wiki/Amazon_Web_Services) for the [server list](https://www.classicube.net/server/list/) that has [issues](https://downdetector.com/status/cloudflare/).
 	 */
 	static retryRate = 1000
-	/** @todo Yet to be documented. */
+	/** Starts the heartbeat loop, calling {@link postHeartbeat} on an interval based on {@link heartbeatRate}. */
 	async start() {
 		while (this.alive) {
 			try {
@@ -49,7 +49,7 @@ export class BaseHeartbeat {
 			}
 		}
 	}
-	/**@todo Yet to be documented.
+	/**Sends a heartbeat to the server list with the provided {@link form}.
 	 *
 	 * @param {Record<string, string>} form
 	 */
