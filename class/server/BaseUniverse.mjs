@@ -5,12 +5,35 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /** @import {BaseLevel} from "../level/BaseLevel.mjs" */
 /** @import {BasePlayer} from "../player/BasePlayer.mjs" */
 
-/**@todo Yet to be documented.
+/**I'm a Minecraft Classic game server, responsible for managing the server lifecycle, connected players and loaded levels.
+ *
+ * I coordinate the following core objects:
+ *
+ * - {@link BasePlayer}: Each player is instantiated and registered into my universe. I assign network IDs, manage player lists and emit player lifecycle events.
+ * - {@link BaseLevel}: I maintain a map of loaded levels, which represent the worlds available on the server. Levels are managed and referenced by name.
+ * - {@link BaseHeartbeat}: If enabled, I instantiate a heartbeat for server list announcements.
+ *
+ * @example Creating a custom universe by extending BaseUniverse.
+ *
+ * ```js
+ * import { BaseUniverse } from "classicborne/class/server/BaseUniverse.mjs"
+ * import { CustomPlayer } from "./CustomPlayer.mjs" // Your custom player class
+ *
+ * class MyUniverse extends BaseUniverse {
+ *   static playerClass = CustomPlayer
+ *   // Add custom logic.
+ * }
+ *
+ * const universe = new MyUniverse({ port: 25565 })
+ * universe.on("playerAdded", (player) => {
+ *   console.log(`Player joined: ${player.username}`)
+ * })
+ * ```
  *
  * @extends {TypedEmitter<{ playerAdded: (player: BasePlayer) => void; playerRemoved: (player: BasePlayer) => void }>}
  */
 export class BaseUniverse extends TypedEmitter {
-	/** @todo Yet to be documented. */
+	/** Creates an instance of a {@link BaseUniverse}. */
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
@@ -82,9 +105,9 @@ export class BaseUniverse extends TypedEmitter {
 		})
 		this.emit("playerRemoved", player)
 	}
-	/** @todo Yet to be documented. */
+	/** The {@link BasePlayer} class to instantiate when clients connect to the server. */
 	static playerClass = BasePlayer
-	/** @todo Yet to be documented. */
+	/** The {@link BaseHeartbeat} class used for announcing my presence. This is promise as the constructor asynchronously imports the module for the class and assigns it to {@link BaseUniverse.heartbeat}. */
 	static heartbeatClass = import("./BaseHeartbeat.mjs").then((module) => module.default)
 }
 
