@@ -1,4 +1,7 @@
-/** @todo Yet to be documented. */
+/** @import {Level} from "../BaseLevel.mjs" */
+/** @import {ChangeRecord} from "./ChangeRecord.mjs" */
+
+/** I'm a dummy change record for a {@link BaseLevel}. Unlike {@link ChangeRecord}, I do not keep track of changes. Instead, my methods are very minimal and don't do much in terms of operation. */
 export class NullChangeRecord {
 	/**/
 	constructor(path, loadedCallback = () => {}) {
