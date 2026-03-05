@@ -11,21 +11,29 @@ const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 /** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
 
-/** I am a change record for a {@link BaseLevel}. */
+/**I am a change record for a {@link BaseLevel}. I keep an append-only record of block changes and commands, allowing for restoring changes to levels.
+ *
+ * I {@link appendAction | append actions} representing block changes or commands to my record. My changes are buffered and periodically {@link flushChanges | flushed} to disk in compressed form. These actions can be {@link restoreBlockChangesToLevel | restored to a level}, replaying the recorded changes. I also support {@link commit | committing} actions up to a specific action count, trimming the record.
+ *
+ * Because of my append-only nature, long records can take a while to restore. In case that happens, my {@link keyframeRecord} can store periodic snapshots of the level state, allowing for faster restoration by starting from a recent keyframe instead of replaying all changes from the beginning.
+ */
 export class ChangeRecord {
 	/**Creates a new ChangeRecord instance.
 	 *
 	 * @param {string} path - The path to the change record file.
 	 * @param {function} loadedCallback - The callback function to call when file handles are opened.
 	 * @param {object} options - Options for the change record.
-	 * @param {boolean} [options.useKeyframeRecord=true] - Whether to use a keyframe record for snapshots.
+	 * @param {boolean} [options.useKeyframeRecord=true] - Whether to use a keyframe record for snapshots. Default is `true`
 	 */
 	constructor(path, loadedCallback = () => {}, { useKeyframeRecord = true } = {}) {
 		this.currentBuffer = new SmartBuffer()
 		this.path = path
 		this.draining = false
 		this.dirty = false
-		/** @type {fs.promises.FileHandle} */
+		/**The handle for the `vhs.bin` file.
+		 *
+		 * @type {fs.promises.FileHandle}
+		 */
 		this.vhsFh = null
 		/** @type {Vector3} */
 		this.bounds = [64, 64, 64]
@@ -182,7 +190,7 @@ export class ChangeRecord {
 		level.loading = false
 		return count
 	}
-	/** @todo Yet to be documented. */
+	/** The keyframe creation threshold in milliseconds. {@link ChangeRecord.restoreBlockChangesToLevel} uses this by checking how much time has passed when restoring from changes alone. */
 	static lagKeyframeTime = 250 // milliseconds
 	/**Flush changes to disk by compressing current buffer and append it to the VHS file.
 	 *
