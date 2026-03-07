@@ -48,7 +48,7 @@ export class BasePlayer extends EventEmitter {
 			client.disconnect(typeof rejectionReason === "string" ? rejectionReason : "Authentication failed.")
 			return false
 		}
-		// do rest of propertry initialization
+		// do rest of property initialization
 		/** @type {Vector3} */
 		this.position = [0, 0, 0]
 		/** @type {Vector2} */
