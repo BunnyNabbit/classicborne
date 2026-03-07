@@ -4,9 +4,9 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /** @import {Vector3} from "../../types/arrayLikes.mjs" */
 /** @import {ChangeRecord} from "./changeRecord/ChangeRecord.mjs" */
 
-/** @todo Yet to be documented. */
+/** I contain data about an interactive question which includes the data type and a name. */
 export class TypeQuestion {
-	/**@todo Yet to be documented.
+	/**Create an instance of a {@link TypeQuestion}.
 	 *
 	 * @param {string} type
 	 * @param {string} typeName
@@ -21,9 +21,9 @@ export class TypeQuestion {
  * @extends {TypedEmitter<{ parsingError: (player: BasePlayer, errorType: number) => void; typeQuestion: (typeQuestion: TypeQuestion) => void; commandExecuted: (commandName: string, actionBytes: number[]) => void }>}
  */
 export class BaseLevelCommandInterpreter extends TypedEmitter {
-	/**@todo Yet to be documented.
+	/**Create an instance of a {@link BaseLevelCommandInterpreter} for a {@link BaseLevel}.
 	 *
-	 * @param {BaseLevel} level
+	 * @param {BaseLevel} level - The {@link BaseLevel}.
 	 */
 	constructor(level) {
 		super()
@@ -31,7 +31,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		this.level.blocking = false
 		this.level.loading = false
 	}
-	/**@todo Yet to be documented.
+	/**Interprets the given command as a string. My {@link level} will be used to get the names of available commands. I will attempt to fill out required data, but if I am missing data, I will start interactive questions for the missing bytes. When this happens, my level will be set as blocking, and block placements will be used for answering the questions.
 	 *
 	 * @param {string} command
 	 * @param {BasePlayer | null} player
@@ -176,7 +176,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 		invalidPosition: 1,
 		positionOutBounds: 2,
 	}
-	/**@todo Yet to be documented.
+	/**Executes the {@link currentCommand} with {@link currentCommandActionBytes} to my {@link level}.
 	 *
 	 * @param {BasePlayer | null} player
 	 */
@@ -201,11 +201,11 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 			this.level.blocking = false
 		}
 	}
-	/** @todo Yet to be documented. */
+	/** Perform cleanup by removing all listeners that I created. */
 	dispose() {
 		this.removeAllListeners()
 	}
-	/**@todo Yet to be documented.
+	/**Checks if the given {@link number} is a byte. Returns `false` if it isn't. Otherwise `true`.
 	 *
 	 * @param {number} number
 	 * @returns {boolean}
