@@ -122,10 +122,14 @@ export class BasePlayer extends EventEmitter {
 			}
 		})
 	}
-	/**@todo Yet to be documented.
+	/**Sends a message.
 	 *
-	 * @param {string} message
-	 * @param {number | number[]} types
+	 * The client can only display 64 characters for each message. To get around this, long messages are split up and an {@link continueAdornment | indicator} is prefixed to subsequent messages. This is most æffective for the default `0` {@link messageTypes | message type}, but behavior is still applied for other message types.
+	 *
+	 * Special behavior is done for right-aligned messages on {@link isClassiCubeMobile | mobile ClassiCube clients}. Because of the controller placements overlapping with the text, {@link rightAlignedMessageTypes message types for the right} have their messages pushed to the left as much as possible to avoid overlapping.
+	 *
+	 * @param {string} message - The string of the message.
+	 * @param {number | number[]} types - A number or array representing {@link messageTypes | message types}.
 	 * @param {string} [continueAdornment="> "] Default is `"> "`
 	 */
 	message(message, types = [0], continueAdornment = "> ") {
