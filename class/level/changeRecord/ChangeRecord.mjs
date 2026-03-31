@@ -50,7 +50,7 @@ export class ChangeRecord {
 							await this.keyframeRecord.ready
 						})
 						.catch((error) => {
-							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error. I'll continue to work in the meantime.`, error)
+							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.`, error)
 							this.keyframeRecord = null
 						})
 						.finally(() => {
