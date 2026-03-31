@@ -51,6 +51,7 @@ export class ChangeRecord {
 						})
 						.catch((error) => {
 							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error. I'll continue to work in the meantime.`, error)
+							this.keyframeRecord = null
 						})
 						.finally(() => {
 							resolve()
