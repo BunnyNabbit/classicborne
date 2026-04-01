@@ -42,7 +42,7 @@
     "classicborne-server-protocol": "~0.6.0",
     "qs": "^6.14.0",
     "smart-buffer": "^4.2.0",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^6.0.1",
     "tiny-typed-emitter": "^2.1.0",
     "trash": "^10.0.1"
   }
