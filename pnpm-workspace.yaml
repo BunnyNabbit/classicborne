@@ -2,7 +2,3 @@ minimumReleaseAge: 1440
 
 onlyBuiltDependencies:
   - sqlite3
-
-minimumReleaseAgeExclude:
-  - classicborne-server-protocol
-  - prettier-plugin-drone-jsdoc
