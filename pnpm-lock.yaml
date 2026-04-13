@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       axios:
-        specifier: ^1.13.2
+        specifier: ^1.15.0
         version: 1.15.0
       classicborne-server-protocol:
         specifier: ~0.6.0
