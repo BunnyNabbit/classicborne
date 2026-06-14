@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"noEmit": true,
+		"noEmit": false,
 		"allowJs": true,
 		"checkJs": false,
 		"target": "esnext",
@@ -11,8 +11,14 @@
 		"moduleResolution": "nodenext",
 		"isolatedModules": true,
 		"strict": false,
+		"allowImportingTsExtensions": true,
 		"skipLibCheck": true,
-		"strictBindCallApply": true
+		"erasableSyntaxOnly": true,
+		"strictBindCallApply": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		// go to js file when using IDE functions like "Go to Definition" in VSCode
+		"declarationMap": true
 	},
 	"include": [
 		"index.mjs",
