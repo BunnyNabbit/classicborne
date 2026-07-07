@@ -1,3 +1,4 @@
+// @ts-check
 import { promisify } from "node:util"
 import fs from "node:fs"
 import { SmartBuffer } from "smart-buffer"
@@ -8,6 +9,7 @@ import trash from "trash"
 import { join } from "node:path"
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 /** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
+/** @import {BaseSqliteAdapter} from "./adapter/BaseSqliteAdapter.mjs" */
 
 /**I am a change record for a {@link BaseLevel}. I keep an append-only record of block changes and commands, allowing for restoring changes to levels.
  *
@@ -46,11 +48,12 @@ export class ChangeRecord {
 					import("./KeyframeRecord.mjs")
 						.then(async (module) => {
 							const { KeyframeRecord } = module
-							this.keyframeRecord = new KeyframeRecord(join(path, "/dvr.db"))
+							const adapter = await KeyframeRecord.findSuitableSqliteAdapter()
+							this.keyframeRecord = new KeyframeRecord(join(path, "/dvr.db"), adapter)
 							await this.keyframeRecord.ready
 						})
 						.catch((error) => {
-							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.`, error)
+							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.\n`, error)
 							this.keyframeRecord = null
 						})
 						.finally(() => {
@@ -237,7 +240,7 @@ export class ChangeRecord {
 		const tempHandle = await fs.promises.open(join(this.path, "temp.vhs.bin"), "w+")
 		this.vhsFh = tempHandle // Use the temp file handle for writing
 		const latestKeyframe = (this.keyframeRecord && (await this.keyframeRecord.getLatestKeyframe(toActionCount, level.template.iconName, level.bounds))) || null
-		// const startingActionCount = latestKeyframe?.totalActionCount ?? 0 // it's off by one. some where!
+		// const startingActionCount = latestKeyframe?.totalActionCount ?? 0 // it's off by one. somewhere!
 		let startingActionCount = 0
 		let startingFileOffset = 0
 		if (latestKeyframe) {
