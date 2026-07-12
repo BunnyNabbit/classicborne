@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      esm-path:
-        specifier: ^1.0.1
-        version: 1.0.1
     devDependencies:
       cross-env:
         specifier: ^7.0.3
@@ -703,9 +699,6 @@ packages:
   escape-string-regexp@2.0.0:
     resolution: {integrity: sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==}
     engines: {node: '>=8'}
-
-  esm-path@1.0.1:
-    resolution: {integrity: sha512-wsS/xE+UuRqDnocJ9ejv1HOIRC/8t0Xrplakjm9aSkm3y2cNF4cbPMEZ6QXK7DyWGtwAOPGJgJtJ/juvmT1gIA==}
 
   esprima@4.0.1:
     resolution: {integrity: sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==}
@@ -2174,8 +2167,6 @@ snapshots:
   escalade@3.2.0: {}
 
   escape-string-regexp@2.0.0: {}
-
-  esm-path@1.0.1: {}
 
   esprima@4.0.1: {}
 
