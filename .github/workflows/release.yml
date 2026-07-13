@@ -41,6 +41,9 @@ jobs:
           run_install: |
             - args: [--frozen-lockfile]
 
+      - name: Generate .d.mts files
+        run: pnpm exec tsc
+
       - name: Release
         run: npx release-it ${{ inputs.increment }}
         env:
