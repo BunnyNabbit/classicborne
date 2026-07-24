@@ -145,11 +145,11 @@ export class ChangeRecord {
 		}
 		return this.actionCount
 	}
-	/**Restore block changes to a level.
+	/**Restore block changes to a {@link level}.
 	 *
 	 * @param {BaseLevel} level - The level to restore changes to.
 	 * @param {number} [maxActions] - The maximum number of actions to restore.
-	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes if defined.
+	 * @param {function} [staller] - The asynchronous function to call to stall the restore process. Also prevents creating keyframes if defined.
 	 * @returns {Promise<number>} The total number of actions restored.
 	 */
 	async restoreBlockChangesToLevel(level, maxActions, staller) {
