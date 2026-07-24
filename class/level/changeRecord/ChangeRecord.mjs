@@ -101,24 +101,24 @@ export class ChangeRecord {
 	/**Process the VHS file with a given processor function.
 	 *
 	 * @private
-	 * @param {fs.promises.FileHandle} vhsFh - The file handle of the VHS file.
+	 * @param {fs.promises.FileHandle} vhsFileHandle - The file handle of the VHS file.
 	 * @param {function} processor - The processor function to process each action.
 	 * @param {number} [startFileOffset=0] - The offset to start processing from. Default is `0`
 	 * @param {number} [startActionCount=0] - The action count to start from. Default is `0`
 	 * @returns {Promise<number>} The total number of actions processed.
 	 */
-	async _processVhsFile(vhsFh, processor, startFileOffset = 0, startActionCount = 0) {
+	async _processVhsFile(vhsFileHandle, processor, startFileOffset = 0, startActionCount = 0) {
 		let currentFileReadOffset = startFileOffset
 		this.actionCount = startActionCount
 		while (true) {
 			/** @type {Buffer | number} */
 			let bufferLength = Buffer.alloc(4)
-			await vhsFh.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
+			await vhsFileHandle.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
 			bufferLength = bufferLength.readUint32LE(0)
 			if (bufferLength == 0) break
 
 			const deflateBuffer = Buffer.alloc(bufferLength)
-			await vhsFh.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
+			await vhsFileHandle.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
 			/** @type {Buffer | SmartBuffer} */
 			let changes = await inflate(deflateBuffer)
 			let bufferActionCount = 0
