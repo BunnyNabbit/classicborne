@@ -269,7 +269,7 @@ export class ChangeRecord {
 		await originalHandle.truncate(startingFileOffset)
 		await originalHandle.close()
 		// append temp file to original file
-		// const tempBuffer = await this.vhsFh.readFile()
+		// const tempBuffer = await this.vhsFileHandle.readFile()
 		const tempBuffer = await fs.promises.readFile(join(this.path, "temp.vhs.bin")) /// ?????
 		// open original in append mode
 		this.vhsFileHandle = await fs.promises.open(originalPath, "a+")
