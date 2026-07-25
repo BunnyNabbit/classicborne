@@ -10,7 +10,7 @@ export class NullChangeRecord {
 		this.path = path
 		this.draining = false
 		this.dirty = false
-		this.vhsFh = null
+		this.vhsFileHandle = null
 		this.bounds = [64, 64, 64]
 		this.actionCount = 0
 		this.currentActionCount = 0
