@@ -227,6 +227,7 @@ export class ChangeRecord {
 	/**Trims the VHS file to the specified action count, discarding any actions beyond that count.
 	 *
 	 * @param {number} toActionCount - The action count to trim to.
+	 * @param {BaseLevel} level - The level to use for referencing its current template and {@link BaseLevel#bounds}.
 	 */
 	async commit(toActionCount, level) {
 		if (this.dirty) await this.flushChanges()
