@@ -10,7 +10,7 @@ import { TypedEmitter } from "tiny-typed-emitter"
  * } from "../../../types/arrayLikes.mjs"
  */
 
-/**Represents a drone entity for replicating character and positions of players and non-player entities.
+/**I represent an entity for replicating character and positions of players and non-player entities.
  * 
  * I am added to {@link BasePlayer | players'} {@link DroneTransmitter} instances so my position and appearance can be synchronized to other players.
  * 

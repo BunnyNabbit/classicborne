@@ -34,7 +34,14 @@ export class BasePlayer extends EventEmitter {
 		/** @type {boolean} */
 		this.teleporting
 	}
-	/**@todo Yet to be documented.
+	/**Asynchronously initializes the object, checking authentication information and setting up listeners. This is called by the constructor.
+	 *
+	 * In order:
+	 *
+	 * 1. Authentication is checked with {@link BasePlayer#checkAuthInfo}. If it doesn't return true, the client is kicked and the rest of the flow ends.
+	 * 2. {@link BasePlayer#afterAuth} is called.
+	 * 3. Event listeners are set using {@link BasePlayer#listenSetBlock} and {@link BasePlayer#listenPosition}.
+	 * 4. If the class is not a subclass, the player is teleported to a {@link BaseLevel} with the identifier `classicborne-default`.
 	 *
 	 * @param {Client} client
 	 * @param {BaseUniverse} universe
