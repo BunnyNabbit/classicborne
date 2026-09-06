@@ -11,9 +11,9 @@ import { TypedEmitter } from "tiny-typed-emitter"
  */
 
 /**I represent an entity for replicating character and positions of players and non-player entities.
- * 
+ *
  * I am added to {@link BasePlayer | players'} {@link DroneTransmitter} instances so my position and appearance can be synchronized to other players.
- * 
+ *
  * By default, {@link BaseLevel} adds me on {@link BaseLevel.addPlayer} to represent the player's character in the level. I get destroyed when the player leaves the level via {@link BaseLevel.removePlayer}.
  *
  * @extends {TypedEmitter<{ position: (position: Vector3, orientation: Vector2) => void; destroy: () => void }>}
@@ -25,15 +25,30 @@ export class Drone extends TypedEmitter {
 	 */
 	constructor(ego = new Ego()) {
 		super()
-		/** @type {Vector3} */
+		/**My position of the drone.
+		 *
+		 * @type {Vector3}
+		 */
 		this.position = [0, 0, 0]
-		/** @type {Vector2} */
+		/**The orientation of the drone in yaw-pitch.
+		 *
+		 * @type {Vector2}
+		 */
 		this.orientation = [0, 0]
+		/**The drone's appearance.
+		 *
+		 * @type {Ego}
+		 */
 		this.ego = ego
-		/** Whether I am destroyed. {@link Drone#destroy} sets this value. */
+		/**Whether I am destroyed. {@link Drone#destroy} sets this value.
+		 *
+		 * @type {boolean}
+		 */
 		this.destroyed = false
 	}
-	/**Sets position and orientation of the drone.
+	/**Sets my {@link Drone.position | position} and {@link Drone.orientation | orientation}.
+	 *
+	 * I emit the `position` event, notifying {@link DroneTransmitter | drone transmitters} to replicate my position to clients.
 	 *
 	 * @param {Object} position - The position of the drone.
 	 * @param {Object} orientation - The orientation of the drone.
@@ -43,7 +58,10 @@ export class Drone extends TypedEmitter {
 		this.orientation = [orientation.yaw, orientation.pitch]
 		this.emit("position", this.position, this.orientation)
 	}
-	/** Destroys the drone, removing it from levels. */
+	/**Destroys the drone, removing it from levels.
+	 *
+	 * Sets my {@link destroyed} state to `true` and emits the `destroy` event, notifying {@link DroneTransmitter | drone transmitters} to replicate my deletion.
+	 */
 	destroy() {
 		if (this.destroyed) return
 		this.destroyed = true
