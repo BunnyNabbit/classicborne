@@ -25,7 +25,7 @@ export class Drone extends TypedEmitter {
 	 */
 	constructor(ego = new Ego()) {
 		super()
-		/**My position of the drone.
+		/**The position of the drone.
 		 *
 		 * @type {Vector3}
 		 */
