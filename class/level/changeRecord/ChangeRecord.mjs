@@ -74,6 +74,8 @@ export class ChangeRecord {
 	}
 	/**Append an action to the change record.
 	 *
+	 * @todo Document throws.
+	 *
 	 * @param {boolean} isCommand - Whether the action is a command.
 	 * @param {number[]} actionBytes - The action bytes to append.
 	 * @param {string} [commandString] - The command string (if applicable).
