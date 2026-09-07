@@ -146,8 +146,8 @@ export class BaseLevel extends TypedEmitter {
 	/**Sends the level data to the specified {@link BasePlayer | player}. This is typically called on {@link BaseLevel.addPlayer}.
 	 *
 	 * @param {BasePlayer} player
-	 * @param {Vector3} [position=[0,0,0]] Default is `[0,0,0]`
-	 * @param {Vector2} [orientation=[0,0]] Default is `[0,0]`
+	 * @param {Vector3} [position=[0,0,0]] - The position to spawn the player based on its internal body position. Default is `[0,0,0]`
+	 * @param {Vector2} [orientation=[0,0]] - The orientation in yaw-pitch. Default is `[0,0]`
 	 */
 	loadPlayer(player, position = [0, 0, 0], orientation = [0, 0]) {
 		player.client.loadLevel(
@@ -185,8 +185,8 @@ export class BaseLevel extends TypedEmitter {
 	 *
 	 * @param {Vector3} position - The position to set the block at.
 	 * @param {number} block - The block type to set.
-	 * @param {BasePlayer[]} [excludePlayers=[]] Default is `[]`
-	 * @param {boolean} [saveToRecord=true] Default is `true`
+	 * @param {BasePlayer[]} [excludePlayers=[]] - An array of {@link BasePlayer | players} to exclude sending block updates to. Default is `[]`
+	 * @param {boolean} [saveToRecord=true] - Whether the block update is recorded in the level's {@link changeRecord}. Default is `true`
 	 */
 	setBlock(position, block, excludePlayers = [], saveToRecord = true) {
 		this.blocks.writeUInt8(block, position[0] + this.bounds[0] * (position[2] + this.bounds[2] * position[1]))
@@ -251,7 +251,7 @@ export class BaseLevel extends TypedEmitter {
 	}
 	/**Destroys the level, releasing any resources used for it.
 	 *
-	 * @param {boolean} [saveChanges=true] If true, I will flush any pending block changes to my {@link ChangeRecord} before disposing it. Default is `true`
+	 * @param {boolean} [saveChanges=true] - If true, I will flush any pending block changes to my {@link ChangeRecord} before disposing it. Default is `true`
 	 */
 	async dispose(saveChanges = true) {
 		if (!this.changeRecord.draining && this.changeRecord.dirty && saveChanges) {
@@ -354,7 +354,7 @@ export class BaseLevel extends TypedEmitter {
 	 *
 	 * @param {BasePlayer} player - The player to teleport.
 	 * @param {string | null} [spaceName] - The identifier of the level to teleport to. Default is `null`
-	 * @param {{}?} [defaults={}] Default is `{}`
+	 * @param {{}?} [defaults={}] - The default properties object for the level's {@link loadIntoUniverse} method. Default is `{}`
 	 */
 	static async teleportPlayer(player, spaceName, defaults = {}) {
 		if (player) {
