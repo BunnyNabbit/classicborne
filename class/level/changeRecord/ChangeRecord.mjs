@@ -34,7 +34,7 @@ export class ChangeRecord {
 		 *
 		 * @type {fs.promises.FileHandle}
 		 */
-		this.vhsFh = null
+		this.vhsFileHandle = null
 		/** @type {Vector3} */
 		this.bounds = [64, 64, 64]
 		this.actionCount = 0
@@ -63,7 +63,7 @@ export class ChangeRecord {
 			)
 		}
 		Promise.all(promises).then((values) => {
-			this.vhsFh = values[0]
+			this.vhsFileHandle = values[0]
 			loadedCallback(this)
 		})
 	}
@@ -76,6 +76,8 @@ export class ChangeRecord {
 		this.appendAction(false, position.concat(block))
 	}
 	/**Append an action to the change record.
+	 *
+	 * @todo Document throws.
 	 *
 	 * @param {boolean} isCommand - Whether the action is a command.
 	 * @param {number[]} actionBytes - The action bytes to append.
@@ -104,24 +106,24 @@ export class ChangeRecord {
 	/**Process the VHS file with a given processor function.
 	 *
 	 * @private
-	 * @param {fs.promises.FileHandle} vhsFh - The file handle of the VHS file.
+	 * @param {fs.promises.FileHandle} vhsFileHandle - The file handle of the VHS file.
 	 * @param {function} processor - The processor function to process each action.
 	 * @param {number} [startFileOffset=0] - The offset to start processing from. Default is `0`
 	 * @param {number} [startActionCount=0] - The action count to start from. Default is `0`
 	 * @returns {Promise<number>} The total number of actions processed.
 	 */
-	async _processVhsFile(vhsFh, processor, startFileOffset = 0, startActionCount = 0) {
+	async _processVhsFile(vhsFileHandle, processor, startFileOffset = 0, startActionCount = 0) {
 		let currentFileReadOffset = startFileOffset
 		this.actionCount = startActionCount
 		while (true) {
 			/** @type {Buffer | number} */
 			let bufferLength = Buffer.alloc(4)
-			await vhsFh.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
+			await vhsFileHandle.read(bufferLength, 0, bufferLength.length, currentFileReadOffset)
 			bufferLength = bufferLength.readUint32LE(0)
 			if (bufferLength == 0) break
 
 			const deflateBuffer = Buffer.alloc(bufferLength)
-			await vhsFh.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
+			await vhsFileHandle.read(deflateBuffer, 0, deflateBuffer.length, currentFileReadOffset + 4)
 			/** @type {Buffer | SmartBuffer} */
 			let changes = await inflate(deflateBuffer)
 			let bufferActionCount = 0
@@ -148,11 +150,11 @@ export class ChangeRecord {
 		}
 		return this.actionCount
 	}
-	/**Restore block changes to a level.
+	/**Restore block changes to a {@link level}.
 	 *
 	 * @param {BaseLevel} level - The level to restore changes to.
 	 * @param {number} [maxActions] - The maximum number of actions to restore.
-	 * @param {function} [staller] - The function to call to stall the restore process. Also prevents creating keyframes if defined.
+	 * @param {function} [staller] - The asynchronous function to call to stall the restore process. Also prevents creating keyframes if defined.
 	 * @returns {Promise<number>} The total number of actions restored.
 	 */
 	async restoreBlockChangesToLevel(level, maxActions, staller) {
@@ -169,7 +171,7 @@ export class ChangeRecord {
 		}
 		let restoreWatch = new Stopwatch(true)
 		const count = await this._processVhsFile(
-			this.vhsFh,
+			this.vhsFileHandle,
 			async (actions, commandName, actionBytes, changes, currentFileReadOffset, bufferActionCount) => {
 				if (staller) await staller()
 				if (maxActions && this.actionCount == maxActions) {
@@ -223,22 +225,23 @@ export class ChangeRecord {
 		const vhsBlockBuffer = new SmartBuffer({ size: deflateBuffer.length + 4 })
 		vhsBlockBuffer.writeUInt32LE(deflateBuffer.length)
 		vhsBlockBuffer.writeBuffer(deflateBuffer)
-		await this.vhsFh.appendFile(vhsBlockBuffer.toBuffer())
+		await this.vhsFileHandle.appendFile(vhsBlockBuffer.toBuffer())
 		this.draining = false
 		return vhsBlockBuffer.length
 	}
 	/**Trims the VHS file to the specified action count, discarding any actions beyond that count.
 	 *
 	 * @param {number} toActionCount - The action count to trim to.
+	 * @param {BaseLevel} level - The level to use for referencing its current template and {@link BaseLevel#bounds}.
 	 */
 	async commit(toActionCount, level) {
 		if (this.dirty) await this.flushChanges()
-		await this.vhsFh.close()
+		await this.vhsFileHandle.close()
 
 		const originalPath = join(this.path, "vhs.bin")
 		const originalHandle = await fs.promises.open(originalPath, "r+")
 		const tempHandle = await fs.promises.open(join(this.path, "temp.vhs.bin"), "w+")
-		this.vhsFh = tempHandle // Use the temp file handle for writing
+		this.vhsFileHandle = tempHandle // Use the temp file handle for writing
 		const latestKeyframe = (this.keyframeRecord && (await this.keyframeRecord.getLatestKeyframe(toActionCount, level.template.iconName, level.bounds))) || null
 		// const startingActionCount = latestKeyframe?.totalActionCount ?? 0 // it's off by one. somewhere!
 		let startingActionCount = 0
@@ -272,11 +275,11 @@ export class ChangeRecord {
 		await originalHandle.truncate(startingFileOffset)
 		await originalHandle.close()
 		// append temp file to original file
-		// const tempBuffer = await this.vhsFh.readFile()
+		// const tempBuffer = await this.vhsFileHandle.readFile()
 		const tempBuffer = await fs.promises.readFile(join(this.path, "temp.vhs.bin")) /// ?????
 		// open original in append mode
-		this.vhsFh = await fs.promises.open(originalPath, "a+")
-		await this.vhsFh.appendFile(tempBuffer)
+		this.vhsFileHandle = await fs.promises.open(originalPath, "a+")
+		await this.vhsFileHandle.appendFile(tempBuffer)
 		// close temp file handle
 		await tempHandle.close()
 		// delete temp file
@@ -290,7 +293,7 @@ export class ChangeRecord {
 	}
 	/** Closes file handles of change record. Does not flush changes. */
 	async dispose() {
-		await this.vhsFh.close()
+		await this.vhsFileHandle.close()
 		if (this.keyframeRecord) await this.keyframeRecord.close()
 	}
 }

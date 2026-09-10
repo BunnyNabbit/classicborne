@@ -34,7 +34,14 @@ export class BasePlayer extends EventEmitter {
 		/** @type {boolean} */
 		this.teleporting
 	}
-	/**@todo Yet to be documented.
+	/**Asynchronously initializes the object, checking authentication information and setting up listeners. This is called by the constructor.
+	 *
+	 * In order:
+	 *
+	 * 1. Authentication is checked with {@link BasePlayer#checkAuthInfo}. If it doesn't return true, the client is kicked and the rest of the flow ends.
+	 * 2. {@link BasePlayer#afterAuth} is called.
+	 * 3. Event listeners are set using {@link BasePlayer#listenSetBlock} and {@link BasePlayer#listenPosition}.
+	 * 4. If the class is not a subclass, the player is teleported to a {@link BaseLevel} with the identifier `classicborne-default`.
 	 *
 	 * @param {Client} client
 	 * @param {BaseUniverse} universe
@@ -89,7 +96,7 @@ export class BasePlayer extends EventEmitter {
 	}
 	/**Gets the display name, ensuring it does not exceed the character limit for drones or player list entries.
 	 *
-	 * @param {string} [prefixTitle="&7"] A title or color code placed before the username. Default is `"&7"`
+	 * @param {string} [prefixTitle="&7"] - A title or color code placed before the username. Default is `"&7"`
 	 */
 	getDisplayName(prefixTitle = "&7") {
 		const limit = 64
@@ -130,7 +137,7 @@ export class BasePlayer extends EventEmitter {
 	 *
 	 * @param {string} message - The string of the message.
 	 * @param {number | number[]} types - A number or array representing {@link messageTypes | message types}.
-	 * @param {string} [continueAdornment="> "] Default is `"> "`
+	 * @param {string} [continueAdornment="> "] - The prefix for any continued messages. Default is `"> "`
 	 */
 	message(message, types = [0], continueAdornment = "> ") {
 		const originalMessage = message

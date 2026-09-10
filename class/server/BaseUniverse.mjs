@@ -5,13 +5,29 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /** @import {BaseLevel} from "../level/BaseLevel.mjs" */
 /** @import {BasePlayer} from "../player/BasePlayer.mjs" */
 
-/**I'm a Minecraft Classic game server, responsible for managing the server lifecycle, connected players and loaded levels.
+/**I'm a _Minecraft Classic_ game server, responsible for managing the server lifecycle, connected players and loaded levels.
+ *
+ * > I think you'll find that the universe pretty much covers everything. (Shut up and get on my horse.)\
+ * > _Amazing Horse_ (????)
  *
  * I coordinate the following core objects:
  *
- * - {@link BasePlayer}: Each player is instantiated and registered into my universe. I assign network IDs, manage player lists and emit player lifecycle events.
- * - {@link BaseLevel}: I maintain a map of loaded levels, which represent the worlds available on the server. Levels are managed and referenced by name.
+ * - {@link BasePlayer}: I initialize and register players I assign network IDs, manage player lists and emit player lifecycle events.
+ * - {@link BaseLevel}: I maintain {@link levels | a map of loaded levels}, which represent the worlds available on the server. Levels are managed and referenced by name.
  * - {@link BaseHeartbeat}: If enabled, I instantiate a heartbeat for server list announcements.
+ *
+ * ## Subclassing
+ *
+ * Like other object in the _classicborne_ ecosystem, universes are usually subclasses of me.
+ *
+ * ### Dependency injection
+ *
+ * My static fields are defaulted to base class implementations. For example, I initialize new instances of a {@link BasePlayer | Player} using my {@link playerClass} static field. Such static members are intended to be overwritten by my subclasses. This is known as "dependency injection".
+ *
+ * I provide the following static fields for dependency injection:
+ *
+ * - {@link playerClass}
+ * - {@link heartbeatClass}
  *
  * @example Creating a custom universe by extending BaseUniverse.
  *
@@ -37,7 +53,7 @@ export class BaseUniverse extends TypedEmitter {
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
-		/**A `classicborne-server-protocol` Server instance.
+		/**A _classicborne-server-protocol_ Server instance.
 		 *
 		 * @type {Server}
 		 */
