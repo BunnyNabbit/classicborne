@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck - Some Voxel Telephone hold overs. Type me to see why.
 import { promisify } from "node:util"
 import fs from "node:fs"
 import { SmartBuffer } from "smart-buffer"
@@ -49,8 +49,9 @@ export class ChangeRecord {
 						.then(async (module) => {
 							const { KeyframeRecord } = module
 							const adapter = await KeyframeRecord.findSuitableSqliteAdapter()
+							if (!adapter) throw new Error("This should be an unreachable state.") // I don't see why this is necessary. Isn't the error thrown if nothing couldn't be found? Either way, this satisfies TypeScript.
 							this.keyframeRecord = new KeyframeRecord(join(path, "/dvr.db"), adapter)
-							await this.keyframeRecord.ready
+							await this.keyframeRecord.adapter.ready
 						})
 						.catch((error) => {
 							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.\n`, error)
@@ -197,8 +198,8 @@ export class ChangeRecord {
 				// Create a keyframe if enough time has passed since the last one, and we're not stalling or seeking
 				if (!staller && !seeking && restoreWatch.elapsed > ChangeRecord.lagKeyframeTime && this.keyframeRecord) {
 					restoreWatch.stop()
-					const keyframeId = await this.keyframeRecord.addKeyframe(currentFileReadOffset, this.actionCount, bufferActionCount, level?.template?.iconName ?? "empty", level.blocks, level.bounds)
-					console.log(`Created keyframe ${keyframeId} at offset ${currentFileReadOffset} for ${level?.template?.iconName ?? "empty"} after ${restoreWatch.elapsed}ms`)
+					await this.keyframeRecord.addKeyframe(currentFileReadOffset, this.actionCount, bufferActionCount, level?.template?.iconName ?? "empty", level.blocks, level.bounds)
+					console.log(`Created keyframe at offset ${currentFileReadOffset} for ${level?.template?.iconName ?? "empty"} after ${restoreWatch.elapsed}ms`)
 					restoreWatch.start()
 				}
 				return true // Continue processing

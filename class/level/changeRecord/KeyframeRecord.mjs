@@ -6,6 +6,7 @@ const deflate = promisify(zlib.deflate)
 /** @import {BaseSqliteAdapter} from "./adapter/BaseSqliteAdapter.mjs" */
 /** @import {BetterSqliteAdapter} from "./adapter/BetterSqliteAdapter.mjs" */
 /** @import {GhostSqliteAdapter} from "./adapter/GhostSqliteAdapter.mjs" */
+/** @import {NativeSqliteAdapter} from "./adapter/NativeSqliteAdapter.mjs" */
 /**I am a keyframe record for a {@link BaseLevel}. I manage level keyframes in my SQLite database, allowing for efficient retrieval and management of keyframe data.
  *
  * I use adapters
@@ -14,33 +15,31 @@ export class KeyframeRecord {
 	/**Creates a new KeyframeRecord instance.
 	 *
 	 * @param {string} path - The path to the SQLite database file.
+	 * @param {typeof GhostSqliteAdapter | typeof BetterSqliteAdapter | typeof NativeSqliteAdapter} adapter - The adapter class to use.
 	 */
 	constructor(path, adapter) {
 		this.path = path
-		/** @type {BaseSqliteAdapter | GhostSqliteAdapter | BetterSqliteAdapter} */
-		this.adapter = adapter
+		/** @type {GhostSqliteAdapter | BetterSqliteAdapter | NativeSqliteAdapter} */
+		this.adapter = new adapter(this, this.path)
 	}
 	/**Adds a keyframe to the database.
 	 *
 	 * @param {number} offset - The offset in the VHS file.
-	 * @param {number} totalActionCount - The action count at this keyframe.
+	 * @param {number} totalActionCount - The action count at this keyframe
+	 * @param {number} bufferActionCount
 	 * @param {string} template - The template associated with this keyframe.
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
 	 * @param {string} [levelData="{}"] - Optional level data in JSON format. Default is `"{}"`
-	 * @returns {Promise<number>} The ID of the newly created keyframe.
+	 * @returns {Promise<void?>}
 	 */
 	async addKeyframe(offset, totalActionCount, bufferActionCount, template, voxelData, bounds, levelData = "{}") {
-		await this.ready
+		await this.adapter.ready
 		const compressedVoxelData = await deflate(voxelData)
 		return new Promise((resolve, reject) => {
-			// this.db.run("INSERT INTO keyframes (offset, totalActionCount, bufferActionCount, template, voxelData, levelData) VALUES (?, ?, ?, ?, ?, ?)", [offset, totalActionCount, bufferActionCount, template + KeyframeRecord.getBoundsKey(bounds), compressedVoxelData, levelData], function (err) {
-			// 	if (err) {
-			// 		reject(err)
-			// 	} else {
-			// 		resolve(this.lastID)
-			// 	}
-			// })
+			this.adapter.addKeyframe(offset, totalActionCount, bufferActionCount, template, compressedVoxelData, bounds, levelData).then(() => {
+				resolve()
+			})
 		})
 	}
 	/**Gets the latest keyframe before a given action count for a specific template.
@@ -51,65 +50,33 @@ export class KeyframeRecord {
 	 * @returns {Promise<object | null>} The latest keyframe record or null if not found.
 	 */
 	async getLatestKeyframe(beforeActionCount, template, bounds) {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			// this.db.get("SELECT * FROM keyframes WHERE totalActionCount <= ? AND template = ? ORDER BY totalActionCount DESC LIMIT 1", [beforeActionCount, template + KeyframeRecord.getBoundsKey(bounds)], (err, row) => {
-			// 	if (err) {
-			// 		reject(err)
-			// 	} else {
-			// 		resolve(row)
-			// 	}
-			// })
-		})
+		await this.adapter.ready
+		return this.adapter.getLatestKeyframe(beforeActionCount, template, bounds)
 	}
 	/**Purge keyframes after a specific action count.
 	 *
 	 * @param {number} afterActionCount - The action count to purge keyframes after.
-	 * @returns {Promise<number>} The number of rows deleted.
+	 * @returns {Promise<void>}
 	 */
 	async purgeKeyframes(afterActionCount) {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			// this.db.run("DELETE FROM keyframes WHERE totalActionCount > ?", [afterActionCount], function (err) {
-			// 	if (err) {
-			// 		reject(err)
-			// 	} else {
-			// 		resolve(this.changes)
-			// 	}
-			// })
-		})
+		await this.adapter.ready
+		return void this.adapter.purgeKeyframes(afterActionCount)
 	}
 	/**Vacuum the database to optimize it.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	async vacuum() {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			// this.db.run("VACUUM", (err) => {
-			// 	if (err) {
-			// 		reject(err)
-			// 	} else {
-			// 		resolve()
-			// 	}
-			// })
-		})
+		await this.adapter.ready
+		return this.adapter.vacuum()
 	}
 	/**Close the database connection.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	async close() {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			// this.db.close((err) => {
-			// 	if (err) {
-			// 		reject(err)
-			// 	} else {
-			// 		resolve()
-			// 	}
-			// })
-		})
+		await this.adapter.ready
+		return this.adapter.close()
 	}
 	/**Get a string key for level bounds.
 	 *
@@ -129,7 +96,7 @@ export class KeyframeRecord {
 	 *
 	 * If I can't find an adapter, I'll throw an {@link Error}.
 	 *
-	 * @returns {GhostSqliteAdapter | BetterSqliteAdapter | NativeSqliteAdapter}
+	 * @returns {Promise<typeof BetterSqliteAdapter | typeof GhostSqliteAdapter | typeof NativeSqliteAdapter>}
 	 * @throws {Error} If no adapter could be imported.
 	 */
 	static async findSuitableSqliteAdapter() {
@@ -156,7 +123,7 @@ export class KeyframeRecord {
 			})
 			.catch(importErrorHandler)
 		if (NativeSqliteAdapter) return NativeSqliteAdapter
-		throw new Error("I wasn't able to find a SQLite adapter for KeyframeRecord. All of them failed to import.", ...errors)
+		throw new Error("I wasn't able to find a SQLite adapter for KeyframeRecord. All of them failed to import. As a last resort, try updating Node.js to use its native SQLite module.", ...errors)
 	}
 }
 

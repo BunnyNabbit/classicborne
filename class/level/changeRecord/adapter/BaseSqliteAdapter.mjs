@@ -5,8 +5,20 @@ import { KeyframeRecord } from "../KeyframeRecord.mjs"
 const deflate = promisify(zlib.deflate)
 /** @import {PathLike} from "fs" */
 /** @import {Vector3} from "../../../../types/arrayLikes.mjs" */
+/** @import {HandlingOptions} from "../../../../types/KeyframeRecord.mts" */
 
-/** I am the base for the adapters that use _SQLite_ as their database. I expect my subclasses to implement the {@link BaseSqliteAdapter.execute}, {@link BaseSqliteAdapter.close} and {@link BaseSqliteAdapter.initializeDatabase} methods. */
+export class Statement {
+	/**@param {string} structuredQueryLanguageStatement - The statement.
+	 * @param {HandlingOptions} handlingOptions
+	 */
+	constructor(structuredQueryLanguageStatement, handlingOptions) {
+		/** The string content of the statement. */
+		this.structuredQueryLanguageStatement = structuredQueryLanguageStatement
+		this.handlingOptions = handlingOptions ?? { executionType: "" }
+	}
+}
+
+/** I am the base for the adapters that use <span title="I hatched in a barn. I grew up in the farm. And you know what? I don't have any regrets when I exited the farm. With SQL, you're flying. Or at least that's what its proponents would say.">_SQLite_ as their database</span>. I expect my subclasses to implement the {@link BaseSqliteAdapter.execute}, {@link BaseSqliteAdapter.close} and {@link BaseSqliteAdapter.initializeDatabase} methods. */
 export class BaseSqliteAdapter {
 	/**@param {KeyframeRecord} keyframeRecord
 	 * @param {string | PathLike} openPath - The path used for identifying the store. Likely, it's somewhere that exists on a local filesystem.
@@ -20,24 +32,34 @@ export class BaseSqliteAdapter {
 	 * @param {number} totalActionCount - The action count at this keyframe.
 	 * @param {number} bufferActionCount - Yet to be documented.
 	 * @param {string} template - The template associated with this keyframe.
-	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
+	 * @param {Buffer} compressedVoxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
 	 * @param {string} [levelData="{}"] - Optional level data in JSON format. Default is `"{}"`
-	 * @returns {Promise<number>} The ID of the newly created keyframe.
+	 * @returns {Promise<void>}
 	 */
-	async addKeyframe(offset, totalActionCount, bufferActionCount, template, voxelData, bounds, levelData = "{}") {
-		// await this.keyframeRecord.ready
-		const compressedVoxelData = await deflate(voxelData)
+	async addKeyframe(offset, totalActionCount, bufferActionCount, template, compressedVoxelData, bounds, levelData = "{}") {
 		return await this.execute(
-			`--sql 
-			Insert into keyframes (
-				offset, totalActionCount, bufferActionCount, template, voxelData, levelData
-			)
-			Values (?, ?, ?, ?, ?, ?)
-			`,
+			new Statement(
+				`--sql 
+				Insert into keyframes (
+					offset,
+					totalActionCount,
+					bufferActionCount,
+					template,
+					voxelData,
+					levelData
+				) Values (?, ?, ?, ?, ?, ?)
+				`,
+				{
+					executionType: "execute",
+				}
+			),
 			[offset, totalActionCount, bufferActionCount, template + KeyframeRecord.getBoundsKey(bounds), compressedVoxelData, levelData]
-		).then((value) => {
-			return value.lastID
+		).then(() => {
+			// betterSqliteAdapter uses lastInsertRowid. What else?
+			// ~~ghost sqlite execute does it in a weird way.~~ actually, should just use `this`...
+			// But, we're not going to bother... It's not important to know.
+			return
 		})
 	}
 	/**Gets the latest keyframe before a given action count for a specific template.
@@ -48,23 +70,20 @@ export class BaseSqliteAdapter {
 	 * @returns {Promise<object | null>} The latest keyframe record or null if not found.
 	 */
 	async getLatestKeyframe(beforeActionCount, template, bounds) {
-		// await this.keyframeRecord.ready
-		// this.db.get("SELECT * FROM keyframes WHERE totalActionCount <= ? AND template = ? ORDER BY totalActionCount DESC LIMIT 1", [beforeActionCount, template + KeyframeRecord.getBoundsKey(bounds)], (err, row) => {
-		// 	if (err) {
-		// 		reject(err)
-		// 	} else {
-		// 		resolve(row)
-		// 	}
-		// })
 		return await this.execute(
-			`--sql
-			Select * from keyframes
-				Where
-					totalActionCount <= ? and template = ?
-				Order by
-					totalActionCount Desc
-				Limit 1
-			`,
+			new Statement(
+				`--sql
+				Select * from keyframes
+					Where
+						totalActionCount <= ? and template = ?
+					Order by
+						totalActionCount Desc
+					Limit 1
+				`,
+				{
+					executionType: "single",
+				}
+			),
 			[beforeActionCount, template + KeyframeRecord.getBoundsKey(bounds)]
 		).then((row) => {
 			return row
@@ -73,18 +92,22 @@ export class BaseSqliteAdapter {
 	/**Purge keyframes after a specific action count.
 	 *
 	 * @param {number} afterActionCount - The action count to purge keyframes after.
-	 * @returns {Promise<number>} The number of rows deleted.
+	 * @returns {Promise<void>}
 	 */
 	async purgeKeyframes(afterActionCount) {
-		// await this.keyframeRecord.ready
 		return await this.execute(
-			`--sql
-			Delete from keyframes
-				Where totalActionCount > ?
-			`,
+			new Statement(
+				`--sql
+				Delete from keyframes
+					Where totalActionCount > ?
+				`,
+				{
+					executionType: "execute",
+				}
+			),
 			[afterActionCount]
-		).then((value) => {
-			return value.changes
+		).then(() => {
+			return
 		})
 	}
 	/**Vacuum the database to optimize it.
@@ -92,8 +115,7 @@ export class BaseSqliteAdapter {
 	 * @returns {Promise<void>}
 	 */
 	async vacuum() {
-		// await this.keyframeRecord.ready
-		return await this.execute(`Vacuum`)
+		return await this.execute(new Statement(`Vacuum`, { executionType: "execute" }))
 	}
 	/**Close the database connection.
 	 *
@@ -120,10 +142,10 @@ export class BaseSqliteAdapter {
 	static getBoundsKey(bounds) {
 		return bounds.join(".")
 	}
-	/**Executes the specified SQL statement.
+	/**Executes the specified {@link Statement} object.
 	 *
 	 * @abstract
-	 * @param {string} statement - The SQL statement to execute.
+	 * @param {Statement} statement - The {@link Statement} instance to execute.
 	 * @param {any[]} [parameters] - The parameters to pass into the parameterized statement.
 	 * @returns {Promise<any>}
 	 */
@@ -132,22 +154,37 @@ export class BaseSqliteAdapter {
 	}
 	/** Ensures the database is initialized by creating tables and indexes if they don't exist */
 	async ensureInitializedDatabase() {
+		// Split into two statements because some adapters won't like it if it were in one.
 		await this.execute(
-			`--sql
-			Create table if not exists keyframes (
-				id Integer Primary key autoIncrement,
-				offset Integer,
-				totalActionCount Integer,
-				bufferActionCount integer,
-				template Text,
-				voxelData Blob,
-				levelData Text
-			);
-			Create index if not exists
-				idx_keyframes_totalActionCount -- TODO: reason for name??
-			On
-				keyframes(totalActionCount)
-			`
+			new Statement(
+				`--sql
+				Create table if not exists keyframes (
+					id Integer Primary key autoIncrement,
+					offset Integer,
+					totalActionCount Integer,
+					bufferActionCount integer,
+					template Text,
+					voxelData Blob,
+					levelData Text
+				)
+				`,
+				{
+					executionType: "execute",
+				}
+			)
+		)
+		await this.execute(
+			new Statement(
+				`--sql
+				Create index if not exists
+					idx_keyframes_totalActionCount -- @TODO: reason for name??
+				On
+					keyframes(totalActionCount)
+				`,
+				{
+					executionType: "execute",
+				}
+			)
 		)
 	}
 }

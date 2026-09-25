@@ -2,6 +2,7 @@
 import sqlite3 from "sqlite3"
 import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
+/** @import {Statement} from "./BaseSqliteAdapter.mjs" */
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 
 /** @todo Yet to be documented. */
@@ -15,15 +16,35 @@ export class GhostSqliteAdapter extends BaseSqliteAdapter {
 		this.db = null
 		this.ready = this.initializeDatabase(openPath)
 	}
-	/**@param {string} statement - The SQL statement to execute.
+	/**@param {Statement} statement - The SQL statement to execute.
 	 * @param {any[]} [parameters] - The parameters to pass into the parameterized statement.
-	 * @returns {Promise<any>}
+	 * @returns {Promise<any | any[]>}
 	 */
 	execute(statement, parameters) {
-		return new Promise((resolve) => {
-			this.db.run(statement, parameters, (...output) => {
-				resolve(...output)
-			})
+		return new Promise((resolve, reject) => {
+			switch (statement.handlingOptions.executionType) {
+				case "all": {
+					this.db.all(statement.structuredQueryLanguageStatement, parameters, (error, rows) => {
+						if (error) reject(error)
+						resolve(rows)
+					})
+					break
+				}
+				case "execute": {
+					this.db.run(statement.structuredQueryLanguageStatement, parameters, (error) => {
+						if (error) reject(error)
+						resolve()
+					})
+					break
+				}
+				case "single": {
+					this.db.get(statement.structuredQueryLanguageStatement, parameters, (error, row) => {
+						if (error) reject(error)
+						resolve(row)
+					})
+					break
+				}
+			}
 		})
 	}
 	/**Close the database connection.
