@@ -1,3 +1,4 @@
+// @ts-nocheck - Some Voxel Telephone hold overs. Type me to see why.
 import { promisify } from "node:util"
 import fs from "node:fs"
 import { SmartBuffer } from "smart-buffer"
@@ -8,6 +9,7 @@ import trash from "trash"
 import { join } from "node:path"
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 /** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
+/** @import {BaseSqliteAdapter} from "./adapter/BaseSqliteAdapter.mjs" */
 
 /**I am a change record for a {@link BaseLevel}. I keep an append-only record of block changes and commands, allowing for restoring changes to levels.
  *
@@ -46,11 +48,13 @@ export class ChangeRecord {
 					import("./KeyframeRecord.mjs")
 						.then(async (module) => {
 							const { KeyframeRecord } = module
-							this.keyframeRecord = new KeyframeRecord(join(path, "/dvr.db"))
-							await this.keyframeRecord.ready
+							const adapter = await KeyframeRecord.findSuitableSqliteAdapter()
+							if (!adapter) throw new Error("This should be an unreachable state.") // I don't see why this is necessary. Isn't the error thrown if nothing couldn't be found? Either way, this satisfies TypeScript.
+							this.keyframeRecord = new KeyframeRecord(join(path, "/dvr.db"), adapter)
+							await this.keyframeRecord.adapter.ready
 						})
 						.catch((error) => {
-							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.`, error)
+							console.warn(`${this.constructor.name}: I was told to use a KeyframeRecord. However, I wasn't able to initialize it because of this error.\nLikely, this is because the sqlite dependency wasn't installed or compiled. See https://github.com/BunnyNabbit/classicborne/issues/8.\nI wouldn't recommend doing this -- I already work fine, but to suppress this warning, explicitly tell me not to use a KeyframeRecord. I'll continue to work in the meantime.\n`, error)
 							this.keyframeRecord = null
 						})
 						.finally(() => {
@@ -194,8 +198,8 @@ export class ChangeRecord {
 				// Create a keyframe if enough time has passed since the last one, and we're not stalling or seeking
 				if (!staller && !seeking && restoreWatch.elapsed > ChangeRecord.lagKeyframeTime && this.keyframeRecord) {
 					restoreWatch.stop()
-					const keyframeId = await this.keyframeRecord.addKeyframe(currentFileReadOffset, this.actionCount, bufferActionCount, level?.template?.iconName ?? "empty", level.blocks, level.bounds)
-					console.log(`Created keyframe ${keyframeId} at offset ${currentFileReadOffset} for ${level?.template?.iconName ?? "empty"} after ${restoreWatch.elapsed}ms`)
+					await this.keyframeRecord.addKeyframe(currentFileReadOffset, this.actionCount, bufferActionCount, level?.template?.iconName ?? "empty", level.blocks, level.bounds)
+					console.log(`Created keyframe at offset ${currentFileReadOffset} for ${level?.template?.iconName ?? "empty"} after ${restoreWatch.elapsed}ms`)
 					restoreWatch.start()
 				}
 				return true // Continue processing
@@ -240,7 +244,7 @@ export class ChangeRecord {
 		const tempHandle = await fs.promises.open(join(this.path, "temp.vhs.bin"), "w+")
 		this.vhsFileHandle = tempHandle // Use the temp file handle for writing
 		const latestKeyframe = (this.keyframeRecord && (await this.keyframeRecord.getLatestKeyframe(toActionCount, level.template.iconName, level.bounds))) || null
-		// const startingActionCount = latestKeyframe?.totalActionCount ?? 0 // it's off by one. some where!
+		// const startingActionCount = latestKeyframe?.totalActionCount ?? 0 // it's off by one. somewhere!
 		let startingActionCount = 0
 		let startingFileOffset = 0
 		if (latestKeyframe) {
