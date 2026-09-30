@@ -6,7 +6,6 @@ import { DatabaseSync } from "node:sqlite"
 import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
 /** @import {Statement} from "./BaseSqliteAdapter.mjs" */
-// const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 
 /** @todo Yet to be documented. */
 export class NativeSqliteAdapter extends BaseSqliteAdapter {
