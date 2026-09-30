@@ -32,7 +32,7 @@ export class KeyframeRecord {
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
 	 * @param {string} [levelData="{}"] - Optional level data in JSON format. Default is `"{}"`
-	 * @returns {Promise<void?>}
+	 * @returns {Promise<void>}
 	 */
 	async addKeyframe(offset, totalActionCount, bufferActionCount, template, voxelData, bounds, levelData = "{}") {
 		await this.adapter.ready
