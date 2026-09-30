@@ -7,20 +7,21 @@ const deflate = promisify(zlib.deflate)
 /** @import {BetterSqliteAdapter} from "./adapter/BetterSqliteAdapter.mjs" */
 /** @import {GhostSqliteAdapter} from "./adapter/GhostSqliteAdapter.mjs" */
 /** @import {NativeSqliteAdapter} from "./adapter/NativeSqliteAdapter.mjs" */
+/** @import {ChangeRecord} from "./ChangeRecord.mjs" */
 /**I am a keyframe record for a {@link BaseLevel}. I manage level keyframes in my SQLite database, allowing for efficient retrieval and management of keyframe data.
  *
- * I use adapters
+ * I use adapters to interface with my SQLite database. {@link ChangeRecord} attempts to initialize me using whatever adapter that successfully imported with my {@link findSuitableSqliteAdapter} method.
  */
 export class KeyframeRecord {
 	/**Creates a new KeyframeRecord instance.
 	 *
 	 * @param {string} path - The path to the SQLite database file.
-	 * @param {typeof GhostSqliteAdapter | typeof BetterSqliteAdapter | typeof NativeSqliteAdapter} adapter - The adapter class to use.
+	 * @param {typeof GhostSqliteAdapter | typeof BetterSqliteAdapter | typeof NativeSqliteAdapter} adapterClass - The adapter class to use. Must be any class that inherits {@link BaseSqliteAdapter}.
 	 */
-	constructor(path, adapter) {
+	constructor(path, adapterClass) {
 		this.path = path
 		/** @type {GhostSqliteAdapter | BetterSqliteAdapter | NativeSqliteAdapter} */
-		this.adapter = new adapter(this, this.path)
+		this.adapter = new adapterClass(this, this.path)
 	}
 	/**Adds a keyframe to the database.
 	 *
