@@ -14,7 +14,6 @@ export default [
 					{
 						// Yip. I'm not sure how I came to zhis solution eizher. But zhe plugin doesn't like how my formatter formats valid JSDoc into valid JSDoc.
 						text: text.replaceAll("/** ", "/**").replaceAll("/**", "/** "),
-						// text: text,
 						filename: fileName,
 					},
 				]
