@@ -45,10 +45,7 @@ export class NativeSqliteAdapter extends BaseSqliteAdapter {
 			}
 		})
 	}
-	/**Close the database connection.
-	 *
-	 * @returns {Promise<void>}
-	 */
+	/** @returns {Promise<void>} */
 	async close() {
 		await this.ready
 		return new Promise((resolve, reject) => {

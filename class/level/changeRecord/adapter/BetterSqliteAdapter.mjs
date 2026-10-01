@@ -40,10 +40,7 @@ export class BetterSqliteAdapter extends BaseSqliteAdapter {
 			resolve(result)
 		})
 	}
-	/**Close the database connection.
-	 *
-	 * @returns {Promise<void>}
-	 */
+	/** @returns {Promise<void>} */
 	async close() {
 		await this.ready
 		return new Promise((resolve, reject) => {
