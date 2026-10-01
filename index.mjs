@@ -2,6 +2,7 @@
  *
  *   In practice, I am only used for TypeDoc generation.
  */
+console.warn("classicborne's index.mjs barrel file is being imported! This is generally ill advised. It is preferred to import classes directly from their modules instead.")
 export * from "./class/server/BaseUniverse.mjs"
 export * from "./class/server/BaseHeartbeat.mjs"
 export * from "./class/player/BasePlayer.mjs"
