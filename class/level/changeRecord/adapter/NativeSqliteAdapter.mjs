@@ -64,13 +64,8 @@ export class NativeSqliteAdapter extends BaseSqliteAdapter {
 	 * @returns {Promise<DatabaseSync>}
 	 */
 	async initializeDatabase(path) {
-		return new Promise((resolve, reject) => {
-			try {
-				this.db = new DatabaseSync(path)
-				resolve(this.db)
-			} catch (error) {
-				reject(error)
-			}
-		})
+		this.db = new DatabaseSync(path)
+		await this.ensureInitializedDatabase()
+		return this.db
 	}
 }
