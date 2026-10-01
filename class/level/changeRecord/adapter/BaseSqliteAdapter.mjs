@@ -1,6 +1,4 @@
 // @ts-check
-import { promisify } from "node:util"
-import zlib from "node:zlib"
 import { KeyframeRecord } from "../KeyframeRecord.mjs"
 import { Statement } from "./Statement.mjs"
 /** @import {PathLike} from "fs" */

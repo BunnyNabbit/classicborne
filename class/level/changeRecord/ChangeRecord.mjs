@@ -9,7 +9,6 @@ import trash from "trash"
 import { join } from "node:path"
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 /** @import {BaseLevel} from "../../level/BaseLevel.mjs" */
-/** @import {BaseSqliteAdapter} from "./adapter/BaseSqliteAdapter.mjs" */
 
 /**I am a change record for a {@link BaseLevel}. I keep an append-only record of block changes and commands, allowing for restoring changes to levels.
  *
