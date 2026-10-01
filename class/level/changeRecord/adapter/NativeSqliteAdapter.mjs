@@ -7,7 +7,10 @@ import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
 /** @import {Statement} from "./BaseSqliteAdapter.mjs" */
 
-/** @todo Yet to be documented. */
+/**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}.
+ *
+ * My module is the last to be imported by {@link KeyframeRecord.findSuitableSqliteAdapter}. I am returned by it if no _SQLite_ dependencies were installed.
+ */
 export class NativeSqliteAdapter extends BaseSqliteAdapter {
 	/**@param {KeyframeRecord} keyframeRecord
 	 * @param {string} openPath - The path used for identifying the store. Likely, it's somewhere that exists on a local filesystem.

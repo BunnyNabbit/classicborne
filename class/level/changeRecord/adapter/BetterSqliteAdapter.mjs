@@ -4,7 +4,10 @@ import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
 /** @import {Statement} from "./BaseSqliteAdapter.mjs" */
 
-/** @todo Yet to be documented. */
+/**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}. My required dependency is [_better-sqlite3_](https://npmx.dev/package/better-sqlite3).
+ *
+ * My module is first to be imported by {@link KeyframeRecord.findSuitableSqliteAdapter}. I am returned by it if [_better-sqlite3_](https://npmx.dev/package/better-sqlite3) is installed.
+ */
 export class BetterSqliteAdapter extends BaseSqliteAdapter {
 	/**@param {KeyframeRecord} keyframeRecord
 	 * @param {string} openPath - The path used for identifying the store. Likely, it's somewhere that exists on a local filesystem.

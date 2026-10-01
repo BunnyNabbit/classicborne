@@ -5,7 +5,10 @@ import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {Statement} from "./BaseSqliteAdapter.mjs" */
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 
-/** @todo Yet to be documented. */
+/**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}. My required dependency is [_sqlite3_](https://npmx.dev/package/sqlite3).
+ *
+ * My module is the second to be imported by {@link KeyframeRecord.findSuitableSqliteAdapter}. I am returned by it if [_sqlite3_](https://npmx.dev/package/sqlite3) is installed.
+ */
 export class GhostSqliteAdapter extends BaseSqliteAdapter {
 	/**@param {KeyframeRecord} keyframeRecord
 	 * @param {string} openPath - The path used for identifying the store. Likely, it's somewhere that exists on a local filesystem.
