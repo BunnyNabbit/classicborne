@@ -58,16 +58,8 @@ export class BetterSqliteAdapter extends BaseSqliteAdapter {
 	 * @returns {Promise<any>}
 	 */
 	async initializeDatabase(path) {
-		return new Promise((resolve, reject) => {
-			const db = new Database(path)
-			this.db = db
-			this.ensureInitializedDatabase()
-				.then(() => {
-					resolve(db)
-				})
-				.catch((error) => {
-					reject(error)
-				})
-		})
+		this.db = new Database(path)
+		await this.ensureInitializedDatabase()
+		return this.db
 	}
 }
