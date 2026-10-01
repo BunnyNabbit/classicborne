@@ -91,9 +91,9 @@ export class KeyframeRecord {
 	 *
 	 * I attempt to import the following adapter classes in order:
 	 *
-	 * 1. `BetterSqliteAdapter` - Uses the [_better-sqlite3_](https://npmx.dev/package/better-sqlite3) optional dependency.
-	 * 2. `GhostSqliteAdapter` - Uses the [_sqlite3_](https://npmx.dev/package/sqlite3) optional dependency.
-	 * 3. `NativeSqliteAdapter` - Uses the experimental [native _Node.js_ _SQLite_ module](https://nodejs.org/api/sqlite.html). If I use this adapter, `NativeSqliteAdapter` will emit a warning on import.
+	 * 1. {@link BetterSqliteAdapter} - Uses the [_better-sqlite3_](https://npmx.dev/package/better-sqlite3) optional dependency.
+	 * 2. {@link GhostSqliteAdapter} - Uses the [_sqlite3_](https://npmx.dev/package/sqlite3) optional dependency.
+	 * 3. {@link NativeSqliteAdapter} - Uses the experimental [native _Node.js_ _SQLite_ module](https://nodejs.org/api/sqlite.html). If I use this adapter, its module will emit a warning on import.
 	 *
 	 * If I can't find an adapter, I'll throw an {@link Error}.
 	 *
