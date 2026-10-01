@@ -2,22 +2,9 @@
 import { promisify } from "node:util"
 import zlib from "node:zlib"
 import { KeyframeRecord } from "../KeyframeRecord.mjs"
-const deflate = promisify(zlib.deflate)
+import { Statement } from "./Statement.mjs"
 /** @import {PathLike} from "fs" */
 /** @import {Vector3} from "../../../../types/arrayLikes.mjs" */
-/** @import {HandlingOptions} from "../../../../types/BaseSqliteAdapter.mts" */
-
-export class Statement {
-	/**@param {string} structuredQueryLanguageStatement - The statement.
-	 * @param {HandlingOptions} handlingOptions
-	 */
-	constructor(structuredQueryLanguageStatement, handlingOptions) {
-		/** The string content of the statement. */
-		this.structuredQueryLanguageStatement = structuredQueryLanguageStatement
-		this.handlingOptions = handlingOptions ?? { executionType: "" }
-	}
-}
-
 /** I am the base for the adapters that use <span title="I hatched in a barn. I grew up in the farm. And you know what? I don't have any regrets when I exited the farm. With SQL, you're flying. Or at least that's what its proponents would say.">_SQLite_ as their database</span>. I expect my subclasses to implement the {@link BaseSqliteAdapter.execute}, {@link BaseSqliteAdapter.close} and {@link BaseSqliteAdapter.initializeDatabase} methods. */
 export class BaseSqliteAdapter {
 	/**@param {KeyframeRecord} keyframeRecord

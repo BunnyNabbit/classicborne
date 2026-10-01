@@ -3,7 +3,7 @@ import { BetterSqliteAdapter } from "../class/level/changeRecord/adapter/BetterS
 import { GhostSqliteAdapter } from "../class/level/changeRecord/adapter/GhostSqliteAdapter.mjs"
 import { NativeSqliteAdapter } from "../class/level/changeRecord/adapter/NativeSqliteAdapter.mjs"
 import { KeyframeRecord } from "../class/level/changeRecord/KeyframeRecord.mjs"
-import { BaseSqliteAdapter, Statement } from "../class/level/changeRecord/adapter/BaseSqliteAdapter.mjs" // Zhis is... apparently part of zhe public API.
+import { Statement } from "../class/level/changeRecord/adapter/Statement.mjs" // Zhis is... apparently part of zhe public API.
 // prettier-ignore
 /** @type {[string, typeof BetterSqliteAdapter | typeof GhostSqliteAdapter | typeof NativeSqliteAdapter][]} */
 const adapterClasses = [

@@ -2,7 +2,7 @@
 import Database from "better-sqlite3"
 import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
-/** @import {Statement} from "./BaseSqliteAdapter.mjs" */
+/** @import {Statement} from "./Statement.mjs" */
 
 /**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}. My required dependency is [_better-sqlite3_](https://npmx.dev/package/better-sqlite3).
  *

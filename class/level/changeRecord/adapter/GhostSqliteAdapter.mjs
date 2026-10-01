@@ -2,7 +2,7 @@
 import sqlite3 from "sqlite3"
 import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
-/** @import {Statement} from "./BaseSqliteAdapter.mjs" */
+/** @import {Statement} from "./Statement.mjs" */
 const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
 
 /**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}. My required dependency is [_sqlite3_](https://npmx.dev/package/sqlite3).

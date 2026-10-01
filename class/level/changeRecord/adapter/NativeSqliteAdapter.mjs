@@ -5,7 +5,7 @@ There's something about dragons. I forgot what the exact saying is. Whatever it 
 import { DatabaseSync } from "node:sqlite"
 import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
 /** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
-/** @import {Statement} from "./BaseSqliteAdapter.mjs" */
+/** @import {Statement} from "./Statement.mjs" */
 
 /**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}.
  *
