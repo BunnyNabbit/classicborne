@@ -5,7 +5,7 @@ import { KeyframeRecord } from "../KeyframeRecord.mjs"
 const deflate = promisify(zlib.deflate)
 /** @import {PathLike} from "fs" */
 /** @import {Vector3} from "../../../../types/arrayLikes.mjs" */
-/** @import {HandlingOptions} from "../../../../types/KeyframeRecord.mts" */
+/** @import {HandlingOptions} from "../../../../types/BaseSqliteAdapter.mts" */
 
 export class Statement {
 	/**@param {string} structuredQueryLanguageStatement - The statement.
