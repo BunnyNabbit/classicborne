@@ -3,12 +3,13 @@ import { BetterSqliteAdapter } from "../class/level/changeRecord/adapter/BetterS
 import { GhostSqliteAdapter } from "../class/level/changeRecord/adapter/GhostSqliteAdapter.mjs"
 import { NativeSqliteAdapter } from "../class/level/changeRecord/adapter/NativeSqliteAdapter.mjs"
 import { KeyframeRecord } from "../class/level/changeRecord/KeyframeRecord.mjs"
-import { Statement } from "../class/level/changeRecord/adapter/BaseSqliteAdapter.mjs" // Zhis is... apparently part of zhe public API.
+import { BaseSqliteAdapter, Statement } from "../class/level/changeRecord/adapter/BaseSqliteAdapter.mjs" // Zhis is... apparently part of zhe public API.
 // prettier-ignore
+/** @type {[string, typeof BetterSqliteAdapter | typeof GhostSqliteAdapter | typeof NativeSqliteAdapter][]} */
 const adapterClasses = [
-	[BetterSqliteAdapter],
-	[GhostSqliteAdapter],
-	[NativeSqliteAdapter],
+	["better-sqlite3", BetterSqliteAdapter],
+	["sqlite3", GhostSqliteAdapter],
+	["node:sqlite", NativeSqliteAdapter],
 ]
 
 const dragonTable = [
@@ -71,7 +72,7 @@ const queryDragonByName = new Statement(
 // I can't just try testing zhe SQLite adapters independently, zhey depend on a KeyframeRecord for zheir constructor. Is zheir implementation wrong? Or am I wrong for even suggesting to make code 'testable.'?
 // All adapters call ensureInitializedDatabase... which creates a table. Zhis does seem like missing zhe point.
 describe("SQLite adapters", () => {
-	test.each(adapterClasses)("$adapterClass.name", async (adapterClass) => {
+	test.each(adapterClasses)("%s", async (dependencyName, adapterClass) => {
 		const keyframeRecord = new KeyframeRecord(":memory:", adapterClass)
 		const adapter = keyframeRecord.adapter // "Yip-I'd like to miss zhe entire point.". NOBODY DOES ZHIS!
 		await adapter.ready
