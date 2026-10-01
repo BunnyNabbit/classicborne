@@ -25,6 +25,8 @@ export class BaseSqliteAdapter {
 	 */
 	constructor(keyframeRecord, openPath) {
 		this.keyframeRecord = keyframeRecord
+		/** @type {any} */
+		this.db
 	}
 	/**Adds a keyframe to the database.
 	 *
@@ -125,14 +127,14 @@ export class BaseSqliteAdapter {
 	async close() {
 		throw new Error("BaseSqliteAdapter#close is abstract and must be implemented.")
 	}
-	/**Close the database connection.
+	/**Initializes the {@link db | database} object.
 	 *
 	 * @abstract
 	 * @param {any} [path]
 	 * @returns {Promise<any>}
 	 */
 	async initializeDatabase(path) {
-		throw new Error("initializeDatabase#close is abstract and must be implemented.")
+		throw new Error("BaseSqliteAdapter#initializeDatabase is abstract and must be implemented.")
 	}
 	/**Get a string key for level bounds.
 	 *
