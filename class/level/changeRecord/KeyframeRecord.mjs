@@ -26,8 +26,8 @@ export class KeyframeRecord {
 	/**Adds a keyframe to the database.
 	 *
 	 * @param {number} offset - The offset in the VHS file.
-	 * @param {number} totalActionCount - The action count at this keyframe
-	 * @param {number} bufferActionCount
+	 * @param {number} totalActionCount - The total action count at this keyframe
+	 * @param {number} bufferActionCount - The number of actions recorded after the last keyframe.
 	 * @param {string} template - The template associated with this keyframe.
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
