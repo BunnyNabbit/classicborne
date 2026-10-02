@@ -61,7 +61,8 @@ export class KeyframeRecord {
 	 */
 	async purgeKeyframes(afterActionCount) {
 		await this.adapter.ready
-		return void this.adapter.purgeKeyframes(afterActionCount)
+		await this.adapter.purgeKeyframes(afterActionCount)
+		return
 	}
 	/**Vacuum the database to optimize it.
 	 *
@@ -69,7 +70,8 @@ export class KeyframeRecord {
 	 */
 	async vacuum() {
 		await this.adapter.ready
-		return this.adapter.vacuum()
+		await this.adapter.vacuum()
+		return
 	}
 	/**Close the database connection.
 	 *
@@ -77,7 +79,8 @@ export class KeyframeRecord {
 	 */
 	async close() {
 		await this.adapter.ready
-		return this.adapter.close()
+		await this.adapter.close()
+		return
 	}
 	/**Get a string key for level bounds.
 	 *
