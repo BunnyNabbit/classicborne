@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"noEmit": true,
+		"allowJs": true,
+		"checkJs": false,
+		"lib": [
+			"ESNext",
+		],
+		"types": ["jest"],
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"isolatedModules": true,
+		"strict": false,
+		"allowImportingTsExtensions": true,
+		"skipLibCheck": true,
+		"erasableSyntaxOnly": true,
+		"strictBindCallApply": true,
+	}
+}

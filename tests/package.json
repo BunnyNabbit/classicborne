@@ -9,8 +9,9 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "cross-env": "^7.0.3",
-    "jest": "^30.0.4",
+    "jest": "^30.5.2",
     "prettier": "^3.6.2",
     "prettier-plugin-drone-class": "^0.1.0",
     "prettier-plugin-drone-jsdoc": "^1.8.0"

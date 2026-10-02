@@ -2,6 +2,7 @@
  *
  *   In practice, I am only used for TypeDoc generation.
  */
+console.warn("classicborne's index.mjs barrel file is being imported! This is generally ill advised. It is preferred to import classes directly from their modules instead.")
 export * from "./class/server/BaseUniverse.mjs"
 export * from "./class/server/BaseHeartbeat.mjs"
 export * from "./class/player/BasePlayer.mjs"
@@ -15,3 +16,7 @@ export * from "./class/level/drone/Ego.mjs"
 export * from "./class/level/changeRecord/ChangeRecord.mjs"
 export * from "./class/level/changeRecord/KeyframeRecord.mjs"
 export * from "./class/level/changeRecord/NullChangeRecord.mjs"
+export * from "./class/level/changeRecord/adapter/BaseSqliteAdapter.mjs"
+export * from "./class/level/changeRecord/adapter/BetterSqliteAdapter.mjs"
+export * from "./class/level/changeRecord/adapter/GhostSqliteAdapter.mjs"
+export * from "./class/level/changeRecord/adapter/NativeSqliteAdapter.mjs"

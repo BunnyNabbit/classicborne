@@ -1,0 +1,65 @@
+// @ts-check
+import Database from "better-sqlite3"
+import { BaseSqliteAdapter } from "./BaseSqliteAdapter.mjs"
+/** @import {KeyframeRecord} from "../KeyframeRecord.mjs" */
+/** @import {Statement} from "./Statement.mjs" */
+
+/**I'm an {@link BaseSqliteAdapter | adapter} for {@link KeyframeRecord}. My required dependency is [_better-sqlite3_](https://npmx.dev/package/better-sqlite3).
+ *
+ * My module is first to be imported by {@link KeyframeRecord.findSuitableSqliteAdapter}. I am returned by it if [_better-sqlite3_](https://npmx.dev/package/better-sqlite3) is installed.
+ */
+export class BetterSqliteAdapter extends BaseSqliteAdapter {
+	/**@param {KeyframeRecord} keyframeRecord
+	 * @param {string} openPath - The path used for identifying the store. Likely, it's somewhere that exists on a local filesystem.
+	 */
+	constructor(keyframeRecord, openPath) {
+		super(keyframeRecord, openPath)
+		/** @type {any} */
+		this.db = null
+		this.ready = this.initializeDatabase(openPath)
+	}
+	/**@param {Statement} statement - The SQL statement to execute.
+	 * @param {any[]} [parameters] - The parameters to pass into the parameterized statement.
+	 * @returns {Promise<any>}
+	 */
+	execute(statement, parameters = []) {
+		return new Promise((resolve) => {
+			const preparedStatement = this.db.prepare(statement.structuredQueryLanguageStatement)
+			let result
+			switch (statement.handlingOptions.executionType) {
+				case "all": {
+					result = preparedStatement.all(...parameters)
+					break
+				}
+				case "execute": {
+					result = preparedStatement.run(...parameters)
+					break
+				}
+				case "single": {
+					result = preparedStatement.get(...parameters)
+					break
+				}
+			}
+			resolve(result)
+		})
+	}
+	/** @returns {Promise<void>} */
+	async close() {
+		await this.ready
+		return new Promise((resolve, reject) => {
+			try {
+				this.db.close()
+			} catch (error) {
+				reject(error)
+			}
+		})
+	}
+	/**@param {string} path
+	 * @returns {Promise<any>}
+	 */
+	async initializeDatabase(path) {
+		this.db = new Database(path)
+		await this.ensureInitializedDatabase()
+		return this.db
+	}
+}
