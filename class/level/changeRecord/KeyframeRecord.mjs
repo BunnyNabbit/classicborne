@@ -8,9 +8,11 @@ const deflate = promisify(zlib.deflate)
 /** @import {GhostSqliteAdapter} from "./adapter/GhostSqliteAdapter.mjs" */
 /** @import {NativeSqliteAdapter} from "./adapter/NativeSqliteAdapter.mjs" */
 /** @import {ChangeRecord} from "./ChangeRecord.mjs" */
-/**I am a keyframe record for a {@link BaseLevel}. I manage level keyframes in my SQLite database, allowing for efficient retrieval and management of keyframe data.
+/** @import {BaseLevel} from "../BaseLevel.mjs" */
+
+/**I am a keyframe record for a {@link BaseLevel}. I manage snapshots of level state snapshots in my _SQLite_ database, allowing for efficient retrieval and management of these keyframes.
  *
- * I use adapters to interface with my SQLite database. {@link ChangeRecord} attempts to initialize me using whatever adapter that successfully imported with my {@link findSuitableSqliteAdapter} method.
+ * I use {@link BaseSqliteAdapter | adapters} to interface with my {@link BaseSqliteAdapter.db | _SQLite_ database}. {@link ChangeRecord} attempts to initialize me using whatever adapter that successfully imported with my {@link findSuitableSqliteAdapter} method. I'm optional and if an adapter fails to import, the {@link ChangeRecord} will continue without my help.
  */
 export class KeyframeRecord {
 	/**Creates a new KeyframeRecord instance.
