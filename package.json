@@ -27,6 +27,7 @@
   },
   "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.19.2",
     "@types/qs": "^6.14.0",
     "prettier": "^3.7.4",
@@ -42,8 +43,11 @@
     "classicborne-server-protocol": "~0.6.0",
     "qs": "^6.14.0",
     "smart-buffer": "^4.2.0",
-    "sqlite3": "^5.1.7",
     "tiny-typed-emitter": "^2.1.0",
     "trash": "^10.0.1"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^12.9.0",
+    "sqlite3": "^5.1.7"
   }
 }

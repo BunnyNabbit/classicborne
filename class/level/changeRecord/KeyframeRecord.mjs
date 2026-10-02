@@ -1,63 +1,47 @@
 // @ts-check
-import sqlite3 from "sqlite3"
 import zlib from "node:zlib"
 import { promisify } from "node:util"
 const deflate = promisify(zlib.deflate)
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
-const { Database, OPEN_READWRITE, OPEN_CREATE } = sqlite3.verbose()
-/** I am a keyframe record for a {@link BaseLevel}. I manage level keyframes in my SQLite database, allowing for efficient retrieval and management of keyframe data. */
+/** @import {BaseSqliteAdapter} from "./adapter/BaseSqliteAdapter.mjs" */
+/** @import {BetterSqliteAdapter} from "./adapter/BetterSqliteAdapter.mjs" */
+/** @import {GhostSqliteAdapter} from "./adapter/GhostSqliteAdapter.mjs" */
+/** @import {NativeSqliteAdapter} from "./adapter/NativeSqliteAdapter.mjs" */
+/** @import {ChangeRecord} from "./ChangeRecord.mjs" */
+/** @import {BaseLevel} from "../BaseLevel.mjs" */
+
+/**I am a keyframe record for a {@link BaseLevel}. I manage snapshots of level state snapshots in my _SQLite_ database, allowing for efficient retrieval and management of these keyframes.
+ *
+ * I use {@link BaseSqliteAdapter | adapters} to interface with my {@link BaseSqliteAdapter.db | _SQLite_ database}. {@link ChangeRecord} attempts to initialize me using whatever adapter that successfully imported with my {@link findSuitableSqliteAdapter} method. I'm optional and if an adapter fails to import, the {@link ChangeRecord} will continue without my help.
+ */
 export class KeyframeRecord {
 	/**Creates a new KeyframeRecord instance.
 	 *
 	 * @param {string} path - The path to the SQLite database file.
+	 * @param {typeof GhostSqliteAdapter | typeof BetterSqliteAdapter | typeof NativeSqliteAdapter} adapterClass - The adapter class to use. Must be any class that inherits {@link BaseSqliteAdapter}.
 	 */
-	constructor(path) {
+	constructor(path, adapterClass) {
 		this.path = path
-		this.db = null
-		this.ready = new Promise((resolve, reject) => {
-			const db = new Database(path, OPEN_READWRITE | OPEN_CREATE, (err) => {
-				if (err) {
-					reject(err)
-				} else {
-					db.run("CREATE TABLE IF NOT EXISTS keyframes (id INTEGER PRIMARY KEY AUTOINCREMENT, offset INTEGER, totalActionCount INTEGER, bufferActionCount INTEGER, template TEXT, voxelData BLOB, levelData TEXT)", (err) => {
-						if (err) {
-							reject(err)
-						} else {
-							// Create index for totalActionCount
-							db.run("CREATE INDEX IF NOT EXISTS idx_keyframes_totalActionCount ON keyframes(totalActionCount)", (err) => {
-								if (err) {
-									reject(err)
-								} else {
-									this.db = db
-									resolve(db)
-								}
-							})
-						}
-					})
-				}
-			})
-		})
+		/** @type {GhostSqliteAdapter | BetterSqliteAdapter | NativeSqliteAdapter} */
+		this.adapter = new adapterClass(this, this.path)
 	}
 	/**Adds a keyframe to the database.
 	 *
 	 * @param {number} offset - The offset in the VHS file.
-	 * @param {number} totalActionCount - The action count at this keyframe.
+	 * @param {number} totalActionCount - The total action count at this keyframe
+	 * @param {number} bufferActionCount - The number of actions recorded after the last keyframe.
 	 * @param {string} template - The template associated with this keyframe.
 	 * @param {Buffer} voxelData - The level voxel data at this keyframe.
 	 * @param {Vector3} bounds - The bounds of the level.
 	 * @param {string} [levelData="{}"] - Optional level data in JSON format. Default is `"{}"`
-	 * @returns {Promise<number>} The ID of the newly created keyframe.
+	 * @returns {Promise<void>}
 	 */
 	async addKeyframe(offset, totalActionCount, bufferActionCount, template, voxelData, bounds, levelData = "{}") {
-		await this.ready
+		await this.adapter.ready
 		const compressedVoxelData = await deflate(voxelData)
 		return new Promise((resolve, reject) => {
-			this.db.run("INSERT INTO keyframes (offset, totalActionCount, bufferActionCount, template, voxelData, levelData) VALUES (?, ?, ?, ?, ?, ?)", [offset, totalActionCount, bufferActionCount, template + KeyframeRecord.getBoundsKey(bounds), compressedVoxelData, levelData], function (err) {
-				if (err) {
-					reject(err)
-				} else {
-					resolve(this.lastID)
-				}
+			this.adapter.addKeyframe(offset, totalActionCount, bufferActionCount, template, compressedVoxelData, bounds, levelData).then(() => {
+				resolve()
 			})
 		})
 	}
@@ -69,65 +53,36 @@ export class KeyframeRecord {
 	 * @returns {Promise<object | null>} The latest keyframe record or null if not found.
 	 */
 	async getLatestKeyframe(beforeActionCount, template, bounds) {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			this.db.get("SELECT * FROM keyframes WHERE totalActionCount <= ? AND template = ? ORDER BY totalActionCount DESC LIMIT 1", [beforeActionCount, template + KeyframeRecord.getBoundsKey(bounds)], (err, row) => {
-				if (err) {
-					reject(err)
-				} else {
-					resolve(row)
-				}
-			})
-		})
+		await this.adapter.ready
+		return this.adapter.getLatestKeyframe(beforeActionCount, template, bounds)
 	}
 	/**Purge keyframes after a specific action count.
 	 *
 	 * @param {number} afterActionCount - The action count to purge keyframes after.
-	 * @returns {Promise<number>} The number of rows deleted.
+	 * @returns {Promise<void>}
 	 */
 	async purgeKeyframes(afterActionCount) {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			this.db.run("DELETE FROM keyframes WHERE totalActionCount > ?", [afterActionCount], function (err) {
-				if (err) {
-					reject(err)
-				} else {
-					resolve(this.changes)
-				}
-			})
-		})
+		await this.adapter.ready
+		await this.adapter.purgeKeyframes(afterActionCount)
+		return
 	}
 	/**Vacuum the database to optimize it.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	async vacuum() {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			this.db.run("VACUUM", (err) => {
-				if (err) {
-					reject(err)
-				} else {
-					resolve()
-				}
-			})
-		})
+		await this.adapter.ready
+		await this.adapter.vacuum()
+		return
 	}
 	/**Close the database connection.
 	 *
 	 * @returns {Promise<void>}
 	 */
 	async close() {
-		await this.ready
-		return new Promise((resolve, reject) => {
-			this.db.close((err) => {
-				if (err) {
-					reject(err)
-				} else {
-					resolve()
-				}
-			})
-		})
+		await this.adapter.ready
+		await this.adapter.close()
+		return
 	}
 	/**Get a string key for level bounds.
 	 *
@@ -136,6 +91,45 @@ export class KeyframeRecord {
 	 */
 	static getBoundsKey(bounds) {
 		return bounds.join(".")
+	}
+	/**Finds a suitable _SQLite_ adapter. I use dynamic imports to find an adapter that is able to import.
+	 *
+	 * I attempt to import the following adapter classes in order:
+	 *
+	 * 1. {@link BetterSqliteAdapter} - Uses the [_better-sqlite3_](https://npmx.dev/package/better-sqlite3) optional dependency.
+	 * 2. {@link GhostSqliteAdapter} - Uses the [_sqlite3_](https://npmx.dev/package/sqlite3) optional dependency.
+	 * 3. {@link NativeSqliteAdapter} - Uses the experimental [native _Node.js_ _SQLite_ module](https://nodejs.org/api/sqlite.html). If I use this adapter, its module will emit a warning on import.
+	 *
+	 * If I can't find an adapter, I'll throw an {@link Error}.
+	 *
+	 * @returns {Promise<typeof BetterSqliteAdapter | typeof GhostSqliteAdapter | typeof NativeSqliteAdapter>}
+	 * @throws {Error} If no adapter could be imported.
+	 */
+	static async findSuitableSqliteAdapter() {
+		/** @type {Error[]} */
+		const errors = []
+		const importErrorHandler = (/** @type {Error} */ error) => {
+			errors.push(error)
+		}
+		const BetterSqliteAdapter = await import("./adapter/BetterSqliteAdapter.mjs")
+			.then((module) => {
+				return module.BetterSqliteAdapter
+			})
+			.catch(importErrorHandler)
+		if (BetterSqliteAdapter) return BetterSqliteAdapter
+		const GhostSqliteAdapter = await import("./adapter/GhostSqliteAdapter.mjs")
+			.then((module) => {
+				return module.GhostSqliteAdapter
+			})
+			.catch(importErrorHandler)
+		if (GhostSqliteAdapter) return GhostSqliteAdapter
+		const NativeSqliteAdapter = await import("./adapter/NativeSqliteAdapter.mjs")
+			.then((module) => {
+				return module.NativeSqliteAdapter
+			})
+			.catch(importErrorHandler)
+		if (NativeSqliteAdapter) return NativeSqliteAdapter
+		throw new Error("I wasn't able to find a SQLite adapter for KeyframeRecord. All of them failed to import. As a last resort, try updating Node.js to use its native SQLite module.", ...errors)
 	}
 }
 
