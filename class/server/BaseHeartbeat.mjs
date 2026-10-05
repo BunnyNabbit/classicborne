@@ -32,7 +32,7 @@ export class BaseHeartbeat {
 		while (this.alive) {
 			try {
 				await this.postHeartbeat({
-					name: this.universe.serverConfiguration.serverName ?? "A classicborne server.",
+					name: this.universe.serverConfiguration.serverName ?? "A classicborne universe.",
 					port: this.universe.serverConfiguration.port.toString(),
 					// @ts-ignore
 					users: this.universe.server.players.length.toString(),
