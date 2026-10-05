@@ -20,14 +20,14 @@ export class BaseHeartbeat {
 		this.alive = true
 		this.start()
 	}
-	/**The delay when {@link obviouslyBadStatusCodes | bad statuses} are received.
+	/**The delay in milliseconds when {@link obviouslyBadStatusCodes | bad statuses} are received.
 	 *
 	 * This does not usually happen, if ever. But let's not purposefully retry requests at the rate of {@link retryRate}...
 	 */
 	static rateLimitedDelay = 45000
 	/** The rate at which to post a heartbeat, in milliseconds. */
 	static heartbeatRate = 45000
-	/** How long to wait */
+	/** How long in milliseconds until the heartbeat request times out. */
 	static heartbeatTimeout = 10000
 	/**The rate at which to retry posting a heartbeat in case of failure, in milliseconds.
 	 *
