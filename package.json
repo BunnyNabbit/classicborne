@@ -36,7 +36,7 @@
     "release-it": "^21.1.0",
     "release-it-pnpm": "^4.6.6",
     "typedoc": "^0.28.15",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "classicborne-server-protocol": "~0.6.0",
