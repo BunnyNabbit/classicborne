@@ -26,7 +26,6 @@ export class BaseTemplate {
 	 *
 	 * @abstract
 	 * @returns {Buffer}
-	 * @ts-ignore
 	 */
 	generate(bounds = this.defaultBounds) {
 		throw new Error("Template generate method not implemented.")
