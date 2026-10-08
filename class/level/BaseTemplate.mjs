@@ -1,8 +1,9 @@
 // @ts-check
 import { Buffer } from "node:buffer"
 /** @import {Vector3} from "../../types/arrayLikes.mjs" */
+/** @import {BaseLevel} from "../level/BaseLevel.mjs" */
 
-/** @todo Yet to be documented. */
+/** I'm a base class for {@link BaseLevel} templates. */
 export class BaseTemplate {
 	/**Create a new template with an icon and default bounds.
 	 *
