@@ -11,7 +11,12 @@ import { Watchdog } from "./Watchdog.mjs"
  * } from "../../types/arrayLikes.mjs"
  */
 
-/** @todo Yet to be documented. */
+/**I represent a client connection.
+ *
+ * The {@link BaseUniverse | universe} initializes me.
+ *
+ * @todo When?
+ */
 export class BasePlayer extends EventEmitter {
 	/**@todo Yet to be documented.
 	 *
