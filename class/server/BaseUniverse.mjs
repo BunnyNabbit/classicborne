@@ -60,7 +60,13 @@ export class BaseUniverse extends TypedEmitter {
 		this.server = new Server(serverConfiguration.port)
 		this.server.setupWebSocketServer()
 		this.server.universe = this
-		this.server.players = []
+		/**The players present on the universe.
+		 *
+		 * @type {BasePlayer[]}
+		 */
+		this.players = []
+		// Deprecated reference to BaseUniverse#players. Since v0.2.0.
+		this.server.players = this.players
 		this.server.extensions.push({
 			name: "MessageTypes",
 			version: 1,
@@ -93,14 +99,14 @@ export class BaseUniverse extends TypedEmitter {
 	 */
 	addPlayer(player) {
 		for (let i = 0; i < 127; i++) {
-			if (!this.server.players.some((player) => player.netId == i)) {
+			if (!this.players.some((player) => player.netId == i)) {
 				player.netId = i
-				this.server.players.forEach((otherPlayer) => {
+				this.players.forEach((otherPlayer) => {
 					player.client.extensions.get("ExtendedPlayerList").addPlayerName(otherPlayer.netId, otherPlayer.username, otherPlayer.getDisplayName(), "Server", 1)
 				})
-				this.server.players.push(player)
+				this.players.push(player)
 				player.client.extensions.get("ExtendedPlayerList").addPlayerName(255, player.username, player.getDisplayName(), "Server", 1)
-				this.server.players.forEach((anyPlayer) => {
+				this.players.forEach((anyPlayer) => {
 					if (anyPlayer != player) anyPlayer.client.extensions.get("ExtendedPlayerList").addPlayerName(i, player.username, player.getDisplayName(), "Server", 1)
 				})
 				this.emit("playerAdded", player)
@@ -114,9 +120,9 @@ export class BaseUniverse extends TypedEmitter {
 	 * @param {BasePlayer} player
 	 */
 	removePlayer(player) {
-		const clientIndex = this.server.players.indexOf(player)
-		if (clientIndex !== -1) this.server.players.splice(clientIndex, 1)
-		this.server.players.forEach((ozherPlayer) => {
+		const clientIndex = this.players.indexOf(player)
+		if (clientIndex !== -1) this.players.splice(clientIndex, 1)
+		this.players.forEach((ozherPlayer) => {
 			ozherPlayer.client.extensions.get("ExtendedPlayerList").removePlayerName(player.netId)
 		})
 		this.emit("playerRemoved", player)
