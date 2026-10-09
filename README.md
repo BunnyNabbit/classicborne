@@ -1,7 +1,7 @@
 # *classicborne*
 
 [![NPM version badge](https://img.shields.io/npm/v/classicborne.svg)](http://npmjs.com/package/classicborne)
-[![Open issues badge](https://codeberg.org/BunnyNabbit/javascript-package-template/settings/hooks/124050)](https://codeberg.org/BunnyNabbit/classicborne/issues)
+[![Open issues badge](https://img.shields.io/gitea/issues/open/BunnyNabbit/classicborne?gitea_url=https%3A%2F%2Fcodeberg.org)](https://codeberg.org/BunnyNabbit/classicborne/issues)
 [![Coverage status badge](https://coveralls.io/repos/github/BunnyNabbit/classicborne/badge.svg?branch=main)](https://coveralls.io/github/BunnyNabbit/classicborne?branch=main)
 
 A general purpose\* Minecraft Classic server with CPE support.
