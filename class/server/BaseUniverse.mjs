@@ -53,7 +53,7 @@ export class BaseUniverse extends TypedEmitter {
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
-		/**A _classicborne-server-protocol_ Server instance.
+		/**A [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) Server instance.
 		 *
 		 * @type {Server}
 		 */
