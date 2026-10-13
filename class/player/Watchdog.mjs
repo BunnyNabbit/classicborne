@@ -8,14 +8,21 @@ export class Watchdog {
 	 * @param {BasePlayer} player - The player this watchdog is monitoring.
 	 */
 	constructor(player) {
+		/** @todo Yet to be documented. */
 		this.interval = setInterval(() => {
 			this.currentRate = 0
 		}, 1000)
 		/** The current rate of operations within the last second. */
 		this.currentRate = 0
-		/** The maximum allowed rate of operations before disconnecting the player. */
+		/**The maximum allowed rate of operations before disconnecting the player.
+		 *
+		 * @type {number}
+		 */
 		this.limit = 382
-		/** @type {BasePlayer} */
+		/**The player being monitored.
+		 *
+		 * @type {BasePlayer}
+		 */
 		this.player = player
 	}
 	/**Increments the current rate of operations by the specified amount. If the current rate exceeds the limit, the player is disconnected.
@@ -31,7 +38,7 @@ export class Watchdog {
 		}
 		return false
 	}
-	/** Performs cleanup by clearing the interval used to reset {@link Watchdog.currentRate}. */
+	/** Performs cleanup by clearing the {@link interval} used to reset {@link Watchdog.currentRate}. */
 	destroy() {
 		clearInterval(this.interval)
 	}
