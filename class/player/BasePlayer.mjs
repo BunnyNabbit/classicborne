@@ -20,16 +20,19 @@ import { Watchdog } from "./Watchdog.mjs"
 export class BasePlayer extends EventEmitter {
 	/**@todo Yet to be documented.
 	 *
-	 * @param {Client} client
+	 * @param {Client} client - The [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) client instance.
 	 * @param {BaseUniverse} universe
 	 * @param {any} authInfo
 	 */
 	constructor(client, universe, authInfo) {
 		super()
 		this.client = client
+		/** @todo Yet to be documented. */
 		this.universe = universe
 		this.client.player = this
+		/** @todo Yet to be documented. */
 		this.authInfo = authInfo
+		/** @todo Yet to be documented. */
 		this.username = authInfo.username
 		/** @type {BaseLevel | null} */
 		this.space = null
@@ -222,9 +225,9 @@ export class BasePlayer extends EventEmitter {
 	}
 	/** @todo Yet to be documented. */
 	static rightAlignedMessageTypes = [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow, BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow]
-	/**@todo Yet to be documented.
+	/**Sends the {@link defaultHotbar} to a given {@link player} instance. Overrides their current hotbar.
 	 *
-	 * @param {BasePlayer} player
+	 * @param {BasePlayer} player - The player to send the hotbar.
 	 */
 	static sendHotbar(player) {
 		this.defaultHotbar.forEach((blockId, index) => {
