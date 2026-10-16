@@ -55,7 +55,7 @@ export class BaseHeartbeat {
 					name: this.universe.serverConfiguration.serverName ?? "A classicborne universe.",
 					port: this.universe.serverConfiguration.port.toString(),
 					// @ts-ignore
-					users: this.universe.server.players.length.toString(),
+					users: this.universe.players.length.toString(),
 					max: "64",
 					software: "BunnyNabbit/classicborne",
 					public: "true",
