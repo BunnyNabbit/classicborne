@@ -40,7 +40,7 @@ export class BaseHeartbeat {
 	static retryRate = 1000
 	/**Quite notably! This is... still very tailored to ClassiCube... There's this funny issue explaining why it is. Don't build on me, kids! https://github.com/BunnyNabbit/classicborne/issues/33
 	 *
-	 * This static property is expected to be removed. Actually, maybe the whole heartbeat classes as they are...
+	 * This class property is expected to be removed. Actually, maybe the whole heartbeat classes as they are...
 	 *
 	 * By default, I am 400, 403 and 429. If triggered, {@link postHeartbeat} will sleep for {@link rateLimitedDelay}.
 	 *

@@ -22,9 +22,9 @@ import { TypedEmitter } from "tiny-typed-emitter"
  *
  * ### Dependency injection
  *
- * My static fields are defaulted to base class implementations. For example, I initialize new instances of a {@link BasePlayer | Player} using my {@link playerClass} static field. Such static members are intended to be overwritten by my subclasses. This is known as "dependency injection".
+ * My class-sided fields are defaulted to base class implementations. For example, I initialize new instances of a {@link BasePlayer | Player} using my {@link playerClass} static field. Such class-sided members are intended to be overwritten by my subclasses. This is known as "dependency injection".
  *
- * I provide the following static fields for dependency injection:
+ * I provide the following class fields for dependency injection:
  *
  * - {@link playerClass}
  * - {@link heartbeatClass}
