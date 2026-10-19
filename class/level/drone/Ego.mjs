@@ -2,9 +2,10 @@
 /** @import {Vector3} from "../../../types/arrayLikes.mjs" */
 /** @import {Drone} from "./Drone.mjs" */
 
-/** I represent a {@link Drone | drone's} appearance.
+/**I represent a {@link Drone | drone's} appearance.
  *
  * @example Building an ego with the helper methods
+ *
  * ```js
  * new Ego().setName("Zolpiden").setSkin("draggy").setScale([1.2, 1.1, 1.2])
  * ```
@@ -64,7 +65,7 @@ export class Ego {
 	}
 	/**Serializes the ego's properties into an object. This can be passed into an {@link Ego} constructor.
 	 *
-	 * @returns {Object} The ego's data in the form of a plain old *JavaScript* object.
+	 * @returns {Object} The ego's data in the form of a plain old _JavaScript_ object.
 	 */
 	serialize() {
 		return {

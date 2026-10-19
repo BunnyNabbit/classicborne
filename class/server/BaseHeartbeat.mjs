@@ -19,7 +19,7 @@ export class BaseHeartbeat {
 		/**If the heartbeat ever had a successful ping. {@link postHeartbeat} sets it.
 		 *
 		 * @type {boolean}
-		 **/
+		 */
 		this.pinged = false
 		this.alive = true
 		this.start()
