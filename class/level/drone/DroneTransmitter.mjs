@@ -14,7 +14,10 @@ export class DroneTransmitter extends EventEmitter {
 		this.client = client
 		// Validate required protocol extensions
 		DroneTransmitter.validateClientExtensions(client)
-		/** @todo Yet to be documented. */
+		/**The {@link Drone | drones} I'm replicating.
+		 *
+		 * @type {Set<Drone>}
+		 */
 		this.drones = new Set()
 		this.netIds = new Map()
 		this.listeners = new Map()

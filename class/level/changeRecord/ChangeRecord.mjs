@@ -77,11 +77,10 @@ export class ChangeRecord {
 	}
 	/**Append an action to the change record.
 	 *
-	 * @todo Document throws.
-	 *
 	 * @param {boolean} isCommand - Whether the action is a command.
 	 * @param {number[]} actionBytes - The action bytes to append.
 	 * @param {string} [commandString] - The command string (if applicable).
+	 * @throws {Error} For a single block change, {@link actionBytes} must have four bytes.
 	 */
 	appendAction(isCommand = false, actionBytes, commandString) {
 		this.actionCount += 1
@@ -97,7 +96,7 @@ export class ChangeRecord {
 		} else {
 			// single block change
 			this.currentBuffer.writeUInt8(0) // action code
-			if (actionBytes.length !== 4) throw "For a single block change, the actionBytes array must have four numbers in the 0-255 range."
+			if (actionBytes.length !== 4) throw new Error("For a single block change, the actionBytes array must have four bytes.")
 			actionBytes.forEach((byte) => {
 				this.currentBuffer.writeUInt8(byte)
 			})

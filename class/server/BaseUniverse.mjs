@@ -8,13 +8,20 @@ import { TypedEmitter } from "tiny-typed-emitter"
 /**I'm a _Minecraft Classic_ game server, responsible for managing the server lifecycle, connected players and loaded levels.
  *
  * > I think you'll find that the universe pretty much covers everything. (Shut up and get on my horse.)\
- * > _Amazing Horse_ (????)
+ * > _Amazing Horse_ (20xx)
  *
  * I coordinate the following core objects:
  *
- * - {@link BasePlayer}: I initialize and register players I assign network IDs, manage player lists and emit player lifecycle events.
+ * - {@link BasePlayer}: I initialize player instances with my {@link playerClass} and {@link BaseUniverse.addPlayer | register them}. I assign {@link BasePlayer.netId | network IDs}, manage player lists and emit player lifecycle events.
  * - {@link BaseLevel}: I maintain {@link levels | a map of loaded levels}, which represent the worlds available on the server. Levels are managed and referenced by name.
  * - {@link BaseHeartbeat}: If enabled, I instantiate a heartbeat for server list announcements.
+ *
+ * ## Events
+ *
+ * I'm an event emitter. I emit the following events:
+ *
+ * - `playerAdded` ({@link BasePlayer | player}): When a player joins.
+ * - `playerRemove` ({@link BasePlayer | player}): When a player disconnects.
  *
  * ## Subclassing
  *
@@ -22,9 +29,9 @@ import { TypedEmitter } from "tiny-typed-emitter"
  *
  * ### Dependency injection
  *
- * My static fields are defaulted to base class implementations. For example, I initialize new instances of a {@link BasePlayer | Player} using my {@link playerClass} static field. Such static members are intended to be overwritten by my subclasses. This is known as "dependency injection".
+ * My class-sided fields are defaulted to base class implementations. For example, I initialize new instances of a {@link BasePlayer | Player} using my {@link playerClass} static field. Such class-sided members are intended to be overwritten by my subclasses. This is known as "dependency injection".
  *
- * I provide the following static fields for dependency injection:
+ * I provide the following class fields for dependency injection:
  *
  * - {@link playerClass}
  * - {@link heartbeatClass}
@@ -53,7 +60,7 @@ export class BaseUniverse extends TypedEmitter {
 	constructor(serverConfiguration) {
 		super(serverConfiguration)
 		this.serverConfiguration = serverConfiguration
-		/**A _classicborne-server-protocol_ Server instance.
+		/**A [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) Server instance.
 		 *
 		 * @type {Server}
 		 */
@@ -86,9 +93,9 @@ export class BaseUniverse extends TypedEmitter {
 		 */
 		this.heartbeat
 	}
-	/**Registers the {@link BasePlayer | player} into the {@link BaseUniverse | universe}, assigning it a network ID and emitting a `playerAdded` event.
+	/**Registers the {@link BasePlayer | player} into the {@link BaseUniverse | universe}, assigning it a {@link BasePlayer.netId | network identifier} and emitting a `playerAdded` event.
 	 *
-	 * @param {BasePlayer} player
+	 * @param {BasePlayer} player - The player to register.
 	 * @throws {Error} Thrown if a network ID cannot be assigned.
 	 */
 	addPlayer(player) {
@@ -123,7 +130,7 @@ export class BaseUniverse extends TypedEmitter {
 	}
 	/** The {@link BasePlayer} class to instantiate when clients connect to the server. */
 	static playerClass = BasePlayer
-	/** The {@link BaseHeartbeat} class used for announcing my presence. This is promise as the constructor asynchronously imports the module for the class and assigns it to {@link BaseUniverse.heartbeat}. */
+	/** The {@link BaseHeartbeat} class used for announcing my presence. This is a promise as the constructor asynchronously imports the module for the class and assigns it to {@link BaseUniverse.heartbeat}. */
 	static heartbeatClass = import("./BaseHeartbeat.mjs").then((module) => module.default)
 }
 

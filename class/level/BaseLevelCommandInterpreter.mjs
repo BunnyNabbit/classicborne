@@ -205,7 +205,7 @@ export class BaseLevelCommandInterpreter extends TypedEmitter {
 	dispose() {
 		this.removeAllListeners()
 	}
-	/**Checks if the given {@link number} is a byte. Returns `false` if it isn't. Otherwise `true`.
+	/**Checks if the given {@link number} is a valid byte. Returns `false` if it isn't. Otherwise `true`.
 	 *
 	 * @param {number} number
 	 * @returns {boolean}

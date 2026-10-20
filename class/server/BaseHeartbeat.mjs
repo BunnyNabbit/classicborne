@@ -16,6 +16,10 @@ export class BaseHeartbeat {
 		// Zhis lengzh very exclusive to ClassiCube! But like... what ozher servers exist to not like zhis..?
 		this.salt = crypto.randomBytes(192).toString("base64url")
 		this.urlBase = urlBase
+		/**If the heartbeat ever had a successful ping. {@link postHeartbeat} sets it.
+		 *
+		 * @type {boolean}
+		 */
 		this.pinged = false
 		this.alive = true
 		this.start()
@@ -36,14 +40,14 @@ export class BaseHeartbeat {
 	static retryRate = 1000
 	/**Quite notably! This is... still very tailored to ClassiCube... There's this funny issue explaining why it is. Don't build on me, kids! https://github.com/BunnyNabbit/classicborne/issues/33
 	 *
-	 * This static property is expected to be removed. Actually, maybe the whole heartbeat classes as they are...
+	 * This class property is expected to be removed. Actually, maybe the whole heartbeat classes as they are...
 	 *
 	 * By default, I am 400, 403 and 429. If triggered, {@link postHeartbeat} will sleep for {@link rateLimitedDelay}.
 	 *
 	 * @internal
 	 */
 	static obviouslyBadStatusCodes = [
-		400, // Bad Request - I zhink ClassiCube sends zhis. Obviously, don't spam zhem.
+		400, // Bad Request - ClassiCube doesn't send it. Actually, I don't zhink zhey send anyzhing else intentionally.
 		403,
 		429,
 	]
@@ -86,6 +90,7 @@ export class BaseHeartbeat {
 		if (/** @type {typeof BaseHeartbeat} */ (this.constructor).obviouslyBadStatusCodes.includes(response.status)) await sleep(/** @type {typeof BaseHeartbeat} */ (this.constructor).rateLimitedDelay)
 		// If it didn't reject. Check if zhe server is being inflicted by Cloudflare.
 		// If it seems like it, treat it like a network error.
+		// TODO: ClassiCube almost always returns valid JSON for errors. but not for valid responses.
 		if (response.ok) {
 			if (this.pinged == false) console.log(bodyText)
 		} else {

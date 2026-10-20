@@ -11,25 +11,52 @@ import { Watchdog } from "./Watchdog.mjs"
  * } from "../../types/arrayLikes.mjs"
  */
 
-/** @todo Yet to be documented. */
+/**I represent a client connection.
+ *
+ * ## Initialization
+ *
+ * The {@link BaseUniverse | universe} initializes me when a client connects to it. When I am created, I might not be valid. The routine in {@link BasePlayer.initialize} does most of the work, including authentication.
+ */
 export class BasePlayer extends EventEmitter {
-	/**@todo Yet to be documented.
-	 *
-	 * @param {Client} client
+	/**@param {Client} client - The [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) client instance.
 	 * @param {BaseUniverse} universe
 	 * @param {any} authInfo
 	 */
 	constructor(client, universe, authInfo) {
 		super()
+		/**The [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) client instance.
+		 *
+		 * @type {Client}
+		 */
 		this.client = client
+		/**The universe the player connected from.
+		 *
+		 * @type {BaseUniverse}
+		 */
 		this.universe = universe
 		this.client.player = this
+		/**The raw `authInfo` object provided by the _classicborne-server-protocol_ library.
+		 *
+		 * @todo _classicborne-server-protocol_ should export types for this.
+		 */
 		this.authInfo = authInfo
+		/**The username of the player.
+		 *
+		 * This is defined before it's verified by {@link BasePlayer.initialize}.
+		 *
+		 * @type {string}
+		 */
 		this.username = authInfo.username
 		/** @type {BaseLevel | null} */
 		this.space = null
+		/** @type {Promise<boolean>} */
 		this.ready = this.initialize(client, universe, authInfo)
-		/** @type {number} */
+		/**The network identifier assigned to the player.
+		 *
+		 * The {@link BaseUniverse | universe} assigns this value from {@link BaseUniverse.addPlayer}. The identifier is only used for the server's tab list.
+		 *
+		 * @type {number}
+		 */
 		this.netId
 		/** @type {boolean} */
 		this.teleporting
@@ -90,7 +117,12 @@ export class BasePlayer extends EventEmitter {
 	async checkAuthInfo(client, universe, authInfo) {
 		return true
 	}
-	/** @todo Yet to be documented. */
+	/**Runs after authentication, but before the player was put into a level and set up its event listeners. I display the server identification banner, displaying `classicborne-server-protocol` and setting operator status`
+	 *
+	 * ```js
+	 * this.client.serverIdentification("classicborne-server-protocol", "", 100)
+	 * ```
+	 */
 	async afterAuth() {
 		this.client.serverIdentification("classicborne-server-protocol", "", 100)
 	}
@@ -102,7 +134,10 @@ export class BasePlayer extends EventEmitter {
 		const limit = 64
 		return `${prefixTitle}${this.username}`.substring(0, limit)
 	}
-	/** @todo Yet to be documented. */
+	/**Listens to the {@link client}'s `setBlock` events, performing {@link BaseLevel.setBlock} after checking permissions against {@link BaseLevel.userHasPermission}.
+	 *
+	 * I'm invoked by {@link BasePlayer.initialize}.
+	 */
 	listenSetBlock() {
 		this.client.on("setBlock", (operation) => {
 			if (this.watchdog.rateOperation()) return
@@ -116,7 +151,10 @@ export class BasePlayer extends EventEmitter {
 			this.space.setBlock(operationPosition, block, [this.client])
 		})
 	}
-	/** @todo Yet to be documented. */
+	/**Listens to the {@link client}'s `position` events, updating {@link position}, {@link heldBlock}, {@link orientation} and the player's drone.
+	 *
+	 * I'm invoked by {@link BasePlayer.initialize}.
+	 */
 	listenPosition() {
 		// TODO: consider emitting events on Player
 		this.client.on("position", (position, orientation, heldBlock) => {
@@ -184,11 +222,22 @@ export class BasePlayer extends EventEmitter {
 			}
 		})
 	}
-	/** @todo Yet to be documented. */
+	/**Checks if the client is using a mobile _ClassiCube_ client.
+	 *
+	 * This specifically checks against _ClassiCube_'s mobile clients, as they have a usability issue regarding placement of text and controls. This issue is considered not a defect by its developer.
+	 *
+	 * > "Buttons are deliberately drawn over text in order to conserve space"<br>_- _UnknownShadow200_ [#🚽development](https://discord.com/channels/375484033427046404/778711150724513853/1411172473176850615) (ClassiCube Discord server)_
+	 *
+	 * This check may fail against _ClassiCube_ forks where the program name is changed.
+	 *
+	 * Checks against {@link BasePlayer.classiCubeMobileSuffixes}.
+	 *
+	 * @returns {boolean} `true`, if detected as a mobile client. `false` otherwise.
+	 */
 	isClassiCubeMobile() {
 		if (this.client.appName.startsWith("ClassiCube") && BasePlayer.classiCubeMobileSuffixes.some((suffix) => this.client.appName.endsWith(suffix))) return true
 	}
-	/** @todo Yet to be documented. */
+	/** I'm array containing client strings associated with _ClassiCube_ for mobile touchscreen devices. {@link BasePlayer.isClassiCubeMobile} uses me. */
 	static classiCubeMobileSuffixes = ["android alpha", "iOS alpha", "web mobile"]
 	/**Clears the displayed screen prints.
 	 *
@@ -199,7 +248,7 @@ export class BasePlayer extends EventEmitter {
 			this.message(" ", printType)
 		})
 	}
-	/** @todo Yet to be documented. */
+	/** The message types associated with their numeric identifiers. */
 	static messageTypes = {
 		bottomLowestRow: 11,
 		bottomMiddleRow: 12,
@@ -209,23 +258,23 @@ export class BasePlayer extends EventEmitter {
 		topHighestRow: 1,
 		center: 100,
 	}
-	/** @todo Yet to be documented. */
+	/** The {@link messageTypes | message types} categorized by the general area they cover. */
 	static printAreaTypes = {
 		bottom: [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow],
 		top: [BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow],
 		center: [BasePlayer.messageTypes.center],
 	}
-	/** @todo Yet to be documented. */
+	/** The {@link messageTypes | message types} aligned to the right. */
 	static rightAlignedMessageTypes = [BasePlayer.messageTypes.bottomLowestRow, BasePlayer.messageTypes.bottomMiddleRow, BasePlayer.messageTypes.bottomHighestRow, BasePlayer.messageTypes.topLowestRow, BasePlayer.messageTypes.topMiddleRow, BasePlayer.messageTypes.topHighestRow]
-	/**@todo Yet to be documented.
+	/**Sends the {@link defaultHotbar} to a given {@link player} instance. Overrides their current hotbar.
 	 *
-	 * @param {BasePlayer} player
+	 * @param {BasePlayer} player - The player to send the hotbar.
 	 */
 	static sendHotbar(player) {
 		this.defaultHotbar.forEach((blockId, index) => {
 			player.client.extensions.get("SetHotbar").setHotbar(blockId, index)
 		})
 	}
-	/** @todo Yet to be documented. */
+	/** The default hotbar {@link sendHotbar | to send}. I consist of nine numeric block identifiers. */
 	static defaultHotbar = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
