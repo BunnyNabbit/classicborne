@@ -1,7 +1,10 @@
 // @ts-check
 /** @import {BasePlayer} from "./BasePlayer.mjs" */
 
-/** I keep track of client activity. My {@link rateOperation} method is used to increment my {@link currentRate | current rate}. If {@link currentRate | current rate} goes beyond my {@link limit}, I will disconnect my {@link Watchdog.player | player}. I set my {@link currentRate | current rate} to zero on a one second {@link interval}. */
+/**I keep track of client activity. My {@link rateOperation} method is used to increment my {@link currentRate | current rate}. If {@link currentRate | current rate} goes beyond my {@link limit}, I will disconnect my {@link Watchdog.player | player}. I set my {@link currentRate | current rate} to zero on a one second {@link interval}.
+ *
+ * @todo Provide a typical example of rateOperation.
+ */
 export class Watchdog {
 	/**Initializes a new instance of the Watchdog class.
 	 *

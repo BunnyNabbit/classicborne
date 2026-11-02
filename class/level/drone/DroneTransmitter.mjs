@@ -3,7 +3,12 @@ import { EventEmitter } from "node:events"
 /** @import {Drone} from "./Drone.mjs" */
 /** @import {BasePlayer} from "../../player/BasePlayer.mjs" */
 
-/** I replicate {@link Drone | drones} and their positions to a {@link BasePlayer | player's} client. */
+/**I replicate {@link Drone | drones} and their positions to a {@link BasePlayer | player's} client.
+ *
+ * @todo Document why I assign ID per client.
+ *
+ * @todo Document how I relate to a player.
+ */
 export class DroneTransmitter extends EventEmitter {
 	/**Creates a new DroneTransmitter instance for a client.
 	 *

@@ -16,6 +16,16 @@ import { Watchdog } from "./Watchdog.mjs"
  * ## Initialization
  *
  * The {@link BaseUniverse | universe} initializes me when a client connects to it. When I am created, I might not be valid. The routine in {@link BasePlayer.initialize} does most of the work, including authentication.
+ *
+ * @todo How do I interact with a level?
+ *
+ * @todo How do I interact with a universe?
+ *
+ * @todo What events do I emit?
+ *
+ * @todo How can the default functionality of my event handlers be extended?
+ *
+ * @todo How would a universe builder override my hotbar?
  */
 export class BasePlayer extends EventEmitter {
 	/**@param {Client} client - The [_classicborne-server-protocol_](https://bunnynabbit.github.io/classicborne-server-protocol/) client instance.

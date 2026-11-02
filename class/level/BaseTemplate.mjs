@@ -3,7 +3,12 @@ import { Buffer } from "node:buffer"
 /** @import {Vector3} from "../../types/arrayLikes.mjs" */
 /** @import {BaseLevel} from "../level/BaseLevel.mjs" */
 
-/** I'm a base class for {@link BaseLevel} templates. */
+/**I'm a base class for {@link BaseLevel} templates.
+ *
+ * @todo How does a Level use me?
+ *
+ * @todo Provide a sample subclass.
+ */
 export class BaseTemplate {
 	/**Create a new template with an icon and default bounds.
 	 *
