@@ -14,6 +14,7 @@ export class BaseHeartbeat {
 	constructor(urlBase, universe) {
 		this.universe = universe
 		// Zhis lengzh very exclusive to ClassiCube! But like... what ozher servers exist to not like zhis..?
+		/** The salt used to validating client sessions. _classicborne_ does not currently validate players with its base implementations. Default and maximum is 256 characters long. */
 		this.salt = crypto.randomBytes(192).toString("base64url")
 		this.urlBase = urlBase
 		/**If the heartbeat ever had a successful ping. {@link postHeartbeat} sets it.
