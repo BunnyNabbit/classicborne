@@ -12,7 +12,7 @@
 - BaseHeartbeat
   - [Changed](https://codeberg.org/BunnyNabbit/classicborne/commit/e581a173d269c7048fe943185ed43c8d2a24c09b#diff-9fae3f5c2f27a5637b785e63400eaf3e28952dbe) the default server name from "A classicborne server." to "A classicborne universe.".
 - KeyframeRecord
-  - Refactored from the `/class/level/changerecord/ChangeRecord.mjs` file. The class is exported from `/class/level/changerecord/KeyframeRecord.mjs`.
+  - Refactored from the `/class/level/changeRecord/ChangeRecord.mjs` file. The class is exported from `/class/level/changeRecord/KeyframeRecord.mjs`.
   - Uses adapters to select a suitable _SQLite_ dependency.
 - DroneTransmitter
   - Added [DroneTransmitter#validateClientExtensions](https://classicborne.bunnynabbit.com/classes/DroneTransmitter.html#validateclientextensions).
@@ -28,7 +28,7 @@
 ### Breaking
 
 - ChangeRecord
-  - Moved ChangeRecord#vhsFs to [ChangeRecord#vhsFileHandle](https://classicborne.bunnynabbit.com/classes/ChangeRecord.html#vhsfilehandle)
+  - Moved ChangeRecord#vhsFh to [ChangeRecord#vhsFileHandle](https://classicborne.bunnynabbit.com/classes/ChangeRecord.html#vhsfilehandle)
 
 ### 0.0.0
 
