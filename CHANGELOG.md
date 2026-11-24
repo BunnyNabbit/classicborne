@@ -23,7 +23,7 @@
       - Player list entries are created with the player's display name.
 - Significant documentation and typing changes. May potentially be breaking if types are checked.
   - When referring to static members of a class, the term "class-side" is now used instead of "static.".
-  - Vector3 and Vector2 are expressed as numeric tuples of fixed length. For example, Vector3 is typed as `[number, number number]` rather than an array of numbers `number[]`.
+  - Vector3 and Vector2 are expressed as numeric tuples of fixed length. For example, Vector3 is typed as `[number, number, number]` rather than an array of numbers `number[]`.
 
 ### Breaking
 
