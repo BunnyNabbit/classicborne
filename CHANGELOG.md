@@ -30,6 +30,19 @@
 - ChangeRecord
   - Moved ChangeRecord#vhsFh to [ChangeRecord#vhsFileHandle](https://classicborne.bunnynabbit.com/classes/ChangeRecord.html#vhsfilehandle)
 
-### 0.0.0
+## 0.1.0
+
+## Changes
+
+[_All changes_](https://codeberg.org/BunnyNabbit/classicborne/compare/0.0.0...0.1.0)
+
+- Package
+  - Updated _classicborne-server-protocol_ to [v0.6.0](https://codeberg.org/BunnyNabbit/classicborne-server-protocol/releases/tag/v0.6.0).
+    - Extension calls such as `client.addPlayerName` are deprecated. BaseLevel, BasePlayer and DroneTransmitter have been changed to use the newer `client.extensions.get(...)` pattern.
+- BaseLevel
+  - Dynamically imports ChangeRecord and NullChangeRecord.
+- Significant documentation and typing changes. May potentially be breaking if types are checked.
+
+## 0.0.0
 
 Initial release.
