@@ -32,8 +32,6 @@
 
 ## 0.1.0
 
-## Changes
-
 [_All changes_](https://codeberg.org/BunnyNabbit/classicborne/compare/0.0.0...0.1.0)
 
 - Package
